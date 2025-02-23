@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html xmlns:th="http://thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head th:fragment="page_head(title)">
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>[[${title}]]</title>
+
+<link rel="stylesheet" type="text/css"
+	th:href="@{/webjars/bootstrap/css/bootstrap.min.css}">
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+<script type="text/javascript" th:src="@{/webjars/jquery/jquery.min.js}"></script>
+<script type="text/javascript"
+	th:src="@{/webjars/bootstrap/js/bootstrap.bundle.min.js}"></script>
+<script type="text/javascript" th:src="@{/js/common.js}"></script>
+
+<style>
+a {
+	text-decoration: none;
+}
+
+.a-title {
+	padding-left: 0 !important;
+}
+
+.navbar {
+	padding: 0px !important;
+}
+
+.form-group {
+	margin: 16px 0;
+}
+</style>
+
+</head>
+
+<body>
+
+	<!-- Header -->
+	<header th:fragment="header">
+		<div style="background-color: #FFF1F5;">
+			<nav class="navbar navbar-expand-lg container">
+				<div class="container-fluid">
+					<a class="navbar-brand" th:href="@{/}"> <img
+						th:src="@{/images/LogoGearvn.png}" width="120" height="60"
+						class="d-inline-block align-top" alt="Logo">
+					</a>
+					<button class="navbar-toggler" type="button"
+						data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+						aria-controls="navbarSupportedContent" aria-expanded="false"
+						aria-label="Toggle navigation">
+						<span class="navbar-toggler-icon"></span>
+					</button>
+					<div class="collapse navbar-collapse" id="navbarSupportedContent">
+						<ul class="navbar-nav me-auto mb-2 mb-lg-0">
+
+							<li class="nav-item dropdown"><a
+								class="nav-link dropdown-toggle" href="#" role="button"
+								data-bs-toggle="dropdown" aria-expanded="false">Users</a>
+								<ul class="dropdown-menu">
+									<li><a class="dropdown-item" href="#">Action</a></li>
+									<li><a class="dropdown-item" href="#">Another action</a></li>
+									<li><hr class="dropdown-divider"></li>
+									<li><a class="dropdown-item" href="#">Something else
+											here</a></li>
+								</ul></li>
+
+							<li class="nav-item dropdown"><a
+								class="nav-link dropdown-toggle" href="#" role="button"
+								data-bs-toggle="dropdown" aria-expanded="false">Categories</a>
+								<ul class="dropdown-menu">
+									<li><a class="dropdown-item" href="#">Action</a></li>
+									<li><a class="dropdown-item" href="#">Another action</a></li>
+									<li><hr class="dropdown-divider"></li>
+									<li><a class="dropdown-item" href="#">Something else
+											here</a></li>
+								</ul></li>
+
+							<li class="nav-item dropdown"><a
+								class="nav-link dropdown-toggle" href="#" role="button"
+								data-bs-toggle="dropdown" aria-expanded="false">Brands</a>
+								<ul class="dropdown-menu">
+									<li><a class="dropdown-item" href="#">Action</a></li>
+									<li><a class="dropdown-item" href="#">Another action</a></li>
+									<li><hr class="dropdown-divider"></li>
+									<li><a class="dropdown-item" href="#">Something else
+											here</a></li>
+								</ul></li>
+
+							<li class="nav-item dropdown"><a
+								class="nav-link dropdown-toggle" href="#" role="button"
+								data-bs-toggle="dropdown" aria-expanded="false">Products</a>
+								<ul class="dropdown-menu">
+									<li><a class="dropdown-item" href="#">Action</a></li>
+									<li><a class="dropdown-item" href="#">Another action</a></li>
+									<li><hr class="dropdown-divider"></li>
+									<li><a class="dropdown-item" href="#">Something else
+											here</a></li>
+								</ul></li>
+
+							<li class="nav-item"><a class="nav-link" href="#">Customers</a></li>
+
+							<li class="nav-item"><a class="nav-link" href="#">Shipping</a></li>
+
+							<li class="nav-item"><a class="nav-link" href="#">Orders</a></li>
+
+							<li class="nav-item dropdown"><a
+								class="nav-link dropdown-toggle" href="#" role="button"
+								data-bs-toggle="dropdown" aria-expanded="false">Reports</a>
+								<ul class="dropdown-menu">
+									<li><a class="dropdown-item" href="#">Action</a></li>
+									<li><a class="dropdown-item" href="#">Another action</a></li>
+									<li><hr class="dropdown-divider"></li>
+									<li><a class="dropdown-item" href="#">Something else
+											here</a></li>
+								</ul></li>
+
+							<li class="nav-item"><a class="nav-link" href="#">Articles</a></li>
+
+
+						</ul>
+
+						<ul class="navbar-nav ms-auto">
+							<!-- Setting -->
+							<li class="nav-item dropdown"><a
+								class="nav-link dropdown-toggle" href="#" role="button"
+								data-bs-toggle="dropdown" aria-expanded="false"> <i
+									class="fas fa-cog fa-lg"></i>
+							</a>
+								<ul class="dropdown-menu dropdown-menu-end">
+									<li><a class="dropdown-item" href="#">Action</a></li>
+									<li><a class="dropdown-item" href="#">Another action</a></li>
+									<li><hr class="dropdown-divider"></li>
+									<li><a class="dropdown-item" href="#">Something else
+											here</a></li>
+								</ul></li>
+
+							<!-- Manager -->
+							<li class="nav-item dropdown"><a
+								class="nav-link dropdown-toggle" href="#" role="button"
+								data-bs-toggle="dropdown" aria-expanded="false"> <i
+									class="fas fa-user fa-lg"></i>
+							</a>
+								<ul class="dropdown-menu dropdown-menu-end text-center">
+									<li><a class="dropdown-item"> <img
+											th:src="@{${#authentication.principal.photos}}" width="120"
+											height="120" class="d-inline-block align-top rounded-circle"
+											alt="User Photo">
+									</a></li>
+									<li><a sec:authentication="principal.email"
+										class="dropdown-item" href="#"></a></li>
+									<li><a sec:authentication="principal.fullName"
+										class="dropdown-item" href="#"></a></li>
+
+									<li><hr class="dropdown-divider"></li>
+
+									<li>
+										<div class="dropdown-item text-center">
+											<a th:href="@{/account}" class="btn btn-primary w-100 text-white"><i class="fas fa-edit"></i>&nbsp;&nbsp;Update</a>
+										</div>
+									</li>
+
+									<li>
+										<form th:action="@{/logout}" method="post">
+											<div>
+												<input type="hidden" name="${_csrf.parameterName}"
+													value="${_csrf.token}" />
+											</div>
+											<div class="dropdown-item text-center">
+												<button type=submit class="btn btn-danger w-100 text-white"><i class="fas fa-sign-out-alt"></i>&nbsp;&nbsp;Logout</button>
+											</div>
+										</form>
+									</li>
+
+								</ul></li>
+
+							<!-- Menu -->
+							<li class="nav-item"><a class="nav-link" href="#"><i
+									class="fas fa-ellipsis-h fa-lg"></i></a></li>
+
+						</ul>
+					</div>
+				</div>
+			</nav>
+		</div>
+	</header>
+	<!-- Header -->
+
+	<!-- Footer -->
+	<footer th:fragment="footer" class="mt-5 text-center">
+		<p>GearVN control panel - Copyright &copy; GearVN</p>
+	</footer>
+	<!-- Footer -->
+
+	<!-- fragment link -->
+	<th th:fragment="column_link(fieldName, columnLabel)"><a
+		class="a-title" th:if="${sortField} != ${fieldName}"
+		th:href="@{'/users/page/' + ${currentPage} + '?sortField=' + ${fieldName} + '&sortType=' + ${sortType} + ${keyword != null ? ('&keyword=' + keyword) : ''}}">[[${columnLabel}]]</a><a
+		class="a-title" th:if="${sortField} == ${fieldName}"
+		th:href="@{'/users/page/' + ${currentPage} + '?sortField=' + ${fieldName} + '&sortType=' + ${reverseSortType} + ${keyword != null ? ('&keyword=' + keyword) : ''}}">[[${columnLabel}]]</a>
+		<span th:if="${sortField} == ${fieldName}"
+		th:class="${sortType} == 'asc' ? 'fas fa-angle-up' : 'fas fa-angle-down'"></span>
+	</th>
+
+	<a th:fragment="page_link(currentPage, label)" class="page-link"
+		th:href="@{'/users/page/' + ${currentPage} + ${sortField != null ? ('?sortField=' + sortField) : ''} + ${sortType != null ? ('&sortType=' + sortType) : ''} + ${keyword != null ? ('&keyword=' + keyword) : ''}}">[[${label}]]</a>
+	<!-- fragment link -->
+
+</body>
+</html>

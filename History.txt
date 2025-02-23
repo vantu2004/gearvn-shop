@@ -1,0 +1,41 @@
+- Ngày 12/02/2025: (video 14, )
+
+	- Tạo root prj - GearVN (pom):
+		- Khai báo module GearVNCommon trong pom
+		- Khai báo module GearVNWebParent trong pom
+		
+	- Tạo common prj/module - GearVNCommon (jar):
+		- Thêm dependency jpa
+		- Xóa file main/test
+		- Xóa spring-boot-starter-test trong tag dependencies của pom.xml
+		- Xóa tag build vì đây chỉ là prj library
+		
+	- Tạo web parent prj/module - GearVNWebParent (pom) chứa sub module backend/frontend
+		- Thêm dependency spring web
+		- Xóa file main/test
+		- Xóa tag build vì đây là prj chứa 2 prj con backend và frontend
+		- Vào Project nature remove java
+		- Bổ sung <packaging>pom</packaging> vào dòng 14 file pom.xml
+		- Khai báo module GearVNBackend trong pom
+		- Khai báo module GearVNFrontend trong pom
+		- Thêm lib thymeleaf
+		- Thêm 3 dependency bootstrap/jquery/webjars-locator-core
+		- Thêm dependency chứa groupId/artifactId/version của GearVNCommon để bên GearVNWebParent có thể tham chiếu tới bên GearVNCommon
+		
+	- Tạo backend prj/module GearVNBackend trong GearVNWebParent
+		- Thay nội dung trong tag parent bằng 3 tag groupId, artifactId, version của parent và xóa groupId, version mặc định vì GearVNBackend kế thừa từ parent
+		- Xóa hết dependency vì để kế thừa từ parent
+		- Xóa file test
+		- Cấu hình port 8080 và đường dẫn cha /GearVNAdmin trong file application
+	
+	- Tạo frontend prj/module GearVNFrontend trong GearVNParent
+		- Thay nội dung trong tag parent bằng 3 tag groupId, artifactId, version của parent và xóa groupId, version mặc định vì GearVNBackend kế thừa từ parent
+		- Xóa file test
+		- Xóa hết dependency vì để kế thừa từ parent
+		- Cấu hình port 8081 và đường dẫn cha /GearVN trong file application
+		
+	* Lưu ý: xóa file test (hoặc vô hiệu hóa việc chạy test) để mvn install chạy được là vì mặc định, Maven sẽ thực thi các bài test khi chạy mvn install. Nếu có test bị lỗi, quá trình build sẽ thất bại, khiến lệnh mvn install không thể hoàn tất.
+	
+- Ngày 13/02/2025
+
+	* Lưu ý: Viết unitTest đầu tiên	video số 33

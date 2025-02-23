@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<!-- khai báo namespace th để có thể sử dụng các thuộc tính của thymeleaf -->
+<html xmlns:th="http://thymeleaf.org">
+
+<!-- Head -->
+<head th:replace="fragments :: page_head('Create New User')"></head>
+<!-- Head -->
+
+<body>
+	<!-- Header -->
+	<header th:replace="fragments :: header"></header>
+	<!-- Header -->
+
+	<div class="container mt-5">
+		<nav aria-label="breadcrumb">
+			<ol class="breadcrumb">
+				<li class="breadcrumb-item"><a th:href="@{/users}">Manage
+						Users</a></li>
+				<li class="breadcrumb-item"><a th:href="@{/users/new}">Create
+						New User</a></li>
+			</ol>
+		</nav>
+	</div>
+
+	<div class="container mt-3">
+		<h2>Create New User</h2>
+	</div>
+
+	<div class="container mt-3">
+		<form class="mx-auto col-md-6" th:action="@{/users/save}"
+			method="post" th:object=${user}
+			onsubmit="return checkDuplicateEmail(this)"
+			enctype="multipart/form-data">
+
+			<div class="form-group row">
+				<label for="inputEmail" class="col-sm-3 col-form-label">Email</label>
+				<div class="col-sm-9">
+					<input type="text" class="form-control" id="inputEmail"
+						placeholder="Email" th:field="*{email}"
+						aria-describedby="emailError">
+					<p id="emailError" th:if="${#fields.hasErrors('email')}"
+						th:errorclass="error" th:errors="*{email}" class="text-danger"></p>
+				</div>
+			</div>
+
+			<div class="form-group row">
+				<label for="inputFirstName" class="col-sm-3 col-form-label">First
+					Name</label>
+				<div class="col-sm-9">
+					<input type="text" class="form-control" id="inputFirstName"
+						placeholder="First Name" th:field="*{firstName}"
+						aria-describedby="firstNameError">
+					<p id="firstNameError" th:if="${#fields.hasErrors('firstName')}"
+						th:errorclass="error" th:errors="*{firstName}" class="text-danger"></p>
+				</div>
+			</div>
+
+			<div class="form-group row">
+				<label for="inputLastName" class="col-sm-3 col-form-label">Last
+					Name</label>
+				<div class="col-sm-9">
+					<input type="text" class="form-control" id="inputLastName"
+						placeholder="Last Name" th:field="*{lastName}"
+						aria-describedby="lastNameError">
+					<p id="lastNameError" th:if="${#fields.hasErrors('lastName')}"
+						th:errorclass="error" th:errors="*{lastName}" class="text-danger"></p>
+				</div>
+			</div>
+
+			<div class="form-group row">
+				<label for="inputPassword" class="col-sm-3 col-form-label">Password</label>
+				<div class="col-sm-9">
+					<input type="password" class="form-control" id="inputPassword"
+						placeholder="Password" th:field="*{password}"
+						aria-describedby="passwordError">
+					<p id="passwordError" th:if="${#fields.hasErrors('password')}"
+						th:errorclass="error" th:errors="*{password}" class="text-danger"></p>
+				</div>
+			</div>
+
+			<div class="form-group row">
+				<fieldset>
+					<div class="row">
+						<legend class="col-form-label col-sm-3 pt-0">Roles</legend>
+						<div class="col-sm-9">
+							<th:block th:each="role : ${listRoles}">
+								<div class="form-check">
+									<input class="form-check-input" type="checkbox"
+										th:field="*{roles}" th:value="${role.id}"> <span
+										th:text="${role.name}"></span> - <i><small
+										th:text="${role.description}"></small></i>
+								</div>
+							</th:block>
+							<p id="rolesError" th:if="${#fields.hasErrors('roles')}"
+								th:errorclass="error" th:errors="*{roles}" class="text-danger"></p>
+						</div>
+					</div>
+				</fieldset>
+			</div>
+
+			<div class="form-group row">
+				<div class="col-sm-3">Enabled</div>
+				<div class="col-sm-9">
+					<div class="form-check">
+						<input class="form-check-input" type="checkbox"
+							th:field="*{enabled}">
+					</div>
+				</div>
+			</div>
+
+			<div class="form-group row">
+				<label for="inputPhotos" class="col-sm-3 col-form-label">Photos</label>
+				<div class="col-sm-9">
+					<div>
+						<input type="file" class="form-control-file mb-2" id="inputPhotos"
+							accept=".png, .jpg, .jpeg" name="avatar">
+					</div>
+					<div>
+						<img th:src="@{/images/LogoGearvn.png}" width="50%" height="50%"
+							class="d-inline-block align-top" alt="avatar"
+							id="inputPhotosPreview" style="border-radius: 10px;"
+							name="avatar">
+						<!-- <i class="fas fa-portrait fa-10x" style="color: #bdc2c7;"></i> -->
+					</div>
+				</div>
+			</div>
+
+			<div class="form-group row">
+				<div class="form-group d-flex justify-content-end">
+					<a th:href="@{/users}" class="btn btn-secondary"
+						style="margin: 0 8px;">Back</a>
+					<button type="submit" class="btn btn-success">Create</button>
+				</div>
+			</div>
+		</form>
+	</div>
+
+	<!-- Modal cảnh báo trùng email -->
+	<div class="modal fade" id="duplicateEmailModal" tabindex="-1">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title text-danger" id="modalTitle">Warning</h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal"
+						aria-label="Close"></button>
+				</div>
+				<div class="modal-body">
+					<p id="modalMessage">There is another user having this email.</p>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-danger"
+						data-bs-dismiss="modal">OK</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- Footer -->
+	<footer th:replace="fragments :: footer"></footer>
+	<!-- Footer -->
+
+	<script>
+		let MAX_FILE_SIZE = 5242880; // 100KB
+
+		function checkDuplicateEmail(form) {
+			// tạo 1 url động tự thêm context-path /GearVNAdmin vào trước, nếu dùng chuỗi cứng thì ko tự thêm đc
+			let url = "[[ @{/users/check_duplicate_email} ]]";
+
+			let userEmail = $("#inputEmail").val();
+			let csrfValue = $("input[name=_csrf]").val(); // Sửa selector
+
+			let param = {
+				email : userEmail,
+				_csrf : csrfValue
+			};
+
+			$.post(
+					url,
+					param,
+					function(response) {
+						if (response === "OK") {
+							form.submit();
+						} else if (response === "Duplicated") {
+							showModalDialog("Warning",
+									"There is another user having the email "
+											+ userEmail);
+						} else {
+							showModalDialog("Error",
+									"Unknow response from server.");
+						}
+					}).fail(function() {
+				showModalDialog("Error", "Could not connect to the server.");
+			});
+
+			// Chặn submit mặc định
+			return false;
+		}
+
+		function showModalDialog(title, message) {
+			$("#modalTitle").text(title);
+			$("#modalMessage").text(message);
+			// modal() có sẵn dùng để show/hide modal
+			$('#duplicateEmailModal').modal('show');
+		}
+
+		$(document)
+				.ready(
+						function() {
+							$("#inputPhotos")
+									.change(
+											function() {
+												if (!checkFileSize(this)) {
+													// Lấy context-path
+													let contextPath = window.location.pathname
+															.split('/')[1];
+													// set lại default image
+													$("#inputPhotosPreview")
+															.attr(
+																	"src",
+																	"/"
+																			+ contextPath
+																			+ "/images/LogoGearvn.png");
+													this.value = "";
+
+													return;
+												}
+
+												showImageThumbnail(this);
+											});
+						});
+
+		function checkFileSize(fileInput) {
+			let fileSize = fileInput.files[0].size;
+
+			if (fileSize > MAX_FILE_SIZE) {
+				alert("You must choose an image less than " + MAX_FILE_SIZE
+						+ " bytes!");
+				return false;
+			} else {
+				return true;
+			}
+		}
+
+		function showImageThumbnail(fileInput) {
+			var file = fileInput.files[0];
+			var reader = new FileReader();
+			reader.onload = function(e) {
+				$("#inputPhotosPreview").attr("src", e.target.result);
+			};
+
+			reader.readAsDataURL(file);
+		}
+	</script>
+
+</body>
+
+</html>
