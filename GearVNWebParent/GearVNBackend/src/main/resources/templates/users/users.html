@@ -74,52 +74,48 @@
 		</div>
 
 		<div class="table-responsive mt-3">
-    <table class="table table-hover">
-        <thead>
-            <tr>
-                <th th:replace="fragments :: column_link('id', 'User ID')" />
-                <th scope="col">Photos</th>
-                <th th:replace="fragments :: column_link('email', 'Email')" />
-                <th th:replace="fragments :: column_link('firstName', 'First Name')" />
-                <th th:replace="fragments :: column_link('lastName', 'Last Name')" />
-                <th scope="col">Roles</th>
-                <th th:replace="fragments :: column_link('enabled', 'Enabled')" />
-                <th scope="col">Action</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr th:each="user : ${listUsers}">
-                <td th:text="${user.id}"></td>
-                <td>
-                    <i th:if="${#strings.isEmpty(user.photos)}" class="fas fa-user-circle fa-3x text-secondary"></i>
-                    <img th:if="${not #strings.isEmpty(user.photos)}" th:src="@{${user.getPhotosImagePath}}" 
-                         width="48" height="48" class="rounded-circle object-fit-cover">
-                </td>
-                <td th:text="${user.email}"></td>
-                <td th:text="${user.firstName}"></td>
-                <td th:text="${user.lastName}"></td>
-                <td>
-                    <span th:each="role : ${user.roles}"> 
-                        <span th:text="${role.name}"></span><br>
-                    </span>
-                </td>
-                <td>
-                    <i th:if="${user.enabled}" class="fas fa-check text-success"></i>
-                    <i th:if="${!user.enabled}" class="fas fa-times text-danger"></i>
-                </td>
-                <td>
-                    <a title="Edit this user" th:href="@{/users/update/} + ${user.id}">
-                        <i class="fas fa-edit text-success"></i>
-                    </a> | 
-                    <a title="Delete this user" th:href="@{'/users/delete/' + ${user.id}}" 
-                       th:userId="${user.id}" class="link-delete">
-                        <i class="fas fa-trash-alt text-danger"></i>
-                    </a>
-                </td>
-            </tr>
-        </tbody>
-    </table>
-</div>
+			<table class="table table-hover">
+				<thead>
+					<tr>
+						<th th:replace="fragments :: column_link('id', 'User ID')" />
+						<th scope="col">Photos</th>
+						<th th:replace="fragments :: column_link('email', 'Email')" />
+						<th
+							th:replace="fragments :: column_link('firstName', 'First Name')" />
+						<th th:replace="fragments :: column_link('lastName', 'Last Name')" />
+						<th scope="col">Roles</th>
+						<th th:replace="fragments :: column_link('enabled', 'Enabled')" />
+						<th scope="col">Action</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="user : ${listUsers}">
+						<td th:text="${user.id}"></td>
+						<td><i th:if="${#strings.isEmpty(user.photos)}"
+							class="fas fa-user-circle fa-3x text-secondary"></i> <img
+							th:if="${not #strings.isEmpty(user.photos)}"
+							th:src="@{${user.getPhotosImagePath}}" width="48" height="48"
+							class="rounded-circle object-fit-cover"></td>
+						<td th:text="${user.email}"></td>
+						<td th:text="${user.firstName}"></td>
+						<td th:text="${user.lastName}"></td>
+						<td><span th:each="role : ${user.roles}"> <span
+								th:text="${role.name}"></span><br>
+						</span></td>
+						<td><i th:if="${user.enabled}"
+							class="fas fa-check text-success"></i> <i
+							th:if="${!user.enabled}" class="fas fa-times text-danger"></i></td>
+						<td><a title="Edit this user"
+							th:href="@{/users/update/} + ${user.id}"> <i
+								class="fas fa-edit text-success"></i>
+						</a> | <a title="Delete this user"
+							th:href="@{'/users/delete/' + ${user.id}}" th:userId="${user.id}"
+							class="link-delete"> <i class="fas fa-trash-alt text-danger"></i>
+						</a></td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
 
 
 		<!-- Pagination -->
@@ -191,7 +187,7 @@
 	<!-- Footer -->
 
 	<!-- jQuery Script -->
-	<script>
+	<script type="text/javascript">
 		$(".link-delete").on(
 				"click",
 				function(event) {

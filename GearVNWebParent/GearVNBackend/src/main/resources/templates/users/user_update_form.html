@@ -14,8 +14,6 @@
 	<div class="container mt-5">
 		<nav aria-label="breadcrumb">
 			<ol class="breadcrumb">
-				<li class="breadcrumb-item"><a th:href="@{/users}">Manage
-						Users</a></li>
 				<li class="breadcrumb-item"><a th:href="@{/account}">Update
 						Account</a></li>
 			</ol>
@@ -27,7 +25,7 @@
 	</div>
 
 	<div class="container mt-3">
-			<div th:if="${message != null}" class="toast show mt-3 mx-auto"
+		<div th:if="${message != null}" class="toast show mt-3 mx-auto"
 			style="width: 48%;">
 			<div class="toast-header">
 				<strong class="me-auto">Message</strong>
@@ -37,7 +35,7 @@
 				<p th:text="${message}"></p>
 			</div>
 		</div>
-	
+
 		<form class="mx-auto col-md-6" th:action="@{/account/update}"
 			method="post" th:object=${user} onsubmit="return handleSubmit(this)"
 			enctype="multipart/form-data">
@@ -151,8 +149,7 @@
 
 			<div class="form-group row">
 				<div class="form-group d-flex justify-content-end">
-					<a th:href="@{/users}" class="btn btn-secondary"
-						style="margin: 0 8px;">Back</a>
+					<a th:href="@{/}" class="btn btn-secondary" style="margin: 0 8px;">Back</a>
 					<button type="submit" class="btn btn-success">Save</button>
 				</div>
 			</div>
@@ -163,66 +160,7 @@
 	<footer th:replace="fragments :: footer"></footer>
 	<!-- Footer -->
 
-	<script>
-		// vì mặc định cấu hình chỉ 1mb nên cấu hình thêm bên application tăng lên 5mb
-		let MAX_FILE_SIZE = 5242880; // byte
-
-		$(document)
-				.ready(
-						function() {
-							$("#inputPhotos")
-									.change(
-											function() {
-												if (!checkFileSize(this)) {
-													// Lấy context-path
-													let contextPath = window.location.pathname
-															.split('/')[1];
-													// set lại default image
-													$("#inputPhotosPreview")
-															.attr(
-																	"src",
-																	"/"
-																			+ contextPath
-																			+ "/images/LogoGearvn.png");
-													this.value = "";
-
-													return;
-												}
-
-												showImageThumbnail(this);
-											});
-						});
-
-		function checkFileSize(fileInput) {
-			let fileSize = fileInput.files[0].size;
-
-			if (fileSize > MAX_FILE_SIZE) {
-				alert("You must choose an image less than " + MAX_FILE_SIZE
-						+ " bytes!");
-				return false;
-			} else {
-				return true;
-			}
-		}
-
-		function showImageThumbnail(fileInput) {
-			var file = fileInput.files[0];
-			var reader = new FileReader();
-			reader.onload = function(e) {
-				$("#inputPhotosPreview").attr("src", e.target.result);
-			};
-
-			reader.readAsDataURL(file);
-		}
-
-		function checkPasswordMatch(inputRePassword) {
-			if (inputRePassword.value != $("#inputPassword").val()) {
-				inputRePassword.setCustomValidity("Passwords do not match!");
-			} else {
-				inputRePassword.setCustomValidity("");
-			}
-		}
-
+	<script type="text/javascript">
 		function handleSubmit(form) {
 			let inputPassword = $("#inputPassword").val();
 			if (!inputPassword) {
@@ -236,6 +174,7 @@
 		}
 	</script>
 
+	<script th:src="@{/js/common_form.js}"></script>
 </body>
 
 </html>

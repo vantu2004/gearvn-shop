@@ -1,4 +1,4 @@
-package com.gearvn.admin.user;
+package com.gearvn.admin.user.service;
 
 import java.io.BufferedOutputStream;
 import java.io.File;

@@ -1,4 +1,4 @@
-package com.gearvn.admin.user;
+package com.gearvn.admin.user.controller;
 
 import java.io.IOException;
 import java.util.List;
@@ -21,6 +21,8 @@ import jakarta.servlet.http.HttpServletResponse;
 import com.gearvn.admin.user.export.UserCsvExporter;
 import com.gearvn.admin.user.export.UserExcelExporter;
 import com.gearvn.admin.user.export.UserPdfExporter;
+import com.gearvn.admin.user.service.UploadImageService;
+import com.gearvn.admin.user.service.UserService;
 import com.gearvn.common.entity.Role;
 import com.gearvn.common.entity.User;
 
@@ -35,9 +37,10 @@ public class UserController {
 	@Autowired
 	private UploadImageService uploadImageService;
 
+	// bắt buộc phải trả về String vì @GetMapping phải nhận tên template để render
 	@GetMapping("/users")
-	public void getFirstUserPage(Model model) {
-		getUserPageByPageNumber(1, model, "firstName", "asc", null);
+	public String getFirstUserPage(Model model) {
+		return getUserPageByPageNumber(1, model, "firstName", "asc", null);
 	}
 
 	@GetMapping("/users/page/{pageNumber}")
@@ -79,7 +82,7 @@ public class UserController {
 		// filter
 		model.addAttribute("keyword", keyword);
 
-		return "users";
+		return "users/users";
 	}
 
 	@GetMapping("/users/new")
@@ -91,7 +94,7 @@ public class UserController {
 		model.addAttribute("user", user);
 		model.addAttribute("listRoles", listRoles);
 
-		return "user_form";
+		return "users/user_form";
 	}
 
 	@PostMapping("/users/save")
@@ -104,7 +107,7 @@ public class UserController {
 			List<Role> listRoles = this.userService.getAllRoles();
 			model.addAttribute("listRoles", listRoles);
 
-			return "user_form";
+			return "users/user_form";
 		}
 
 		if (!multipartFile.isEmpty()) {
@@ -130,7 +133,7 @@ public class UserController {
 			model.addAttribute("oldPassword", user.getPassword());
 			model.addAttribute("listRoles", listRoles);
 
-			return "admin_update_form";
+			return "users/admin_update_form";
 		} catch (Exception e) {
 			redirectAttributes.addFlashAttribute("message", "Could not find any user with id " + id);
 			return "redirect:/users";
@@ -151,7 +154,7 @@ public class UserController {
 
 			user.setPhotos(oldUser.getPhotos());
 			
-			return "admin_update_form";
+			return "users/admin_update_form";
 		}
 
 		String fileName = oldUser.getPhotos();

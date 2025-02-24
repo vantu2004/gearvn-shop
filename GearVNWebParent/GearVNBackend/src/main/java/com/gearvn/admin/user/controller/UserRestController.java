@@ -1,9 +1,10 @@
-package com.gearvn.admin.user;
+package com.gearvn.admin.user.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.gearvn.admin.user.service.UserService;
 import com.gearvn.common.entity.User;
 
 @RestController

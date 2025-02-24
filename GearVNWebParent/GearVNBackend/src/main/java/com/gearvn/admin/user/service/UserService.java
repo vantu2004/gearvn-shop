@@ -1,4 +1,4 @@
-package com.gearvn.admin.user;
+package com.gearvn.admin.user.service;
 
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -12,6 +12,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.gearvn.admin.user.repository.RoleRepository;
+import com.gearvn.admin.user.repository.UserRepository;
 import com.gearvn.common.entity.Role;
 import com.gearvn.common.entity.User;
 

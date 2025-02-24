@@ -1,4 +1,4 @@
-package com.gearvn.admin.user;
+package com.gearvn.admin.user.repository;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

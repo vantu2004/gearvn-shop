@@ -5,7 +5,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
-import com.gearvn.admin.user.UserRepository;
+import com.gearvn.admin.user.repository.UserRepository;
 import com.gearvn.common.entity.User;
 
 public class GearvnUserDetailsService implements UserDetailsService{

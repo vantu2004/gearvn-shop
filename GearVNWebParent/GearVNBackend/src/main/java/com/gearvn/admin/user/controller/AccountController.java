@@ -1,11 +1,8 @@
-package com.gearvn.admin.user;
+package com.gearvn.admin.user.controller;
 
-import java.util.Enumeration;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -14,11 +11,12 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.gearvn.admin.security.GearvnUserDetails;
+import com.gearvn.admin.user.service.UploadImageService;
+import com.gearvn.admin.user.service.UserService;
 import com.gearvn.common.entity.Role;
 import com.gearvn.common.entity.User;
 
@@ -50,7 +48,7 @@ public class AccountController {
 		model.addAttribute("user", user);
 		model.addAttribute("listRoles", listRoles);
 
-		return "user_update_form";
+		return "users/user_update_form";
 	}
 
 	@PostMapping("/account/update")
@@ -67,7 +65,7 @@ public class AccountController {
 
 			user.setPhotos(oldUser.getPhotos());
 			
-			return "user_update_form";
+			return "users/user_update_form";
 		}
 
 		String fileName = oldUser.getPhotos();

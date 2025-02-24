@@ -17,6 +17,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.test.annotation.Rollback;
 
+import com.gearvn.admin.user.repository.UserRepository;
 import com.gearvn.common.entity.Role;
 import com.gearvn.common.entity.User;
 

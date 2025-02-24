@@ -4,7 +4,6 @@ import java.awt.Color;
 import java.io.IOException;
 import java.util.List;
 
-import com.gearvn.admin.user.AbstractExporter;
 import com.gearvn.common.entity.User;
 import com.lowagie.text.Document;
 import com.lowagie.text.Font;

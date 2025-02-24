@@ -11,7 +11,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.session.security.web.authentication.SpringSessionRememberMeServices;
 
-import com.gearvn.admin.user.UserService;
+import com.gearvn.admin.user.service.UserService;
 
 import jakarta.servlet.DispatcherType;
 
@@ -55,21 +55,30 @@ public class WebSecurityConfig {
 	public SecurityFilterChain filterChain(HttpSecurity http, UserService userService) throws Exception {
 		// v6. lamda
 		http.authorizeHttpRequests(
-				authorize -> authorize.dispatcherTypeMatchers(DispatcherType.FORWARD, DispatcherType.INCLUDE)
-						.permitAll().requestMatchers("/", "/login", "/css/**", "/js/**", "/images/**", "/webjars/**")
-						.permitAll().anyRequest().authenticated())
-				.formLogin(formLogin -> formLogin.loginPage("/login").usernameParameter("email")
-						.defaultSuccessUrl("/", true).failureUrl("/login?error=true"))
-				
+				authorize -> authorize.dispatcherTypeMatchers(DispatcherType.FORWARD, DispatcherType.INCLUDE).permitAll()
+				.requestMatchers("/", "/login", "/css/**", "/js/**", "/images/**", "/webjars/**").permitAll()
+				/*
+				 * sau khi tải listRoles từ db bên GearvnUserDetails, lệnh dưới dùng
+				 * hasAuthority (ko tự động thêm ROLE_) dò chính xác trong listRoles vì trong db
+				 * cx ko có ROLE_, nếu db có lưu ROLE_ thì dùng hasAuthority()/hasRole() (tự
+				 * thêm ROLE_)
+				 */
+				.requestMatchers("/users/**").hasAuthority("Admin")
+				.anyRequest().authenticated())
+
+				.formLogin(formLogin -> formLogin.loginPage("/login").usernameParameter("email").permitAll())
+				// .defaultSuccessUrl("/", true).failureUrl("/login?error=true"))
+
 				.sessionManagement((sessionManagement) -> sessionManagement
-						.sessionCreationPolicy(SessionCreationPolicy.ALWAYS)
-						.invalidSessionUrl("/logout?expired")
+						.sessionCreationPolicy(SessionCreationPolicy.ALWAYS).invalidSessionUrl("/logout?expired")
 						// tối đa 1 thiết bị đăng nhập
 						.maximumSessions(1)
 						// thiết bị khác đăng nhập đá thiết bị đã đăng nhập
 						.maxSessionsPreventsLogin(false))
+				
 				// xóa cookie và hủy session
 				.logout(logout -> logout.deleteCookies("JSESSIONID").invalidateHttpSession(true))
+				
 				// bật rememberMe
 				.rememberMe(r -> r.rememberMeServices(rememberMeServices()));
 

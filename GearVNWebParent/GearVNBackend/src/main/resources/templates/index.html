@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
 <!-- Head -->
 <head th:replace="fragments :: page_head('Home')"></head>
@@ -11,6 +11,13 @@
 	<!-- Header -->
 	<header th:replace="fragments :: header"></header>
 	<!-- Header -->
+
+	<div class="container mt-3">
+		<h3>GearVN Control Panel</h3>
+		Welcome
+		<a th:href="@{/account}" sec:authentication="principal.fullName"></a>
+		<span sec:authentication="principal.authorities"></span>
+	</div>
 
 	<!-- Footer -->
 	<footer th:replace="fragments :: footer"></footer>
