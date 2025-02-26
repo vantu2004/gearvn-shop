@@ -34,6 +34,18 @@ a {
 .form-group {
 	margin: 16px 0;
 }
+
+#mainNavbar {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	z-index: 1000;
+}
+
+body {
+	padding-top: 50px;
+}
 </style>
 
 </head>
@@ -42,7 +54,9 @@ a {
 
 	<!-- Header -->
 	<header th:fragment="header">
-		<div style="background-color: #FFF1F5;">
+		<div
+			style="background-color: rgb(255, 255, 255); box-shadow: 1px 1px 15px #aaaaaa;"
+			id="mainNavbar">
 			<nav class="navbar navbar-expand-lg container">
 				<div class="container-fluid">
 					<a class="navbar-brand" th:href="@{/}"> <img
@@ -222,7 +236,7 @@ a {
 	</footer>
 	<!-- Footer -->
 
-	<!-- fragment link -->
+	<!-- fragment column link -->
 	<th th:fragment="column_link(fieldName, columnLabel)"><a
 		class="a-title" th:if="${sortField} != ${fieldName}"
 		th:href="@{'/users/page/' + ${currentPage} + '?sortField=' + ${fieldName} + '&sortType=' + ${sortType} + ${keyword != null ? ('&keyword=' + keyword) : ''}}">[[${columnLabel}]]</a><a
@@ -231,10 +245,12 @@ a {
 		<span th:if="${sortField} == ${fieldName}"
 		th:class="${sortType} == 'asc' ? 'fas fa-angle-up' : 'fas fa-angle-down'"></span>
 	</th>
+	<!-- fragment column link -->
 
+	<!-- fragment page link -->
 	<a th:fragment="page_link(currentPage, label)" class="page-link"
 		th:href="@{'/users/page/' + ${currentPage} + ${sortField != null ? ('?sortField=' + sortField) : ''} + ${sortType != null ? ('&sortType=' + sortType) : ''} + ${keyword != null ? ('&keyword=' + keyword) : ''}}">[[${label}]]</a>
-	<!-- fragment link -->
+	<!-- fragment page link -->
 
 </body>
 </html>

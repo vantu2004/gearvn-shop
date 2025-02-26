@@ -3,7 +3,7 @@
 <html xmlns:th="http://thymeleaf.org">
 
 <!-- Head -->
-<head th:replace="fragments :: page_head('Manage Users')"></head>
+<head th:replace="fragments :: page_head('Manage Category')"></head>
 <!-- Head -->
 
 <body>
@@ -12,15 +12,15 @@
 	<!-- Header -->
 
 	<div class="container mt-5">
-		<h2>Manage Users</h2>
+		<h2>Manage Category</h2>
 	</div>
 
+	<!-- create/csv/excel/pdf -->
 	<div class="container mt-3">
 		<div class="row g-2">
 			<div class="col-12 col-sm-6 col-md-3">
-				<a class="btn btn-primary w-100" th:href="@{/users/new}"> <i
-					class="fas fa-user-plus"></i> Create New User
-				</a>
+				<a class="btn btn-primary w-100" th:href="@{/categories/create}"><i
+					class="fas fa-plus-square"></i> Create New Category </a>
 			</div>
 			<div class="col-12 col-sm-6 col-md-3">
 				<a class="btn btn-warning w-100" th:href="@{/users/export/csv}">
@@ -39,8 +39,10 @@
 			</div>
 		</div>
 	</div>
+	<!-- create/csv/excel/pdf -->
 
 	<div class="container mt-3">
+		<!-- search/reload -->
 		<form th:action="@{/users/page/1}" method="get">
 			<div class="row g-3 align-items-center">
 				<div class="col-auto">
@@ -56,12 +58,14 @@
 					<button type="submit" class="btn">
 						<i class="fas fa-search"></i>
 					</button>
-					<a th:href="@{/users}" class="btn"> <i class="fas fa-redo"></i>
+					<a th:href="@{/categories}" class="btn"> <i class="fas fa-redo"></i>
 					</a>
 				</div>
 			</div>
 		</form>
+		<!-- search/reload -->
 
+		<!-- message -->
 		<div th:if="${message != null}" class="toast show mt-3"
 			style="width: 100%;">
 			<div class="toast-header">
@@ -72,51 +76,60 @@
 				<p th:text="${message}"></p>
 			</div>
 		</div>
+		<!-- message -->
 
+		<!-- list categories -->
 		<div class="table-responsive mt-3">
 			<table class="table table-hover">
 				<thead>
 					<tr>
-						<th th:replace="fragments :: column_link('id', 'User ID')" />
-						<th scope="col">Photos</th>
-						<th th:replace="fragments :: column_link('email', 'Email')" />
-						<th
-							th:replace="fragments :: column_link('firstName', 'First Name')" />
-						<th th:replace="fragments :: column_link('lastName', 'Last Name')" />
-						<th scope="col">Roles</th>
-						<th th:replace="fragments :: column_link('enabled', 'Enabled')" />
+						<th scope="col">ID</th>
+						<th scope="col">Category Image</th>
+						<th scope="col"><a class="a-title"
+							th:href="@{'/categories?sortType=' + ${reverseSortType}}">Category
+								Name</a> <span
+							th:class="${reverseSortType} == 'asc' ? 'fas fa-angle-up' : 'fas fa-angle-down'"></span>
+						</th>
+						<th scope="col">Alias</th>
+						<th scope="col">Enable</th>
 						<th scope="col">Action</th>
 					</tr>
 				</thead>
 				<tbody>
-					<tr th:each="user : ${listUsers}">
-						<td th:text="${user.id}"></td>
-						<td><i th:if="${#strings.isEmpty(user.photos)}"
-							class="fas fa-user-circle fa-3x text-secondary"></i> <img
-							th:if="${not #strings.isEmpty(user.photos)}"
-							th:src="@{${user.getPhotosImagePath}}" width="48" height="48"
+					<tr th:each="category : ${listCategories}">
+						<td th:text="${category.id}"></td>
+
+						<td><i th:if="${#strings.isEmpty(category.image)}"
+							class="fas fa-images fa-3x text-secondary"></i> <img
+							th:if="${not #strings.isEmpty(category.image)}"
+							th:src="@{${category.getImagePath}}" width="48" height="48"
 							class="rounded-circle object-fit-cover"></td>
-						<td th:text="${user.email}"></td>
-						<td th:text="${user.firstName}"></td>
-						<td th:text="${user.lastName}"></td>
-						<td><span th:each="role : ${user.roles}"> <span
-								th:text="${role.name}"></span><br>
-						</span></td>
-						<td><i th:if="${user.enabled}"
+
+						<td th:text="${category.name}"></td>
+
+						<td th:text="${category.alias}"></td>
+
+						<td><i th:if="${category.enabled}"
 							class="fas fa-check text-success"></i> <i
-							th:if="${!user.enabled}" class="fas fa-times text-danger"></i></td>
-						<td><a title="Edit this user"
-							th:href="@{/users/update/} + ${user.id}"> <i
+							th:if="${!category.enabled}" class="fas fa-times text-danger"></i></td>
+
+						<td><a title="Edit this category"
+							th:href="@{'/categories/update/' + ${category.id}}"> <i
 								class="fas fa-edit text-success"></i>
-						</a> | <a title="Delete this user"
-							th:href="@{'/users/delete/' + ${user.id}}" th:userId="${user.id}"
-							class="link-delete"> <i class="fas fa-trash-alt text-danger"></i>
-						</a></td>
+						</a> | <a th:if="${!category.isHasChildren}"
+							title="Delete this category"
+							th:href="@{'/categories/delete/' + ${category.id}}"
+							th:categoryId="${category.id}" class="link-delete"> <i
+								class="fas fa-trash-alt text-danger"></i>
+						</a> <i th:if="${category.isHasChildren}" class="fas fa-ban"
+							style="color: #ff0000;"
+							title="Cannot delete category with subcategories"></i></td>
+
 					</tr>
 				</tbody>
 			</table>
 		</div>
-
+		<!-- list categories -->
 
 		<!-- Pagination -->
 		<nav aria-label="Pagination"
@@ -154,10 +167,11 @@
 					th:replace="fragments :: page_link(${totalPages}, 'Last')"></a></li>
 			</ul>
 		</nav>
+		<!-- Pagination -->
 
 		<div class="text-center mt-5" th:if="${totalElements <= 0}">No
-			users found.</div>
-		<!-- Pagination -->
+			categories found.</div>
+
 	</div>
 
 	<!-- Modal delete-->
@@ -176,12 +190,12 @@
 					event.preventDefault();
 
 					let link = $(this);
-					let userId = link.attr("userId") || "unknown";
+					let categoryId = link.attr("categoryId") || "unknown";
 					let href = link.attr("href") || "#";
 
 					$("#modalMessage").text(
-							"Are you sure you want to delete user ID " + userId
-									+ "?");
+							"Are you sure you want to delete category ID "
+									+ categoryId + "?");
 					$("#deleteButton").attr("href", href);
 
 					$("#confirmModal").modal("show");

@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<!-- khai báo namespace th để có thể sử dụng các thuộc tính của thymeleaf -->
+<html xmlns:th="http://thymeleaf.org">
+
+<!-- Head -->
+<head th:replace="fragments :: page_head('Create New Category')"></head>
+<!-- Head -->
+
+<body>
+	<!-- Header -->
+	<header th:replace="fragments :: header"></header>
+	<!-- Header -->
+
+	<div class="container mt-5">
+		<nav aria-label="breadcrumb">
+			<ol class="breadcrumb">
+				<li class="breadcrumb-item"><a th:href="@{/categories}">Manage
+						Categories</a></li>
+				<li class="breadcrumb-item"><a
+					th:href="@{'/categories/update/' + ${category.id}}">Update
+						Category</a></li>
+			</ol>
+		</nav>
+	</div>
+
+	<div class="container mt-3">
+		<h2>Update Category | ID = [[${category.id}]]</h2>
+	</div>
+
+	<div class="container mt-3">
+		<form class="mx-auto col-md-6" th:action="@{/categories/update}"
+			method="post" th:object=${category} enctype="multipart/form-data"
+			onsubmit="return checkDuplicate(this)">
+
+			<div class="form-group row" style="display: none;">
+				<label for="inputId" class="col-sm-3 col-form-label">Id</label>
+				<div class="col-sm-9">
+					<input type="text" class="form-control" id="inputId"
+						placeholder="id" th:field="*{id}" readonly>
+				</div>
+			</div>
+
+			<div class="form-group row">
+				<label for="inputName" class="col-sm-3 col-form-label">Category
+					Name</label>
+				<div class="col-sm-9">
+					<input type="text" class="form-control" id="inputName"
+						placeholder="Category Name" th:field="*{name}"
+						aria-describedby="nameError">
+					<p id="nameError" th:if="${#fields.hasErrors('name')}"
+						th:errorclass="error" th:errors="*{name}" class="text-danger"></p>
+				</div>
+			</div>
+
+			<div class="form-group row">
+				<label for="inputAlias" class="col-sm-3 col-form-label">Category
+					Alias</label>
+				<div class="col-sm-9">
+					<input type="text" class="form-control" id="inputAlias"
+						placeholder="Category Alias" th:field="*{alias}"
+						aria-describedby="aliasError">
+					<p id="aliasError" th:if="${#fields.hasErrors('alias')}"
+						th:errorclass="error" th:errors="*{alias}" class="text-danger"></p>
+				</div>
+			</div>
+
+			<div class="form-group row">
+				<label for="inputParentCategory" class="col-sm-3 col-form-label">Parent
+					Category</label>
+				<div class="col-sm-9">
+					<select class="form-select" id="inputParentCategory"
+						th:field="*{parent}">
+						<option value="0">[No Parent]</option>
+						<th:block th:each="cat : ${hierarchicalCategories}">
+							<option th:value="${cat.id}">[[${cat.name}]]</option>
+						</th:block>
+					</select>
+				</div>
+			</div>
+
+			<div class="form-group row">
+				<div class="col-sm-3">Enabled</div>
+				<div class="col-sm-9">
+					<div class="form-check">
+						<input class="form-check-input" type="checkbox"
+							th:field="*{enabled}">
+					</div>
+				</div>
+			</div>
+
+			<div class="form-group row">
+				<label for="inputPhotos" class="col-sm-3 col-form-label">Image</label>
+				<div class="col-sm-9">
+					<div>
+						<!-- Giá trị tạm để đảm bảo image ko null -->
+						<input type="hidden" name="image" th:field="*{image}"> <input
+							type="file" class="form-control-file mb-2" id="inputPhotos"
+							accept=".png, .jpg, .jpeg" name="multipartFile">
+					</div>
+					<div>
+						<img th:src="@{${category.getImagePath}}" width="50%" height="50%"
+							class="d-inline-block align-top" alt="image"
+							id="inputPhotosPreview" style="border-radius: 10px;" name="image">
+					</div>
+				</div>
+			</div>
+
+			<div class="form-group row">
+				<div class="form-group d-flex justify-content-end">
+					<a th:href="@{/categories}" class="btn btn-secondary"
+						style="margin: 0 8px;">Back</a>
+					<button type="submit" class="btn btn-success">Save</button>
+				</div>
+			</div>
+		</form>
+	</div>
+
+	<!-- Modal -->
+	<div th:replace="modal_fragments :: modal_dialog"></div>
+	<!-- Modal -->
+
+	<!-- Footer -->
+	<footer th:replace="fragments :: footer"></footer>
+	<!-- Footer -->
+
+	<script type="text/javascript">
+		function checkDuplicate(form) {
+			// tạo 1 url động tự thêm context-path /GearVNAdmin vào trước, nếu dùng chuỗi cứng thì ko tự thêm đc
+			let url = "[[ @{/categories/check_duplicate} ]]";
+
+			let id = $("#inputId").val();
+			let name = $("#inputName").val();
+			let alias = $("#inputAlias").val();
+			let csrfValue = $("input[name=_csrf]").val();
+
+			let param = {
+				id : id,
+				name : name,
+				alias : alias,
+				_csrf : csrfValue
+			};
+
+			$.post(url, param, function(response) {
+				if (response === "OK") {
+					form.submit();
+				} else if (response === "DuplicateName") {
+					showModalDialog("Warning", "Name ​​cannot be duplicated");
+				} else if (response === "DuplicateAlias") {
+					showModalDialog("Warning", "Alias ​​cannot be duplicated");
+				} else {
+					showModalDialog("Error", "Unknow response from server.");
+				}
+			}).fail(function() {
+				showModalDialog("Error", "Could not connect to the server.");
+			});
+
+			// Chặn submit mặc định
+			return false;
+		}
+
+		function showModalDialog(title, message) {
+			$("#modalTitle").text(title);
+			$("#modalMessage").text(message);
+			// modal() có sẵn dùng để show/hide modal
+			$('#duplicateModal').modal('show');
+		}
+	</script>
+
+	<script th:src="@{/js/common_form.js}"></script>
+
+</body>
+
+</html>

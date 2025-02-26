@@ -75,7 +75,10 @@ public class User implements Serializable{
 	 */
 	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(name = "users_roles", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
-	// vì dùng builder nên mặc định các biến khởi tạo "="
+	/*
+	 * mặc định @Builder sẽ bỏ qua những field này, @Builder.Default giữ giá trị mặc
+	 * định đã đc gán "=",
+	 */
 	@Builder.Default
 	@NotEmpty(message = "Role cannot be empty")
 	private Set<Role> roles = new HashSet<Role>();

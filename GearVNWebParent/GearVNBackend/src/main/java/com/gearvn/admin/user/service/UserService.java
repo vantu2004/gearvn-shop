@@ -39,14 +39,14 @@ public class UserService {
 	public Page<User> pagination_getAllUsers(int pageNumber, String sortField, String sortType, String keyword) {
 		Sort sort = Sort.by(sortField);
 		sort = sortType.equals("asc") ? sort.ascending() : sort.descending();
-		
+
 		// pageNumber truyền vào ko bắt đầu từ 0 nên phải -1
 		Pageable pageable = PageRequest.of(pageNumber - 1, USER_PER_PAGE, sort);
-		
+
 		if (keyword != null) {
 			return this.userRepository.findAll(keyword, pageable);
 		}
-		
+
 		return this.userRepository.findAll(pageable);
 	}
 

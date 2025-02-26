@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://thymeleaf.org">
+<body>
+	<!-- Modal cảnh báo trùng userEmail/categoryName/categoryAlias -->
+	<div th:fragment="modal_dialog">
+		<div class="modal fade" id="duplicateModal" tabindex="-1">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title text-danger" id="modalTitle">Warning</h5>
+						<button type="button" class="btn-close" data-bs-dismiss="modal"
+							aria-label="Close"></button>
+					</div>
+					<div class="modal-body">
+						<p id="modalMessage">There is another category having this ...</p>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-danger"
+							data-bs-dismiss="modal">OK</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- Modal cảnh báo delete -->
+	<div th:fragment="modal_delete">
+		<div class="modal fade" id="confirmModal" tabindex="-1"
+			aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title text-danger" id="modalTitle">Delete
+							Confirmation</h5>
+						<button type="button" class="btn-close" data-bs-dismiss="modal"
+							aria-label="Close"></button>
+					</div>
+					<div class="modal-body">
+						<p id="modalMessage">Message</p>
+					</div>
+					<div class="modal-footer">
+						<a class="btn btn-secondary" data-bs-dismiss="modal">Cancel</a> <a
+							class="btn btn-danger" id="deleteButton" href="#">Delete</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

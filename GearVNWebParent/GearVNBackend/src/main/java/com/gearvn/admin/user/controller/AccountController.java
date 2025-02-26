@@ -14,8 +14,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.gearvn.admin.common.UploadImageService;
 import com.gearvn.admin.security.GearvnUserDetails;
-import com.gearvn.admin.user.service.UploadImageService;
 import com.gearvn.admin.user.service.UserService;
 import com.gearvn.common.entity.Role;
 import com.gearvn.common.entity.User;

@@ -18,10 +18,10 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import jakarta.servlet.http.HttpServletResponse;
 
+import com.gearvn.admin.common.UploadImageService;
 import com.gearvn.admin.user.export.UserCsvExporter;
 import com.gearvn.admin.user.export.UserExcelExporter;
 import com.gearvn.admin.user.export.UserPdfExporter;
-import com.gearvn.admin.user.service.UploadImageService;
 import com.gearvn.admin.user.service.UserService;
 import com.gearvn.common.entity.Role;
 import com.gearvn.common.entity.User;
@@ -184,7 +184,15 @@ public class UserController {
 	@GetMapping("/users/delete/{id}")
 	public String deleteUser(@PathVariable("id") Integer id, RedirectAttributes redirectAttributes) {
 		try {
+			String targetFolder = "user-photos";
+			User user = this.userService.getUserById(id);
+			String fileName = user.getPhotos();
+			
 			this.userService.deleteUser(id);
+			if (fileName != null && !fileName.isEmpty()) {
+				this.uploadImageService.deletePhotos(targetFolder, fileName);
+			}
+			
 			redirectAttributes.addFlashAttribute("message", "The user ID " + id + " has been deleted successfully.");
 		} catch (Exception e) {
 			redirectAttributes.addFlashAttribute("message", "Could not find any user with id " + id);
