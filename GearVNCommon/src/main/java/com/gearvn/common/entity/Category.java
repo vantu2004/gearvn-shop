@@ -49,7 +49,7 @@ public class Category {
 
 	@Column(length = 128, nullable = false, unique = true)
 	@NotEmpty
-	@Size(min = 2, max = 128)
+	@Size(min = 2, max = 64)
 	private String alias;
 
 	@Column(length = 128, nullable = false)

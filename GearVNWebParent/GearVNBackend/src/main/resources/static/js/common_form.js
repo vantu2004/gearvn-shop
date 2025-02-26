@@ -56,3 +56,41 @@ function checkPasswordMatch(inputRePassword) {
 		inputRePassword.setCustomValidity("");
 	}
 }
+
+function checkDuplicate(form) {
+	let id = $("#inputId").val();
+	let name = $("#inputName").val();
+	let alias = $("#inputAlias").val();
+	let csrfValue = $("input[name=_csrf]").val();
+
+	let param = {
+		id: id,
+		name: name,
+		alias: alias,
+		_csrf: csrfValue
+	};
+
+	$.post(checkDuplicateUrl, param, function(response) {
+		if (response === "OK") {
+			form.submit();
+		} else if (response === "DuplicateName") {
+			showModalDialog("Warning", "Name ​​cannot be duplicated");
+		} else if (response === "DuplicateAlias") {
+			showModalDialog("Warning", "Alias ​​cannot be duplicated");
+		} else {
+			showModalDialog("Error", "Unknow response from server.");
+		}
+	}).fail(function() {
+		showModalDialog("Error", "Could not connect to the server.");
+	});
+
+	// Chặn submit mặc định
+	return false;
+}
+
+function showModalDialog(title, message) {
+	$("#modalTitle").text(title);
+	$("#modalMessage").text(message);
+	// modal() có sẵn dùng để show/hide modal
+	$('#duplicateModal').modal('show');
+}

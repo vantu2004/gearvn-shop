@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-<!-- khai báo namespace th để có thể sử dụng các thuộc tính của thymeleaf -->
 <html xmlns:th="http://thymeleaf.org">
 
 <!-- Head -->
@@ -23,18 +22,8 @@
 					class="fas fa-plus-square"></i> Create New Category </a>
 			</div>
 			<div class="col-12 col-sm-6 col-md-3">
-				<a class="btn btn-warning w-100" th:href="@{/users/export/csv}">
+				<a class="btn btn-warning w-100" th:href="@{/categories/export/csv}">
 					<i class="fas fa-file-csv"></i> Export To CSV
-				</a>
-			</div>
-			<div class="col-12 col-sm-6 col-md-3">
-				<a class="btn btn-success w-100" th:href="@{/users/export/excel}">
-					<i class="fas fa-file-excel"></i> Export To Excel
-				</a>
-			</div>
-			<div class="col-12 col-sm-6 col-md-3">
-				<a class="btn btn-danger w-100" th:href="@{/users/export/pdf}">
-					<i class="fas fa-file-pdf"></i> Export To PDF
 				</a>
 			</div>
 		</div>
@@ -43,12 +32,10 @@
 
 	<div class="container mt-3">
 		<!-- search/reload -->
-		<form th:action="@{/users/page/1}" method="get">
+		<form th:action="@{/categories/page/1}" method="get">
 			<div class="row g-3 align-items-center">
 				<div class="col-auto">
-					<input type="hidden" id="inputSortField" class="form-control"
-						th:value="${sortField}" name="sortField"> <input
-						type="hidden" id="inputSortType" class="form-control"
+					<input type="hidden" id="inputSortType" class="form-control"
 						th:value="${sortType}" name="sortType"> <input
 						type="search" id="inputKeyword" class="form-control"
 						placeholder="Enter keyword" aria-describedby="passwordHelpInline"
@@ -85,11 +72,9 @@
 					<tr>
 						<th scope="col">ID</th>
 						<th scope="col">Category Image</th>
-						<th scope="col"><a class="a-title"
-							th:href="@{'/categories?sortType=' + ${reverseSortType}}">Category
-								Name</a> <span
-							th:class="${reverseSortType} == 'asc' ? 'fas fa-angle-up' : 'fas fa-angle-down'"></span>
-						</th>
+						<!-- th:href chuẩn bị link cho lần click tiếp theo, th:class hiển thị đúng icon của sortType hiện tại -->
+						<th
+							th:replace="fragments :: column_link('/categories', 'name', 'Category Name')" />
 						<th scope="col">Alias</th>
 						<th scope="col">Enable</th>
 						<th scope="col">Action</th>
@@ -135,39 +120,32 @@
 		<nav aria-label="Pagination"
 			class="d-flex flex-column align-items-center mt-5"
 			th:if="${totalElements > 0}">
-			<p class="mb-2">Show users from [[${startCount}]] to
-				[[${endCount}]] of [[${totalElements}]]</p>
+			<p class="mb-2">Show top-level categories from [[${startCount}]]
+				to [[${endCount}]] of [[${totalElements}]]</p>
 			<ul class="pagination justify-content-center">
-				<!-- Nút "First" -->
 				<li class="page-item"
 					th:classappend="${currentPage == 1} ? 'disabled'"><a
-					th:replace="fragments :: page_link(1, 'First')"></a></li>
+					th:replace="fragments :: page_link('/categories', 1, 'First')"></a></li>
 
-				<!-- Nút "Previous" -->
 				<li class="page-item"
 					th:classappend="${currentPage == 1} ? 'disabled'"><a
-					th:replace="fragments :: page_link(${currentPage - 1}, 'Previous')"></a>
-				</li>
+					th:replace="fragments :: page_link('/categories', ${currentPage - 1}, 'Previous')"></a></li>
 
-				<!-- Các số trang -->
 				<li class="page-item"
 					th:each="page : ${#numbers.sequence(startPage, endPage)}"
 					th:classappend="${page == currentPage} ? 'active'"><a
-					th:replace="fragments :: page_link(${page}, ${page})"></a></li>
+					th:replace="fragments :: page_link('/categories', ${page}, ${page})"></a></li>
 
-				<!-- Nút "Next" -->
 				<li class="page-item"
 					th:classappend="${currentPage == totalPages} ? 'disabled'"><a
-					th:replace="fragments :: page_link(${currentPage + 1}, 'Next')"></a>
-				</li>
+					th:replace="fragments :: page_link('/categories', ${currentPage + 1}, 'Next')"></a></li>
 
-				<!-- Nút "Last" -->
 				<li class="page-item"
 					th:classappend="${currentPage == totalPages} ? 'disabled'"><a
-					th:replace="fragments :: page_link(${totalPages}, 'Last')"></a></li>
+					th:replace="fragments :: page_link('/categories', ${totalPages}, 'Last')"></a></li>
 			</ul>
 		</nav>
-		<!-- Pagination -->
+
 
 		<div class="text-center mt-5" th:if="${totalElements <= 0}">No
 			categories found.</div>

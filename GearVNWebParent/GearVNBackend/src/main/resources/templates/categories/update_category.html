@@ -123,7 +123,7 @@
 	<footer th:replace="fragments :: footer"></footer>
 	<!-- Footer -->
 
-	<script type="text/javascript">
+<!-- 	<script type="text/javascript">
 		function checkDuplicate(form) {
 			// tạo 1 url động tự thêm context-path /GearVNAdmin vào trước, nếu dùng chuỗi cứng thì ko tự thêm đc
 			let url = "[[ @{/categories/check_duplicate} ]]";
@@ -164,6 +164,10 @@
 			// modal() có sẵn dùng để show/hide modal
 			$('#duplicateModal').modal('show');
 		}
+	</script> -->
+
+	<script>
+		let checkDuplicateUrl = "[[ @{/categories/check_duplicate} ]]";
 	</script>
 
 	<script th:src="@{/js/common_form.js}"></script>

@@ -35,7 +35,7 @@ a {
 	margin: 16px 0;
 }
 
-#mainNavbar {
+/* #mainNavbar {
 	position: fixed;
 	top: 0;
 	left: 0;
@@ -45,7 +45,7 @@ a {
 
 body {
 	padding-top: 50px;
-}
+} */
 </style>
 
 </head>
@@ -236,21 +236,28 @@ body {
 	</footer>
 	<!-- Footer -->
 
-	<!-- fragment column link -->
-	<th th:fragment="column_link(fieldName, columnLabel)"><a
+	<!-- fragment column link user -->
+	<th th:fragment="column_link(rootPath, fieldName, columnLabel)"><a
 		class="a-title" th:if="${sortField} != ${fieldName}"
-		th:href="@{'/users/page/' + ${currentPage} + '?sortField=' + ${fieldName} + '&sortType=' + ${sortType} + ${keyword != null ? ('&keyword=' + keyword) : ''}}">[[${columnLabel}]]</a><a
+		th:href="@{${rootPath} + '/page/' + ${currentPage} + '?sortField=' + ${fieldName} + '&sortType=' + ${sortType} + ${keyword != null ? ('&keyword=' + keyword) : ''}}">[[${columnLabel}]]</a><a
 		class="a-title" th:if="${sortField} == ${fieldName}"
-		th:href="@{'/users/page/' + ${currentPage} + '?sortField=' + ${fieldName} + '&sortType=' + ${reverseSortType} + ${keyword != null ? ('&keyword=' + keyword) : ''}}">[[${columnLabel}]]</a>
+		th:href="@{${rootPath} + '/page/' + ${currentPage} + '?sortField=' + ${fieldName} + '&sortType=' + ${reverseSortType} + ${keyword != null ? ('&keyword=' + keyword) : ''}}">[[${columnLabel}]]</a>
 		<span th:if="${sortField} == ${fieldName}"
 		th:class="${sortType} == 'asc' ? 'fas fa-angle-up' : 'fas fa-angle-down'"></span>
 	</th>
-	<!-- fragment column link -->
+	<!-- fragment column link user-->
 
-	<!-- fragment page link -->
-	<a th:fragment="page_link(currentPage, label)" class="page-link"
-		th:href="@{'/users/page/' + ${currentPage} + ${sortField != null ? ('?sortField=' + sortField) : ''} + ${sortType != null ? ('&sortType=' + sortType) : ''} + ${keyword != null ? ('&keyword=' + keyword) : ''}}">[[${label}]]</a>
-	<!-- fragment page link -->
+	<!-- fragment page link user -->
+	<a th:fragment="page_link(rootPath, currentPage, label)" class="page-link"
+		th:href="@{${rootPath} + '/page/' + ${currentPage} + ${sortField != null ? ('?sortField=' + sortField) : ''} + ${sortType != null ? ('&sortType=' + sortType) : ''} + ${keyword != null ? ('&keyword=' + keyword) : ''}}">[[${label}]]</a>
+	<!-- fragment page link user -->
+
+
+	<!-- fragment page link category -->
+<!-- 	<a th:fragment="page_link_category(currentPage, label)" class="page-link"
+		th:href="@{'/categories/page/' + ${currentPage} + ${sortType != null ? ('?sortType=' + sortType) : ''} + ${keyword != null ? ('&keyword=' + keyword) : ''}}">
+		[[${label}]] </a> -->
+	<!-- fragment page link category -->
 
 </body>
 </html>
