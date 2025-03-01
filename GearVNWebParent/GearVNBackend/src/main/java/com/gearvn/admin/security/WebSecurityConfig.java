@@ -64,7 +64,7 @@ public class WebSecurityConfig {
 				 * thêm ROLE_)
 				 */
 				.requestMatchers("/users/**").hasAuthority("Admin")
-				.requestMatchers("/categories/**").hasAnyAuthority("Admin", "Editor")
+				.requestMatchers("/categories/**", "/brands/**").hasAnyAuthority("Admin", "Editor")
 				.anyRequest().authenticated())
 
 				.formLogin(formLogin -> formLogin.loginPage("/login").usernameParameter("email").permitAll())

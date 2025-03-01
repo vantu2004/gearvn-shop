@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<!-- khai báo namespace th để có thể sử dụng các thuộc tính của thymeleaf -->
+<html xmlns:th="http://thymeleaf.org">
+
+<!-- Head -->
+<head th:replace="fragments :: page_head('Update Brand')"></head>
+<!-- Head -->
+
+<body>
+	<!-- Header -->
+	<header th:replace="fragments :: header"></header>
+	<!-- Header -->
+
+	<div class="container mt-5">
+		<nav aria-label="breadcrumb">
+			<ol class="breadcrumb">
+				<li class="breadcrumb-item"><a th:href="@{/brands}">Manage
+						Brands</a></li>
+				<li class="breadcrumb-item"><a th:href="@{'/brands/update' + ${brand.id}}">Update Brand</a></li>
+			</ol>
+		</nav>
+	</div>
+
+	<div class="container mt-3">
+		<h2>Update Brand | ID = [[${brand.id}]]</h2>
+	</div>
+
+	<div class="container mt-3">
+		<form class="mx-auto col-md-6" th:action="@{/brands/update}"
+			method="post" th:object=${brand} enctype="multipart/form-data"
+			onsubmit="return checkDuplicateName(this)">
+
+			<div class="form-group row" style="display: none;">
+				<label for="inputId" class="col-sm-3 col-form-label">Id</label>
+				<div class="col-sm-9">
+					<input type="text" class="form-control" id="inputId"
+						placeholder="id" th:field="*{id}" readonly>
+				</div>
+			</div>
+
+			<div class="form-group row">
+				<label for="inputName" class="col-sm-3 col-form-label">Brand
+					Name</label>
+				<div class="col-sm-9">
+					<input type="text" class="form-control" id="inputName"
+						placeholder="Brand Name" th:field="*{name}"
+						aria-describedby="nameError">
+					<p id="nameError" th:if="${#fields.hasErrors('name')}"
+						th:errorclass="error" th:errors="*{name}" class="text-danger"></p>
+				</div>
+			</div>
+
+			<div class="form-group row">
+				<label class="col-sm-3 col-form-label">Select one or more
+					categories</label>
+				<div class="col-sm-9">
+					<select class="form-select" th:field="*{categories}" multiple
+						required style="resize: vertical; height: 200px;">
+						<th:block th:each="category : ${categories}">
+							<option th:value="${category.id}">[[${category.name}]]</option>
+						</th:block>
+					</select>
+					<p id="nameError" th:if="${#fields.hasErrors('categories')}"
+						th:errorclass="error" th:errors="*{categories}"
+						class="text-danger"></p>
+				</div>
+			</div>
+
+			<div class="form-group row">
+				<label for="chosenCategories" class="col-sm-3 col-form-label">Chosen
+					Categories</label>
+				<div class="col-sm-9" id="chosenCategories"></div>
+			</div>
+
+			<div class="form-group row">
+				<label for="inputPhotos" class="col-sm-3 col-form-label">Logo</label>
+				<div class="col-sm-9">
+					<div>
+						<!-- Giá trị tạm để đảm bảo image ko null -->
+						<input type="hidden" name="logo" th:field="*{logo}"> <input
+							type="file" class="form-control-file mb-2" id="inputPhotos"
+							accept=".png, .jpg, .jpeg" name="multipartFile">
+					</div>
+					<div>
+						<img th:src="@{${brand.getLogoPath}}" width="50%" height="50%"
+							class="d-inline-block align-top" alt="logo"
+							id="inputPhotosPreview" style="border-radius: 10px;" name="logo">
+					</div>
+				</div>
+			</div>
+
+			<div class="form-group row">
+				<div class="form-group d-flex justify-content-end">
+					<a th:href="@{/brands}" class="btn btn-secondary"
+						style="margin: 0 8px;">Back</a>
+					<button type="submit" class="btn btn-success">Save</button>
+				</div>
+			</div>
+		</form>
+	</div>
+
+	<!-- Modal -->
+	<div th:replace="modal_fragments :: modal_dialog"></div>
+	<!-- Modal -->
+
+	<!-- Footer -->
+	<footer th:replace="fragments :: footer"></footer>
+	<!-- Footer -->
+
+	<script type="text/javascript">
+		// check duplicate brandName
+		let checkDuplicateUrl = "[[ @{/brands/check_duplicate} ]]";
+	</script>
+
+	<script th:src="@{/js/common_form.js}"></script>
+
+</body>
+
+</html>

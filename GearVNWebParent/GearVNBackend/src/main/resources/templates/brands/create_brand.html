@@ -3,7 +3,7 @@
 <html xmlns:th="http://thymeleaf.org">
 
 <!-- Head -->
-<head th:replace="fragments :: page_head('Create New Category')"></head>
+<head th:replace="fragments :: page_head('Create New Brand')"></head>
 <!-- Head -->
 
 <body>
@@ -14,22 +14,22 @@
 	<div class="container mt-5">
 		<nav aria-label="breadcrumb">
 			<ol class="breadcrumb">
-				<li class="breadcrumb-item"><a th:href="@{/categories}">Manage
-						Categories</a></li>
-				<li class="breadcrumb-item"><a th:href="@{/categories/create}">Create
-						New Category</a></li>
+				<li class="breadcrumb-item"><a th:href="@{/brands}">Manage
+						Brands</a></li>
+				<li class="breadcrumb-item"><a th:href="@{/brands/create}">Create
+						New Brand</a></li>
 			</ol>
 		</nav>
 	</div>
 
 	<div class="container mt-3">
-		<h2>Create New Category</h2>
+		<h2>Create New Brand</h2>
 	</div>
 
 	<div class="container mt-3">
-		<form class="mx-auto col-md-6" th:action="@{/categories/save}"
-			method="post" th:object=${category} enctype="multipart/form-data"
-			onsubmit="return checkDuplicate(this)">
+		<form class="mx-auto col-md-6" th:action="@{/brands/save}"
+			method="post" th:object=${brand} enctype="multipart/form-data"
+			onsubmit="return checkDuplicateName(this)">
 
 			<div class="form-group row" style="display: none;">
 				<label for="inputId" class="col-sm-3 col-form-label">Id</label>
@@ -40,11 +40,11 @@
 			</div>
 
 			<div class="form-group row">
-				<label for="inputName" class="col-sm-3 col-form-label">Category
+				<label for="inputName" class="col-sm-3 col-form-label">Brand
 					Name</label>
 				<div class="col-sm-9">
 					<input type="text" class="form-control" id="inputName"
-						placeholder="Category Name" th:field="*{name}"
+						placeholder="Brand Name" th:field="*{name}"
 						aria-describedby="nameError">
 					<p id="nameError" th:if="${#fields.hasErrors('name')}"
 						th:errorclass="error" th:errors="*{name}" class="text-danger"></p>
@@ -52,62 +52,48 @@
 			</div>
 
 			<div class="form-group row">
-				<label for="inputAlias" class="col-sm-3 col-form-label">Category
-					Alias</label>
+				<label class="col-sm-3 col-form-label">Select one or more
+					categories</label>
 				<div class="col-sm-9">
-					<input type="text" class="form-control" id="inputAlias"
-						placeholder="Category Alias" th:field="*{alias}"
-						aria-describedby="aliasError">
-					<p id="aliasError" th:if="${#fields.hasErrors('alias')}"
-						th:errorclass="error" th:errors="*{alias}" class="text-danger"></p>
-				</div>
-			</div>
-
-			<div class="form-group row">
-				<label for="inputParentCategory" class="col-sm-3 col-form-label">Parent
-					Category</label>
-				<div class="col-sm-9">
-					<select class="form-select" id="inputParentCategory"
-						th:field="*{parent}">
-						<option value="0">[No Parent]</option>
-						<th:block th:each="cat : ${hierarchicalCategories}">
-							<option th:value="${cat.id}">[[${cat.name}]]</option>
+					<select class="form-select" th:field="*{categories}" multiple
+						required style="resize: vertical; height: 200px;">
+						<th:block th:each="category : ${categories}">
+							<option th:value="${category.id}">[[${category.name}]]</option>
 						</th:block>
 					</select>
+					<p id="nameError" th:if="${#fields.hasErrors('categories')}"
+						th:errorclass="error" th:errors="*{categories}"
+						class="text-danger"></p>
 				</div>
 			</div>
 
 			<div class="form-group row">
-				<div class="col-sm-3">Enabled</div>
-				<div class="col-sm-9">
-					<div class="form-check">
-						<input class="form-check-input" type="checkbox"
-							th:field="*{enabled}">
-					</div>
-				</div>
+				<label for="chosenCategories" class="col-sm-3 col-form-label">Chosen
+					Categories</label>
+				<div class="col-sm-9" id="chosenCategories"></div>
 			</div>
 
 			<div class="form-group row">
-				<label for="inputPhotos" class="col-sm-3 col-form-label">Image</label>
+				<label for="inputPhotos" class="col-sm-3 col-form-label">Logo</label>
 				<div class="col-sm-9">
 					<div>
 						<!-- Giá trị tạm để đảm bảo image ko null -->
-						<input type="hidden" name="image"
-							th:value="${category.image} ?: 'LogoGearvn.jpg'"> <input
+						<input type="hidden" name="logo"
+							th:value="${brand.logo} ?: 'LogoGearvn.jpg'"> <input
 							type="file" class="form-control-file mb-2" id="inputPhotos"
 							accept=".png, .jpg, .jpeg" name="multipartFile" required>
 					</div>
 					<div>
 						<img th:src="@{/images/LogoGearvn.png}" width="50%" height="50%"
-							class="d-inline-block align-top" alt="image"
-							id="inputPhotosPreview" style="border-radius: 10px;" name="image">
+							class="d-inline-block align-top" alt="logo"
+							id="inputPhotosPreview" style="border-radius: 10px;" name="logo">
 					</div>
 				</div>
 			</div>
 
 			<div class="form-group row">
 				<div class="form-group d-flex justify-content-end">
-					<a th:href="@{/categories}" class="btn btn-secondary"
+					<a th:href="@{/brands}" class="btn btn-secondary"
 						style="margin: 0 8px;">Back</a>
 					<button type="submit" class="btn btn-success">Create</button>
 				</div>
@@ -123,8 +109,9 @@
 	<footer th:replace="fragments :: footer"></footer>
 	<!-- Footer -->
 
-	<script>
-		let checkDuplicateUrl = "[[ @{/categories/check_duplicate} ]]";
+	<script type="text/javascript">
+		// check duplicate brandName
+		let checkDuplicateUrl = "[[ @{/brands/check_duplicate} ]]";
 	</script>
 
 	<script th:src="@{/js/common_form.js}"></script>
