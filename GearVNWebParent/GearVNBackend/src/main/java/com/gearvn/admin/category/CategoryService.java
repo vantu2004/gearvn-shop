@@ -63,7 +63,8 @@ public class CategoryService {
 		return sortType.equals("asc") ? sort.ascending() : sort.descending();
 	}
 
-	private List<Category> getHierarchicalCategories(List<Category> categories, String sortType) {
+	// public để bên brandService có thể truy cập được và lấy categories theo brand
+	public List<Category> getHierarchicalCategories(List<Category> categories, String sortType) {
 		List<Category> hierarchicalCategories = new ArrayList<>();
 
 		// duyệt lần 1

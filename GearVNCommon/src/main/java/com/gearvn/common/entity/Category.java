@@ -1,6 +1,7 @@
 package com.gearvn.common.entity;
 
 import java.util.Set;
+
 import java.util.HashSet;
 
 import jakarta.persistence.Column;
@@ -34,12 +35,12 @@ import lombok.ToString;
 // hashCode() giúp Java tìm nhanh đối tượng, còn equals() đảm bảo hai đối tượng thực sự bằng nhau.
 // bắt buộc phải có, nếu ko sẽ gây lỗi khi get listCategories
 // bắt buộc triển khai cả 2 hashCode và equals nếu ko @Data sẽ mất hiệu lực
-@EqualsAndHashCode(onlyExplicitlyIncluded = true) 
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class Category {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	// chỉ định id sẽ đc equals() so sánh và hashCode() tìm kiếm
-    @EqualsAndHashCode.Include 
+	@EqualsAndHashCode.Include
 	private Integer id;
 
 	@Column(length = 128, nullable = false, unique = true)
@@ -68,7 +69,7 @@ public class Category {
 	@OneToMany(mappedBy = "parent")
 	@Builder.Default
 	private Set<Category> children = new HashSet<Category>();
-	
+
 	@Transient
 	public String getImagePath() {
 		if (id == null || image == null || image.isEmpty()) {
@@ -77,9 +78,9 @@ public class Category {
 
 		return "/category-images/" + this.image;
 	}
-	
+
 	@Transient
 	public boolean isHasChildren() {
-	    return children != null && !children.isEmpty();
+		return children != null && !children.isEmpty();
 	}
 }

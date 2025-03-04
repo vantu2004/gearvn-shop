@@ -10,6 +10,9 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -21,7 +24,7 @@ import lombok.ToString;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
+@Builder(toBuilder = true)
 @ToString
 public class Product {
 
@@ -30,9 +33,11 @@ public class Product {
 	private Integer id;
 
 	@Column(unique = true, length = 255, nullable = false)
+	@NotBlank
 	private String name;
 
 	@Column(unique = true, length = 255, nullable = false)
+	@NotBlank
 	private String alias;
 
 	@Column(length = 512, nullable = false, name = "short_description")
@@ -53,12 +58,17 @@ public class Product {
 	private boolean inStock;
 
 	// giá nhập
+	@NotNull
+	@Positive
 	private float cost;
 
 	// giá bán
+	@NotNull
+	@Positive
 	private float price;
 
 	@Column(name = "discount_percent")
+	@Positive
 	private float discountPercent;
 
 	private float length;
@@ -68,10 +78,12 @@ public class Product {
 
 	@ManyToOne
 	@JoinColumn(name = "category_id")
+	@NotNull
 	private Category category;
 
 	@ManyToOne
 	@JoinColumn(name = "brand_id")
+	@NotNull
 	private Brand brand;
 
 }

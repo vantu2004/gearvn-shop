@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<!-- khai báo namespace th để có thể sử dụng các thuộc tính của thymeleaf -->
+<html xmlns:th="http://thymeleaf.org">
+
+<!-- Head -->
+<head th:replace="fragments :: page_head('Create New Product')"></head>
+<!-- Head -->
+
+<body>
+	<!-- Header -->
+	<header th:replace="fragments :: header"></header>
+	<!-- Header -->
+
+	<!-- sideBar -->
+	<div class="container-fluid">
+		<div class="row flex-nowrap">
+			<!-- SideBar -->
+			<th:block th:replace="products/product_fragments :: sidebar"></th:block>
+			<!-- SideBar -->
+
+			<th:block th:replace="products/product_fragments :: createNewProduct"></th:block>
+		</div>
+	</div>
+
+	<!-- sideBar -->
+
+	<!-- Modal -->
+	<div th:replace="modal_fragments :: modal_dialog"></div>
+	<!-- Modal -->
+
+	<!-- Footer -->
+	<footer th:replace="fragments :: footer"></footer>
+	<!-- Footer -->
+
+	<script type="text/javascript">
+		// check duplicate brandName
+		let checkDuplicateUrl = "[[ @{/brands/check_duplicate} ]]";
+
+		// load categories
+		let dropdownBrands = $("#inputBrand");
+		let dropdownCategories = $("#inputCategory");
+
+		$(document).ready(function() {
+			dropdownBrands.change(function() {
+				dropdownCategories.empty();
+				getCategories();
+			});
+			// set categories cho brand đầu tiên
+			getCategories();
+		});
+
+		function getCategories() {
+			let brandId = dropdownBrands.val();
+			let url = "[[@{/brands/}]]" + brandId + "/categories";
+
+			$.get(url, function(response) {
+				$.each(response, function(index, category) {
+					$("<option>").val(category.id).text(category.name).appendTo(
+							dropdownCategories);
+				})
+			});
+		}
+	</script>
+
+	<script th:src="@{/js/common_form.js}"></script>
+
+</body>
+
+</html>

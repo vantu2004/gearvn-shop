@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html xmlns:th="http://thymeleaf.org">
+
+<!-- Head -->
+<head th:replace="fragments :: page_head('Manage Products')"></head>
+<!-- Head -->
+
+<body>
+	<!-- Header -->
+	<header th:replace="fragments :: header"></header>
+	<!-- Header -->
+
+	<div class="container mt-5">
+		<h2>Manage Products</h2>
+	</div>
+
+	<!-- create/csv/excel/pdf -->
+	<div class="container mt-3">
+		<div class="row g-2">
+			<div class="col-12 col-sm-6 col-md-3">
+				<a class="btn btn-primary w-100" th:href="@{/products/create}"><i
+					class="fas fa-plus-square"></i> Create New Product </a>
+			</div>
+			<div class="col-12 col-sm-6 col-md-3">
+				<a class="btn btn-warning w-100" th:href="@{/products/export/csv}">
+					<i class="fas fa-file-csv"></i> Export To CSV
+				</a>
+			</div>
+		</div>
+	</div>
+	<!-- create/csv/excel/pdf -->
+
+	<div class="container mt-3">
+		<!-- search/reload -->
+		<form th:action="@{/products/page/1}" method="get">
+			<div class="row g-3 align-items-center">
+				<div class="col-auto">
+					<input type="hidden" id="inputSortType" class="form-control"
+						th:value="${sortType}" name="sortType"> <input
+						type="search" id="inputKeyword" class="form-control"
+						placeholder="Enter keyword" aria-describedby="passwordHelpInline"
+						name="keyword" th:value="${keyword}">
+				</div>
+				<div class="col-auto">
+					<button type="submit" class="btn">
+						<i class="fas fa-search"></i>
+					</button>
+					<a th:href="@{/products}" class="btn"> <i class="fas fa-redo"></i>
+					</a>
+				</div>
+			</div>
+		</form>
+		<!-- search/reload -->
+
+		<!-- message -->
+		<div th:if="${message != null}" class="toast show mt-3"
+			style="width: 100%;">
+			<div class="toast-header">
+				<strong class="me-auto">Message</strong>
+				<button type="button" class="btn-close" data-bs-dismiss="toast"></button>
+			</div>
+			<div class="toast-body" style="color: green;">
+				<p th:text="${message}"></p>
+			</div>
+		</div>
+		<!-- message -->
+
+		<!-- list categories -->
+		<div class="table-responsive mt-3">
+			<table class="table table-hover">
+				<thead>
+					<tr>
+						<th scope="col">ID</th>
+						<th scope="col">Main Image</th>
+						<th scope="col">Product Name</th>
+						<th scope="col">Brand</th>
+						<th scope="col">Category</th>
+						<th scope="col">Enabled</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="product : ${listProducts}">
+						<td th:text="${product.id}"></td>
+
+						<!-- 						<td><i th:if="${#strings.isEmpty(brand.logo)}"
+							class="fas fa-images fa-3x text-secondary"></i> <img
+							th:if="${not #strings.isEmpty(brand.logo)}"
+							th:src="@{${brand.getLogoPath}}" width="48" height="48"
+							class="rounded-circle object-fit-cover"></td> -->
+						<td><i class="fas fa-images fa-3x text-secondary"></i></td>
+
+						<td th:text="${product.name}"></td>
+
+						<td style="width: 300px;"><span
+							th:each="brand : ${product.brand}"> <span
+								class="badge text-bg-success" th:text="${brand.name}"></span>
+						</span></td>
+
+						<td style="width: 300px;"><span
+							th:each="category : ${product.category}"> <span
+								class="badge text-bg-secondary" th:text="${category.name}"></span>
+						</span></td>
+
+						<td><a title="View this product"
+							th:href="@{'/products/update/' + ${product.id}}"> <i
+								class="fas fa-eye"></i>
+						</a> | <a title="Edit this product"
+							th:href="@{'/products/update/' + ${product.id}}"> <i
+								class="fas fa-edit text-success"></i>
+						</a> | <a title="Delete this product"
+							th:href="@{'/products/delete/' + ${product.id}}"
+							th:productId="${product.id}" class="link-delete"> <i
+								class="fas fa-trash-alt text-danger"></i>
+						</a>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+		<!-- list categories -->
+
+		<!-- Pagination -->
+		<nav aria-label="Pagination"
+			class="d-flex flex-column align-items-center mt-5"
+			th:if="${totalElements > 0}">
+			<p class="mb-2">Show brands from [[${startCount}]] to
+				[[${endCount}]] of [[${totalElements}]]</p>
+			<ul class="pagination justify-content-center">
+				<li class="page-item"
+					th:classappend="${currentPage == 1} ? 'disabled'"><a
+					th:replace="fragments :: page_link('/brands', 1, 'First')"></a></li>
+
+				<li class="page-item"
+					th:classappend="${currentPage == 1} ? 'disabled'"><a
+					th:replace="fragments :: page_link('/brands', ${currentPage - 1}, 'Previous')"></a></li>
+
+				<li class="page-item"
+					th:each="page : ${#numbers.sequence(startPage, endPage)}"
+					th:classappend="${page == currentPage} ? 'active'"><a
+					th:replace="fragments :: page_link('/brands', ${page}, ${page})"></a></li>
+
+				<li class="page-item"
+					th:classappend="${currentPage == totalPages} ? 'disabled'"><a
+					th:replace="fragments :: page_link('/brands', ${currentPage + 1}, 'Next')"></a></li>
+
+				<li class="page-item"
+					th:classappend="${currentPage == totalPages} ? 'disabled'"><a
+					th:replace="fragments :: page_link('/brands', ${totalPages}, 'Last')"></a></li>
+			</ul>
+		</nav>
+
+
+		<div class="text-center mt-5" th:if="${totalElements <= 0}">No
+			brands found.</div>
+
+	</div>
+
+	<!-- Modal delete-->
+	<div th:replace="modal_fragments :: modal_delete"></div>
+	<!-- Modal delete-->
+
+	<!-- Footer -->
+	<footer th:replace="fragments :: footer"></footer>
+	<!-- Footer -->
+
+	<!-- jQuery Script -->
+	<script type="text/javascript">
+		$(".link-delete").on(
+				"click",
+				function(event) {
+					event.preventDefault();
+
+					let link = $(this);
+					let brandId = link.attr("brandId") || "unknown";
+					let href = link.attr("href") || "#";
+
+					$("#modalMessage").text(
+							"Are you sure you want to delete brand ID "
+									+ brandId + "?");
+					$("#deleteButton").attr("href", href);
+
+					$("#confirmModal").modal("show");
+				});
+	</script>
+</body>
+
+</html>

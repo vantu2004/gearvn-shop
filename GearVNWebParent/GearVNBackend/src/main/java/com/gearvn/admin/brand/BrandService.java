@@ -22,7 +22,7 @@ public class BrandService {
 	
 	@Autowired
 	private BrandRepository brandRepository;
-	
+
 	public List<Brand> getAllBrands() {
 		return this.brandRepository.findAll(Sort.by("name").ascending());
 	}
