@@ -3,7 +3,10 @@
 <html xmlns:th="http://thymeleaf.org">
 
 <!-- Head -->
-<head th:replace="fragments :: page_head('Create New Product', 'none')"></head>
+<head th:replace="fragments :: page_head('Description Product', 'remove')">
+	<link rel="stylesheet" th:ref="@{/richtext/richtext.min.css}"/>
+	<script th:src="@{/richtext/jquery.richtext.min.js}"></script>
+</head>
 <!-- Head -->
 
 <body>
