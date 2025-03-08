@@ -53,9 +53,10 @@ public class CategoryService {
 	public List<Category> getAllCategories(String sortType) {
 		// lấy listRootCategories đc sort mặc định
 		List<Category> listCategories = this.categoryRepository.findRootCategories(getSortType(sortType));
-
+		List<Category> listHierarchicalCategories = getHierarchicalCategories(listCategories, sortType);
+		
 		// dựa vào listRootCategories trả về toàn bộ cây category đã dc phân cấp
-		return getHierarchicalCategories(listCategories, sortType);
+		return listHierarchicalCategories;
 	}
 
 	private Sort getSortType(String sortType) {

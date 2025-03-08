@@ -3,7 +3,12 @@
 <html xmlns:th="http://thymeleaf.org">
 
 <!-- Head -->
-<head th:replace="fragments :: page_head('Create New Product', 'none')"></head>
+<head>
+<head th:replace="fragments :: page_head('Create New Product', 'tag')" />
+<link rel="stylesheet" th:href="@{/richtext/richtext.min.css}" />
+<script th:src="@{/richtext/jquery.richtext.min.js}"></script>
+
+</head>
 <!-- Head -->
 
 <body>
@@ -11,18 +16,54 @@
 	<header th:replace="fragments :: header"></header>
 	<!-- Header -->
 
-	<!-- sideBar -->
-	<div class="container-fluid">
+	<div class="container">
 		<div class="row flex-nowrap">
-			<!-- SideBar -->
-			<th:block th:replace="products/product_fragments :: sidebar"></th:block>
-			<!-- SideBar -->
+			<!-- Tabs dọc -->
+			<div class="col-auto col-md-3 col-xl-2 px-sm-2 px-0"
+				style="box-shadow: 1px 0px 5px -2px #aaaaaa;">
+				<th:block th:replace="products/product_fragments :: sidebar"></th:block>
+			</div>
 
-			<th:block th:replace="products/product_fragments :: createNewProduct"></th:block>
+			<div class="col mt-4">
+				<form th:action="@{/products/save}" method="post"
+					onsubmit="return check(this)" enctype="multipart/form-data"
+					th:object="${product}">
+					<!-- Nội dung tab -->
+					<div class="col-md-9 mx-auto">
+						<div class="tab-content">
+
+							<div class="tab-pane fade active show" id="overview"
+								role="tabpanel">
+								<th:block th:replace="products/product_fragments :: overview"></th:block>
+							</div>
+
+							<div class="tab-pane fade p-3" id="description" role="tabpanel">
+								<th:block th:replace="products/product_fragments :: description"></th:block>
+							</div>
+
+							<div class="tab-pane fade p-3" id="images" role="tabpanel">
+								Images</div>
+
+							<div class="tab-pane fade p-3" id="details" role="tabpanel">
+								Details</div>
+
+							<div class="tab-pane fade" id="shipping" role="tabpanel">
+								<th:block th:replace="products/product_fragments :: shipping"></th:block>
+							</div>
+
+						</div>
+						<div class="form-group row">
+							<div class="form-group d-flex justify-content-end">
+								<a th:href="@{/products}" class="btn btn-secondary"
+									style="margin: 0 8px;">Back</a>
+								<button type="submit" class="btn btn-success">Create</button>
+							</div>
+						</div>
+					</div>
+				</form>
+			</div>
 		</div>
 	</div>
-
-	<!-- sideBar -->
 
 	<!-- Modal -->
 	<div th:replace="modal_fragments :: modal_dialog"></div>
@@ -33,14 +74,20 @@
 	<!-- Footer -->
 
 	<script type="text/javascript">
-		// check duplicate brandName
-		let checkDuplicateUrl = "[[ @{/brands/check_duplicate} ]]";
+		// check duplicate productName/productAlias
+		let checkDuplicateUrl = "[[ @{/products/check_duplicate} ]]";
 
 		// load categories
 		let dropdownBrands = $("#inputBrand");
 		let dropdownCategories = $("#inputCategory");
 
 		$(document).ready(function() {
+
+			// set richtext function
+			$("#shortDescription").richText();
+			$("#fullDescription").richText();
+
+			// load combobox function
 			dropdownBrands.change(function() {
 				dropdownCategories.empty();
 				getCategories();
@@ -55,10 +102,34 @@
 
 			$.get(url, function(response) {
 				$.each(response, function(index, category) {
-					$("<option>").val(category.id).text(category.name).appendTo(
-							dropdownCategories);
+					$("<option>").val(category.id).text(category.name)
+							.appendTo(dropdownCategories);
 				})
 			});
+		}
+
+		// mặc định của jquery richTextEditor là <div><br></div> và khi nhập r xóa hết thì còn <br> -> xử lý validation
+		function check(form) {
+			setDefaultValueTextArea();
+
+			checkDuplicate(form);
+			
+			// hàm post bên checkDuplicate chạy kiểu async nên phải return false để chặn hàm này lại cho hàm checkDuplicate xử lý
+			return false;
+		}
+		
+		function setDefaultValueTextArea(){
+			let shortDescription = $('#shortDescription');
+			let fullDescription = $('#fullDescription');
+			let content_shortDescription = shortDescription.val().trim();
+			let content_fullDescription = fullDescription.val().trim();
+
+			if (content_shortDescription === '<div><br></div>' || content_shortDescription === '<br>') {
+				shortDescription.val('');
+			}
+			if (content_fullDescription === '<div><br></div>' || content_fullDescription === '<br>') {
+				fullDescription.val('');
+			}
 		}
 	</script>
 

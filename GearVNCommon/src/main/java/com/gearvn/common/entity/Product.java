@@ -10,6 +10,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
@@ -41,9 +42,11 @@ public class Product {
 	private String alias;
 
 	@Column(length = 512, nullable = false, name = "short_description")
+	@NotBlank
 	private String shortDescription;
 
 	@Column(length = 4096, nullable = false, name = "full_description")
+	@NotBlank
 	private String fullDescription;
 
 	@Column(name = "created_time", nullable = false, updatable = false)
@@ -68,12 +71,16 @@ public class Product {
 	private float price;
 
 	@Column(name = "discount_percent")
-	@Positive
+	@Min(0)
 	private float discountPercent;
 
+	@Positive
 	private float length;
+	@Positive
 	private float width;
+	@Positive
 	private float height;
+	@Positive
 	private float weight;
 
 	@ManyToOne

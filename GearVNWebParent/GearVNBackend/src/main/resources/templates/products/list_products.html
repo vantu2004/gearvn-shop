@@ -76,6 +76,7 @@
 						<th scope="col">Brand</th>
 						<th scope="col">Category</th>
 						<th scope="col">Enabled</th>
+						<th scope="col">Action</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -100,6 +101,10 @@
 							th:each="category : ${product.category}"> <span
 								class="badge text-bg-secondary" th:text="${category.name}"></span>
 						</span></td>
+
+						<td><i th:if="${product.enabled}"
+							class="fas fa-check text-success"></i> <i
+							th:if="${!product.enabled}" class="fas fa-times text-danger"></i></td>
 
 						<td><a title="View this product"
 							th:href="@{'/products/update/' + ${product.id}}"> <i
@@ -170,12 +175,12 @@
 					event.preventDefault();
 
 					let link = $(this);
-					let brandId = link.attr("brandId") || "unknown";
+					let productId = link.attr("productId") || "unknown";
 					let href = link.attr("href") || "#";
 
 					$("#modalMessage").text(
-							"Are you sure you want to delete brand ID "
-									+ brandId + "?");
+							"Are you sure you want to delete product ID "
+									+ productId + "?");
 					$("#deleteButton").attr("href", href);
 
 					$("#confirmModal").modal("show");

@@ -6,170 +6,262 @@
 <body>
 	<!-- SideBar -->
 	<th:block th:fragment="sidebar">
-		<div class="col-auto col-md-3 col-xl-2 px-sm-2 px-0"
-			style="box-shadow: 1px 0px 5px -2px #aaaaaa;">
-			<div
-				class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 min-vh-100">
+		<div
+			class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 min-vh-100">
+			<ul
+				class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start mt-3 w-100"
+				id="menu">
+				<li class="nav-item mb-3"><span
+					class="d-none d-sm-inline fs-5 fw-bold">Menu</span></li>
 
-				<ul
-					class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start mt-3"
-					id="menu">
-					<li class="nav-item mb-3"><span
-						class="d-none d-sm-inline fs-5 fw-bold">Menu</span></li>
+				<li class="nav-item mb-3 w-100"><a
+					class="nav-link d-flex align-items-center gap-3 w-100 px-0 w-100 active	"
+					data-bs-toggle="tab" href="#overview" role="tab"> <span
+						class="icon-container d-flex justify-content-center align-items-center"
+						style="width: 35px;"> <i class="fs-5 fas fa-home"></i>
+					</span> <span class="d-none d-sm-inline flex-grow-1 text-start">Overview</span>
+				</a></li>
 
-					<li class="nav-item mb-3"><a href="#"
-						class="nav-link d-flex align-items-center gap-3 px-0 w-100"> <span
-							class="icon-container d-flex justify-content-center align-items-center"
-							style="width: 35px;"> <i class="fs-5 fas fa-home"></i>
-						</span> <span class="d-none d-sm-inline flex-grow-1 text-start">Overview</span>
-					</a></li>
-					<li class="nav-item mb-3"><a href="#"
-						class="nav-link d-flex align-items-center gap-3 px-0 w-100"> <span
-							class="icon-container d-flex justify-content-center align-items-center"
-							style="width: 35px;"> <i class="fs-5 fas fa-file-alt"></i>
-						</span> <span class="d-none d-sm-inline flex-grow-1 text-start">Description</span>
-					</a></li>
-					<li class="nav-item mb-3"><a href="#"
-						class="nav-link d-flex align-items-center gap-3 px-0 w-100"> <span
-							class="icon-container d-flex justify-content-center align-items-center"
-							style="width: 35px;"> <i class="fs-5 fas fa-image"></i>
-						</span> <span class="d-none d-sm-inline flex-grow-1 text-start">Images</span>
-					</a></li>
-					<li class="nav-item mb-3"><a href="#"
-						class="nav-link d-flex align-items-center gap-3 px-0 w-100"> <span
-							class="icon-container d-flex justify-content-center align-items-center"
-							style="width: 35px;"> <i class="fs-5 fas fa-eye"></i>
-						</span> <span class="d-none d-sm-inline flex-grow-1 text-start">Details</span>
-					</a></li>
-					<li class="nav-item mb-3"><a href="#"
-						class="nav-link d-flex align-items-center gap-3 px-0 w-100"> <span
-							class="icon-container d-flex justify-content-center align-items-center"
-							style="width: 35px;"> <i class="fs-5 fas fa-shipping-fast"></i>
-						</span> <span class="d-none d-sm-inline flex-grow-1 text-start">Shipping</span>
-					</a></li>
-				</ul>
+				<li class="nav-item mb-3 w-100"><a
+					class="nav-link d-flex align-items-center gap-3 w-100 px-0 w-100"
+					data-bs-toggle="tab" href="#description" role="tab"> <span
+						class="icon-container d-flex justify-content-center align-items-center"
+						style="width: 35px;"> <i class="fs-5 fas fa-file-alt"></i>
+					</span> <span class="d-none d-sm-inline flex-grow-1 text-start">Description</span>
+				</a></li>
 
-			</div>
+				<li class="nav-item mb-3 w-100"><a
+					class="nav-link d-flex align-items-center gap-3 w-100 px-0 w-100"
+					data-bs-toggle="tab" href="#images" role="tab"> <span
+						class="icon-container d-flex justify-content-center align-items-center"
+						style="width: 35px;"> <i class="fs-5 fas fa-image"></i>
+					</span> <span class="d-none d-sm-inline flex-grow-1 text-start">Images</span>
+				</a></li>
+
+				<li class="nav-item mb-3 w-100"><a
+					class="nav-link d-flex align-items-center gap-3 w-100 px-0 w-100"
+					data-bs-toggle="tab" href="#details" role="tab"> <span
+						class="icon-container d-flex justify-content-center align-items-center"
+						style="width: 35px;"> <i class="fs-5 fas fa-eye"></i>
+					</span> <span class="d-none d-sm-inline flex-grow-1 text-start">Details</span>
+				</a></li>
+
+				<li class="nav-item mb-3 w-100"><a
+					class="nav-link d-flex align-items-center gap-3 w-100 px-0 w-100"
+					data-bs-toggle="tab" href="#shipping" role="tab"> <span
+						class="icon-container d-flex justify-content-center align-items-center"
+						style="width: 35px;"> <i class="fs-5 fas fa-shipping-fast"></i>
+					</span> <span class="d-none d-sm-inline flex-grow-1 text-start">Shipping</span>
+				</a></li>
+			</ul>
 		</div>
 	</th:block>
 	<!-- SideBar -->
 
-	<!-- Create New Product Form -->
-	<th:block th:fragment="createNewProduct">
-		<div class="col mt-4">
+	<!-- Overview-->
+	<th:block th:fragment="overview">
+		<div class="mt-4 mx-auto col-md-12">
 			<h3>Create New Product</h3>
-			<form th:action="@{/products/save}" method="post"
-				th:object=${product} class="mt-5 mx-auto col-md-6">
-				<div class="form-group mb-3 row">
-					<label for="inputName" class="col-sm-3 col-form-label">Product
-						Name</label>
-					<div class="col-sm-9">
-						<input type="text" id="inputName" class="form-control"
-							placeholder="Enter product name" th:field="*{name}">
-						<p id="nameError" th:if="${#fields.hasErrors('name')}"
-							th:errorclass="error" th:errors="*{name}" class="text-danger"></p>
+
+			<div class="form-group mb-3 row" style="display: none;">
+				<label for="inputId" class="col-sm-3 col-form-label">Id</label>
+				<div class="col-sm-9">
+					<input type="text" id="inputId" class="form-control" th:field="*{id}">
+				</div>
+			</div>
+
+			<div class="form-group mb-3 row">
+				<label for="inputName" class="col-sm-3 col-form-label">Product
+					Name</label>
+				<div class="col-sm-9">
+					<input type="text" id="inputName" class="form-control"
+						placeholder="Enter product name" th:field="*{name}">
+					<p id="nameError" th:if="${#fields.hasErrors('name')}"
+						th:errorclass="error" th:errors="*{name}" class="text-danger"></p>
+				</div>
+			</div>
+
+			<div class="form-group mb-3 row">
+				<label for="inputAlias" class="col-sm-3 col-form-label">Alias</label>
+				<div class="col-sm-9">
+					<input type="text" id="inputAlias" class="form-control"
+						placeholder="Default is product name" th:field="*{alias}">
+					<p id="aliasError" th:if="${#fields.hasErrors('alias')}"
+						th:errorclass="error" th:errors="*{alias}" class="text-danger"></p>
+				</div>
+			</div>
+
+			<div class="form-group row">
+				<label for="inputBrand" class="col-sm-3 col-form-label">Brand</label>
+				<div class="col-sm-9">
+					<select class="form-select" id="inputBrand" th:field="*{brand}">
+						<th:block th:each="brand : ${listBrands}">
+							<option th:value="${brand.id}">[[${brand.name}]]</option>
+						</th:block>
+					</select>
+					<p id="brandError" th:if="${#fields.hasErrors('brand')}"
+						th:errorclass="error" th:errors="*{brand}" class="text-danger"></p>
+				</div>
+			</div>
+
+			<div class="form-group row">
+				<label for="inputCategory" class="col-sm-3 col-form-label">Category</label>
+				<div class="col-sm-9">
+					<select class="form-select" id="inputCategory"
+						th:field="*{category}">
+						<th:block th:each="cat : ${listCategories}">
+							<option th:value="${cat.id}">[[${cat.name}]]</option>
+						</th:block>
+					</select>
+					<p id="categoryError" th:if="${#fields.hasErrors('category')}"
+						th:errorclass="error" th:errors="*{category}" class="text-danger"></p>
+				</div>
+			</div>
+
+			<div class="form-group mb-3 row">
+				<label class="col-sm-3">Enabled</label>
+				<div class="col-sm-9">
+					<div class="form-check">
+						<input class="form-check-input" type="checkbox"
+							th:field="*{enabled}">
 					</div>
 				</div>
+			</div>
 
-				<div class="form-group mb-3 row">
-					<label for="inputAlias" class="col-sm-3 col-form-label">Alias</label>
-					<div class="col-sm-9">
-						<input type="text" id="inputAlias" class="form-control"
-							placeholder="Default is product name" th:field="*{alias}">
-						<p id="aliasError" th:if="${#fields.hasErrors('alias')}"
-							th:errorclass="error" th:errors="*{alias}" class="text-danger"></p>
+			<div class="form-group mb-3 row">
+				<label class="col-sm-3">Is Stock</label>
+				<div class="col-sm-9">
+					<div class="form-check">
+						<input class="form-check-input" type="checkbox"
+							th:field="*{inStock}">
 					</div>
 				</div>
+			</div>
 
-				<div class="form-group row">
-					<label for="inputBrand" class="col-sm-3 col-form-label">Brand</label>
-					<div class="col-sm-9">
-						<select class="form-select" id="inputBrand" th:field="*{brand}">
-							<th:block th:each="brand : ${listBrands}">
-								<option th:value="${brand.id}">[[${brand.name}]]</option>
-							</th:block>
-						</select>
-						<p id="brandError" th:if="${#fields.hasErrors('brand')}"
-							th:errorclass="error" th:errors="*{brand}" class="text-danger"></p>
-					</div>
+			<div class="form-group mb-3 row">
+				<label for="inputCost" class="col-sm-3 col-form-label">Cost</label>
+				<div class="col-sm-9">
+					<input type="number" id="inputCost" class="form-control"
+						placeholder="0.0" th:field="*{cost}">
+					<p id="costError" th:if="${#fields.hasErrors('cost')}"
+						th:errorclass="error" th:errors="*{cost}" class="text-danger"></p>
 				</div>
+			</div>
 
-				<div class="form-group row">
-					<label for="inputCategory" class="col-sm-3 col-form-label">Category</label>
-					<div class="col-sm-9">
-						<select class="form-select" id="inputCategory"
-							th:field="*{category}">
-							<th:block th:each="cat : ${listCategories}">
-								<option th:value="${cat.id}">[[${cat.name}]]</option>
-							</th:block>
-						</select>
-						<p id="categoryError" th:if="${#fields.hasErrors('category')}"
-							th:errorclass="error" th:errors="*{category}" class="text-danger"></p>
-					</div>
+			<div class="form-group mb-3 row">
+				<label for="inputPrice" class="col-sm-3 col-form-label">List
+					Price</label>
+				<div class="col-sm-9">
+					<input type="number" id="inputPrice" class="form-control"
+						placeholder="0.0" th:field="*{price}">
+					<p id="priceError" th:if="${#fields.hasErrors('price')}"
+						th:errorclass="error" th:errors="*{price}" class="text-danger"></p>
 				</div>
+			</div>
 
-				<div class="form-group mb-3 row">
-					<label class="col-sm-3">Enabled</label>
-					<div class="col-sm-9">
-						<div class="form-check">
-							<input class="form-check-input" type="checkbox"
-								th:field="*{enabled}">
-						</div>
-					</div>
+			<div class="form-group mb-3 row">
+				<label for="inputDiscount" class="col-sm-3 col-form-label">Discount
+					Percent</label>
+				<div class="col-sm-9">
+					<input type="number" id="inputDiscount" class="form-control"
+						placeholder="0.0" th:field="*{discountPercent}">
 				</div>
-
-				<div class="form-group mb-3 row">
-					<label class="col-sm-3">Is Stock</label>
-					<div class="col-sm-9">
-						<div class="form-check">
-							<input class="form-check-input" type="checkbox"
-								th:field="*{inStock}">
-						</div>
-					</div>
-				</div>
-
-				<div class="form-group mb-3 row">
-					<label for="inputCost" class="col-sm-3 col-form-label">Cost</label>
-					<div class="col-sm-9">
-						<input type="number" id="inputCost" class="form-control"
-							placeholder="0.0" th:field="*{cost}">
-						<p id="costError" th:if="${#fields.hasErrors('cost')}"
-							th:errorclass="error" th:errors="*{cost}" class="text-danger"></p>
-					</div>
-				</div>
-
-				<div class="form-group mb-3 row">
-					<label for="inputPrice" class="col-sm-3 col-form-label">List
-						Price</label>
-					<div class="col-sm-9">
-						<input type="number" id="inputPrice" class="form-control"
-							placeholder="0.0" th:field="*{price}">
-						<p id="priceError" th:if="${#fields.hasErrors('price')}"
-							th:errorclass="error" th:errors="*{price}" class="text-danger"></p>
-					</div>
-				</div>
-
-				<div class="form-group mb-3 row">
-					<label for="inputDiscount" class="col-sm-3 col-form-label">Discount
-						Percent</label>
-					<div class="col-sm-9">
-						<input type="number" id="inputDiscount" class="form-control"
-							placeholder="0.0" th:field="*{discountPercent}">
-					</div>
-				</div>
-
-				<div class="form-group row">
-					<div class="form-group d-flex justify-content-end">
-						<a th:href="@{/products}" class="btn btn-secondary"
-							style="margin: 0 8px;">Back</a>
-						<button type="submit" class="btn btn-success">Create</button>
-					</div>
-				</div>
-			</form>
-
+			</div>
 		</div>
 	</th:block>
-	<!-- Create New Product Form -->
+	<!-- Overview-->
+
+	<!-- Description -->
+	<th:block th:fragment="description">
+		<div class="mt-4 mx-auto col-md-12">
+			<h3>Description</h3>
+			<div class="row">
+				<div class="col-md-12 mt-3">
+					<label for="shortDescription" class="form-label">
+						<h5>Short Description</h5>
+					</label>
+					<textarea class="form-control" id="shortDescription" rows="5"
+						th:field="*{shortDescription}"></textarea>
+					<p id="shortDescError"
+						th:if="${#fields.hasErrors('shortDescription')}"
+						th:errorclass="error" th:errors="*{shortDescription}"
+						class="text-danger"></p>
+				</div>
+				<div class="col-md-12 mt-5">
+					<label for="fullDescription" class="form-label">
+						<h5>Full Description</h5>
+					</label>
+					<textarea class="form-control" id="fullDescription" rows="10"
+						th:field="*{fullDescription}"></textarea>
+					<p id="fullDescError"
+						th:if="${#fields.hasErrors('fullDescription')}"
+						th:errorclass="error" th:errors="*{fullDescription}"
+						class="text-danger"></p>
+				</div>
+			</div>
+		</div>
+	</th:block>
+	<!-- Description -->
+
+	<!-- Shipping -->
+	<th:block th:fragment="shipping">
+		<div class="mt-4 mx-auto col-md-12">
+			<h3>Shipping</h3>
+
+			<div class="form-group mb-3 row">
+				<div class="col-sm-12">
+					The following information is important to calculate shipping cost
+					for the product.</br> The dimensions (L X W X H) is for the box that is
+					used to package the product - not the product's dimensions.
+				</div>
+			</div>
+
+			<div class="form-group mb-3 row">
+				<label for="inputLength" class="col-sm-3 col-form-label">Length
+					(inch):</label>
+				<div class="col-sm-9">
+					<input type="number" id="inputLength" class="form-control"
+						placeholder="0.0" th:field="*{length}">
+					<p id="lengthError" th:if="${#fields.hasErrors('length')}"
+						th:errorclass="error" th:errors="*{length}" class="text-danger"></p>
+				</div>
+			</div>
+
+			<div class="form-group mb-3 row">
+				<label for="inputWidth" class="col-sm-3 col-form-label">Width
+					(inch):</label>
+				<div class="col-sm-9">
+					<input type="number" id="inputWidth" class="form-control"
+						placeholder="0.0" th:field="*{width}">
+					<p id="widthError" th:if="${#fields.hasErrors('width')}"
+						th:errorclass="error" th:errors="*{width}" class="text-danger"></p>
+				</div>
+			</div>
+
+			<div class="form-group mb-3 row">
+				<label for="inputHeight" class="col-sm-3 col-form-label">Height
+					(inch):</label>
+				<div class="col-sm-9">
+					<input type="number" id="inputHeight" class="form-control"
+						placeholder="0.0" th:field="*{height}">
+					<p id="heightError" th:if="${#fields.hasErrors('height')}"
+						th:errorclass="error" th:errors="*{height}" class="text-danger"></p>
+				</div>
+			</div>
+
+			<div class="form-group mb-3 row">
+				<label for="inputWeight" class="col-sm-3 col-form-label">Weight
+					(pounds):</label>
+				<div class="col-sm-9">
+					<input type="number" id="inputWeight" class="form-control"
+						placeholder="0.0" th:field="*{weight}">
+					<p id="weightError" th:if="${#fields.hasErrors('weight')}"
+						th:errorclass="error" th:errors="*{weight}" class="text-danger"></p>
+				</div>
+			</div>
+		</div>
+	</th:block>
+	<!-- Shipping -->
 
 </body>
 </html>
