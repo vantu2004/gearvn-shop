@@ -9,12 +9,13 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.gearvn.admin.brand.BrandService;
-import com.gearvn.admin.category.CategoryService;
+import com.gearvn.admin.common.UploadImageService;
 import com.gearvn.common.entity.Brand;
-import com.gearvn.common.entity.Category;
 import com.gearvn.common.entity.Product;
 
 import jakarta.validation.Valid;
@@ -26,6 +27,9 @@ public class ProductController {
 
 	@Autowired
 	private BrandService brandService;
+	
+	@Autowired
+	private UploadImageService uploadImageService;
 
 	@GetMapping("/products")
 	public String getProductsFirstPage(Model model) {
@@ -47,7 +51,7 @@ public class ProductController {
 	
 	@PostMapping("/products/save")
 	public String handleSaveProduct(Model model, @Valid Product product, BindingResult bindingResult,
-			RedirectAttributes redirectAttributes) {
+			RedirectAttributes redirectAttributes, @RequestParam("multipartFile") MultipartFile multipartFile) {
 		// validation
 		if (bindingResult.hasErrors()) {
 			List<Brand> listBrands = this.brandService.getAllBrands();
@@ -56,12 +60,12 @@ public class ProductController {
 			return "products/create_product";
 		}
 
-//		if (!multipartFile.isEmpty()) {
-//			String targetFolder = "../category-images";
-//			String fileName = this.uploadImageService.handleSaveUploadFile(multipartFile, targetFolder);
-//			category.setImage(fileName);
-//		}
-//
+		if (!multipartFile.isEmpty()) {
+			String targetFolder = "../product-images";
+			String fileName = this.uploadImageService.handleSaveUploadFile(multipartFile, targetFolder);
+			product.setMainImage(fileName);
+		}
+
 		this.productService.handleSaveProduct(product);
 
 		redirectAttributes.addFlashAttribute("message", "The product has been saved successfully.");

@@ -1,31 +1,21 @@
 // vì mặc định cấu hình chỉ 1mb nên cấu hình thêm bên application tăng lên 5mb
 let MAX_FILE_SIZE = 5242880; // byte
 
-$(document)
-	.ready(
-		function() {
-			$("#inputPhotos")
-				.change(
-					function() {
-						if (!checkFileSize(this)) {
-							// Lấy context-path
-							let contextPath = window.location.pathname
-								.split('/')[1];
-							// set lại default image
-							$("#inputPhotosPreview")
-								.attr(
-									"src",
-									"/"
-									+ contextPath
-									+ "/images/LogoGearvn.png");
-							this.value = "";
+$(document).ready(function() {
+	$("#inputPhotos").change(function() {
+		if (!checkFileSize(this)) {
+			// Lấy context-path
+			let contextPath = window.location.pathname.split('/')[1];
+			// set lại default image
+			$("#inputPhotosPreview").attr("src", "/" + contextPath + "/images/LogoGearvn.png");
+			this.value = "";
 
-							return;
-						}
+			return;
+		}
 
-						showImageThumbnail(this);
-					});
-		});
+		showImageThumbnail(this);
+	});
+});
 
 function checkFileSize(fileInput) {
 	let fileSize = fileInput.files[0].size;
@@ -57,7 +47,7 @@ function checkPasswordMatch(inputRePassword) {
 	}
 }
 
-// check trùng categoryName/categoryAlias - create_category.html/update_category.html
+// check trùng categoryName/categoryAlias - create_category.html/update_category.html/create_product.html
 function checkDuplicate(form) {
 	let id = $("#inputId").val();
 	let name = $("#inputName").val();

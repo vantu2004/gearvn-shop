@@ -66,7 +66,8 @@
 			<div class="form-group mb-3 row" style="display: none;">
 				<label for="inputId" class="col-sm-3 col-form-label">Id</label>
 				<div class="col-sm-9">
-					<input type="text" id="inputId" class="form-control" th:field="*{id}">
+					<input type="text" id="inputId" class="form-control"
+						th:field="*{id}">
 				</div>
 			</div>
 
@@ -262,6 +263,32 @@
 		</div>
 	</th:block>
 	<!-- Shipping -->
+
+	<!-- Images -->
+	<th:block th:fragment="images">
+		<div class="mt-4 mx-auto col-md-12">
+			<h3>Images</h3>
+
+			<div class="form-group row">
+				<label for="inputPhotos" class="col-sm-3 col-form-label">Main Images</label>
+				<div class="col-sm-9">
+					<div>
+						<!-- Giá trị tạm để đảm bảo image ko null -->
+						<input type="hidden" name="image"
+							th:value="${product.mainImage} ?: 'LogoGearvn.jpg'"> <input
+							type="file" class="form-control-file mb-2" id="inputPhotos"
+							accept=".png, .jpg, .jpeg" name="multipartFile">
+					</div>
+					<div>
+						<img th:src="@{/images/LogoGearvn.png}" width="50%" height="50%"
+							class="d-inline-block align-top" alt="image"
+							id="inputPhotosPreview" style="border-radius: 10px;" name="image">
+					</div>
+				</div>
+			</div>
+		</div>
+	</th:block>
+	<!-- Images -->
 
 </body>
 </html>

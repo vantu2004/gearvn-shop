@@ -42,7 +42,8 @@
 							</div>
 
 							<div class="tab-pane fade p-3" id="images" role="tabpanel">
-								Images</div>
+								<th:block th:replace="products/product_fragments :: images"></th:block>
+							</div>
 
 							<div class="tab-pane fade p-3" id="details" role="tabpanel">
 								Details</div>
@@ -113,21 +114,23 @@
 			setDefaultValueTextArea();
 
 			checkDuplicate(form);
-			
+
 			// hàm post bên checkDuplicate chạy kiểu async nên phải return false để chặn hàm này lại cho hàm checkDuplicate xử lý
 			return false;
 		}
-		
-		function setDefaultValueTextArea(){
+
+		function setDefaultValueTextArea() {
 			let shortDescription = $('#shortDescription');
 			let fullDescription = $('#fullDescription');
 			let content_shortDescription = shortDescription.val().trim();
 			let content_fullDescription = fullDescription.val().trim();
 
-			if (content_shortDescription === '<div><br></div>' || content_shortDescription === '<br>') {
+			if (content_shortDescription === '<div><br></div>'
+					|| content_shortDescription === '<br>') {
 				shortDescription.val('');
 			}
-			if (content_fullDescription === '<div><br></div>' || content_fullDescription === '<br>') {
+			if (content_fullDescription === '<div><br></div>'
+					|| content_fullDescription === '<br>') {
 				fullDescription.val('');
 			}
 		}

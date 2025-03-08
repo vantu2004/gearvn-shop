@@ -100,4 +100,20 @@ public class ProductRepositoryTests {
 
 		assertThat(product).isNull();
 	}
+	
+	@Test
+	public void testUpdateProductWithImages() {
+		Product product = this.productRepository.findById(2).orElse(null);
+		
+		product.setMainImage("LogoGearvn.png");
+		
+		product.addExtraImages("LogoGearvn.png");
+		product.addExtraImages("LogoGearvn1.png");
+		product.addExtraImages("LogoGearvn2.png");
+		
+		Product savedProduct = this.productRepository.save(product);
+		
+		assertThat(product).isNotNull();
+		assertThat(savedProduct.getImages().size()).isEqualTo(7);
+	}
 }
