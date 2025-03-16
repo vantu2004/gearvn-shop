@@ -112,7 +112,7 @@
 				<label for="inputPhotos" class="col-sm-3 col-form-label">Photos</label>
 				<div class="col-sm-9">
 					<div>
-						<input type="file" class="form-control-file mb-2" id="inputPhotos"
+						<input type="file" class="form-control mb-2" id="inputPhotos"
 							accept=".png, .jpg, .jpeg" name="avatar">
 					</div>
 					<div>
@@ -144,6 +144,10 @@
 	<!-- Footer -->
 
 	<script type="text/javascript">
+		// upload image
+		let input = "#inputPhotos";
+		let inputPreview = "#inputPhotosPreview";
+
 		function checkDuplicateEmail(form) {
 			// tạo 1 url động tự thêm context-path /GearVNAdmin vào trước, nếu dùng chuỗi cứng thì ko tự thêm đc
 			let url = "[[ @{/users/check_duplicate_email} ]]";

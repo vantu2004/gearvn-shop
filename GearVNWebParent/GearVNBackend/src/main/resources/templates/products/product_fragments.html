@@ -266,17 +266,20 @@
 
 	<!-- Images -->
 	<th:block th:fragment="images">
-		<div class="mt-4 mx-auto col-md-12">
+		<div class="mt-4 mx-auto col-md-12 parent-images">
 			<h3>Images</h3>
 
-			<div class="form-group row">
-				<label for="inputPhotos" class="col-sm-3 col-form-label">Main Images</label>
+			<!-- Main Images -->
+			<div class="form-group mb-3 row">
+				<label for="inputPhotos" class="col-sm-3 col-form-label">Main
+					Image</label>
 				<div class="col-sm-9">
 					<div>
 						<!-- Giá trị tạm để đảm bảo image ko null -->
-						<input type="hidden" name="image"
-							th:value="${product.mainImage} ?: 'LogoGearvn.jpg'"> <input
-							type="file" class="form-control-file mb-2" id="inputPhotos"
+						<input type="hidden" name="mainImage"
+							th:value="${product.mainImage} ?: 'LogoGearvn.png'"> 
+						<input
+							type="file" class="form-control mb-2" id="inputPhotos"
 							accept=".png, .jpg, .jpeg" name="multipartFile">
 					</div>
 					<div>
@@ -286,6 +289,32 @@
 					</div>
 				</div>
 			</div>
+			<!-- Main Images -->
+
+			<!-- Extra Images -->
+			<div class="form-group mb-3 row">
+				<label for="inputPhotos" class="col-sm-3 col-form-label">Extra
+					Images</label>
+				<div class="col-sm-9">
+					<div class="image-upload-container">
+						<div class="d-flex align-items-center image-upload mb-2">
+							<input type="file" class="form-control me-2 image-input"
+								accept=".png, .jpg, .jpeg" name="extraMultipartFile">
+							<button class="btn btn-danger">
+								<i class="fas fa-times fa-lg"></i>
+							</button>
+						</div>
+
+						<div>
+							<img th:src="@{/images/LogoGearvn.png}" width="50%" height="50%"
+								class="d-inline-block align-top image-preview"
+								style="border-radius: 10px;" alt="image">
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- Extra Images -->
+
 		</div>
 	</th:block>
 	<!-- Images -->

@@ -2,6 +2,7 @@ package com.gearvn.admin.product;
 
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -27,7 +28,7 @@ public class ProductController {
 
 	@Autowired
 	private BrandService brandService;
-	
+
 	@Autowired
 	private UploadImageService uploadImageService;
 
@@ -42,16 +43,17 @@ public class ProductController {
 	@GetMapping("/products/create")
 	public String getCreateProductPage(Model model) {
 		List<Brand> listBrands = this.brandService.getAllBrands();
-		
+
 		model.addAttribute("product", new Product());
 		model.addAttribute("listBrands", listBrands);
 
 		return "products/create_product";
 	}
-	
+
 	@PostMapping("/products/save")
 	public String handleSaveProduct(Model model, @Valid Product product, BindingResult bindingResult,
-			RedirectAttributes redirectAttributes, @RequestParam("multipartFile") MultipartFile multipartFile) {
+			RedirectAttributes redirectAttributes, @RequestParam("multipartFile") MultipartFile multipartFile,
+			@RequestParam("extraMultipartFile") MultipartFile[] extraMultipartFile) {
 		// validation
 		if (bindingResult.hasErrors()) {
 			List<Brand> listBrands = this.brandService.getAllBrands();
@@ -59,11 +61,23 @@ public class ProductController {
 
 			return "products/create_product";
 		}
-
+		
+		String targetFolder = "../product-images";
+		
+		// main image
 		if (!multipartFile.isEmpty()) {
-			String targetFolder = "../product-images";
 			String fileName = this.uploadImageService.handleSaveUploadFile(multipartFile, targetFolder);
 			product.setMainImage(fileName);
+		}
+		
+		// extra images
+		if (extraMultipartFile.length > 0) {
+			for (MultipartFile mult : extraMultipartFile) {
+				if (!StringUtils.isEmpty(mult.getOriginalFilename())) {
+					String fileName = this.uploadImageService.handleSaveUploadFile(mult, targetFolder);
+					product.addExtraImages(fileName);
+				}
+			}
 		}
 
 		this.productService.handleSaveProduct(product);
@@ -71,26 +85,25 @@ public class ProductController {
 		redirectAttributes.addFlashAttribute("message", "The product has been saved successfully.");
 		return "redirect:/products";
 	}
-	
+
 	@GetMapping("/products/delete/{id}")
 	public String deleteProduct(@PathVariable("id") Integer id, RedirectAttributes redirectAttributes) {
 		try {
-			//String targetFolder = "../category-images";
+			// String targetFolder = "../category-images";
 			Product product = this.productService.getProductById(id);
 			if (product != null) {
 				this.productService.deleteProductById(id);
 			}
-			//Category category = this.categoryService.getCategoryById(id);
-			//String imageName = category.getImage();
-			//this.categoryService.deleteCategoryById(id);
+			// Category category = this.categoryService.getCategoryById(id);
+			// String imageName = category.getImage();
+			// this.categoryService.deleteCategoryById(id);
 			/*
 			 * nên để xóa ảnh sau vì trường hợp xóa category thất bại thì ném ngoại lệ trc
 			 * thay vì xóa ảnh
 			 */
-			//this.uploadImageService.deletePhotos(targetFolder, imageName);
+			// this.uploadImageService.deletePhotos(targetFolder, imageName);
 
-			redirectAttributes.addFlashAttribute("message",
-					"The product ID " + id + " has been deleted successfully.");
+			redirectAttributes.addFlashAttribute("message", "The product ID " + id + " has been deleted successfully.");
 		} catch (Exception e) {
 			redirectAttributes.addFlashAttribute("message", "Could not find any product with id " + id);
 		}

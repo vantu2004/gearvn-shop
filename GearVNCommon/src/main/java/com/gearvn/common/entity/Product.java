@@ -83,6 +83,7 @@ public class Product {
 	private float discountPercent;
 
 	@Column(name = "main_image", nullable = false)
+	@NotBlank
 	private String mainImage;
 
 	@Positive

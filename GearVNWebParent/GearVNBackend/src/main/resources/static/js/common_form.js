@@ -2,12 +2,12 @@
 let MAX_FILE_SIZE = 5242880; // byte
 
 $(document).ready(function() {
-	$("#inputPhotos").change(function() {
+	$(input).change(function() {
 		if (!checkFileSize(this)) {
 			// Lấy context-path
 			let contextPath = window.location.pathname.split('/')[1];
 			// set lại default image
-			$("#inputPhotosPreview").attr("src", "/" + contextPath + "/images/LogoGearvn.png");
+			$(inputPreview).attr("src", "/" + contextPath + "/images/LogoGearvn.png");
 			this.value = "";
 
 			return;
@@ -33,7 +33,7 @@ function showImageThumbnail(fileInput) {
 	var file = fileInput.files[0];
 	var reader = new FileReader();
 	reader.onload = function(e) {
-		$("#inputPhotosPreview").attr("src", e.target.result);
+		$(inputPreview).attr("src", e.target.result);
 	};
 
 	reader.readAsDataURL(file);
@@ -53,7 +53,12 @@ function checkDuplicate(form) {
 	let name = $("#inputName").val();
 	let alias = $("#inputAlias").val();
 	let csrfValue = $("input[name=_csrf]").val();
-
+	
+	// check có chọn file nào trong input chưa
+    let fileInput = document.querySelector("#inputPhotos");
+	// nếu create form thì id null/rỗng, update thì chắc chắn có id
+	let isCreateMode = !id || id.trim() === "0";
+	
 	let param = {
 		id: id,
 		name: name,
@@ -63,7 +68,11 @@ function checkDuplicate(form) {
 
 	$.post(checkDuplicateUrl, param, function(response) {
 		if (response === "OK") {
-			form.submit();
+			if (isCreateMode && !fileInput.files.length) {
+			    showModalDialog("Warning", "Main image ​​cannot be empty");
+			} else {
+				form.submit();
+			}
 		} else if (response === "DuplicateName") {
 			showModalDialog("Warning", "Name ​​cannot be duplicated");
 		} else if (response === "DuplicateAlias") {
@@ -85,6 +94,11 @@ function checkDuplicateName(form) {
 	let name = $("#inputName").val();
 	let csrfValue = $("input[name=_csrf]").val();
 
+	// check có chọn file nào trong input chưa
+	let fileInput = document.querySelector("#inputPhotos");
+	// nếu create form thì id null/rỗng, update thì chắc chắn có id
+	let isCreateMode = !id || id.trim() === "0";
+	
 	let param = {
 		id: id,
 		name: name,
@@ -96,7 +110,11 @@ function checkDuplicateName(form) {
 		param,
 		function(response) {
 			if (response === "OK") {
-				form.submit();
+				if (isCreateMode && !fileInput.files.length) {
+				    showModalDialog("Warning", "Main image ​​cannot be empty");
+				} else {
+					form.submit();
+				}
 			} else if (response === "Duplicated") {
 				showModalDialog("Warning",
 					"There is another brand having the name "

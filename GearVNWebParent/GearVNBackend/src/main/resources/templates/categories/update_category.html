@@ -94,7 +94,7 @@
 					<div>
 						<!-- Giá trị tạm để đảm bảo image ko null -->
 						<input type="hidden" name="image" th:field="*{image}"> <input
-							type="file" class="form-control-file mb-2" id="inputPhotos"
+							type="file" class="form-control mb-2" id="inputPhotos"
 							accept=".png, .jpg, .jpeg" name="multipartFile">
 					</div>
 					<div>
@@ -125,6 +125,10 @@
 
 	<script>
 		let checkDuplicateUrl = "[[ @{/categories/check_duplicate} ]]";
+		
+		// upload image
+		let input = "#inputPhotos";
+		let inputPreview = "#inputPhotosPreview";
 	</script>
 
 	<script th:src="@{/js/common_form.js}"></script>

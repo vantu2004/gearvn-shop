@@ -134,7 +134,7 @@
 				<label for="inputPhotos" class="col-sm-3 col-form-label">Photos</label>
 				<div class="col-sm-9">
 					<div>
-						<input type="file" class="form-control-file mb-2" id="inputPhotos"
+						<input type="file" class="form-control mb-2" id="inputPhotos"
 							accept=".png, .jpg, .jpeg" name="avatar">
 					</div>
 					<div>
@@ -161,6 +161,10 @@
 	<!-- Footer -->
 
 	<script type="text/javascript">
+		// upload image
+		let input = "#inputPhotos";
+		let inputPreview = "#inputPhotosPreview";
+
 		function handleSubmit(form) {
 			let inputPassword = $("#inputPassword").val();
 			if (!inputPassword) {

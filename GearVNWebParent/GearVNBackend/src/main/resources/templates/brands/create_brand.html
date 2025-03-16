@@ -79,9 +79,9 @@
 					<div>
 						<!-- Giá trị tạm để đảm bảo image ko null -->
 						<input type="hidden" name="logo"
-							th:value="${brand.logo} ?: 'LogoGearvn.jpg'"> <input
-							type="file" class="form-control-file mb-2" id="inputPhotos"
-							accept=".png, .jpg, .jpeg" name="multipartFile" required>
+							th:value="${brand.logo} ?: 'LogoGearvn.png'"> <input
+							type="file" class="form-control mb-2" id="inputPhotos"
+							accept=".png, .jpg, .jpeg" name="multipartFile" >
 					</div>
 					<div>
 						<img th:src="@{/images/LogoGearvn.png}" width="50%" height="50%"
@@ -112,6 +112,10 @@
 	<script type="text/javascript">
 		// check duplicate brandName
 		let checkDuplicateUrl = "[[ @{/brands/check_duplicate} ]]";
+		
+		// upload image
+		let input = "#inputPhotos";
+		let inputPreview = "#inputPhotosPreview";
 	</script>
 
 	<script th:src="@{/js/common_form.js}"></script>

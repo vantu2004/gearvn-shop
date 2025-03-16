@@ -41,7 +41,7 @@
 								<th:block th:replace="products/product_fragments :: description"></th:block>
 							</div>
 
-							<div class="tab-pane fade p-3" id="images" role="tabpanel">
+							<div class="tab-pane fade" id="images" role="tabpanel">
 								<th:block th:replace="products/product_fragments :: images"></th:block>
 							</div>
 
@@ -77,6 +77,13 @@
 	<script type="text/javascript">
 		// check duplicate productName/productAlias
 		let checkDuplicateUrl = "[[ @{/products/check_duplicate} ]]";
+
+		// upload mainImage
+		let input = "#inputPhotos";
+		let inputPreview = "#inputPhotosPreview";
+
+		// default image, dùng cho extraImage
+		let defaultImage = "[[@{/images/LogoGearvn.png}]]";
 
 		// load categories
 		let dropdownBrands = $("#inputBrand");
@@ -137,6 +144,7 @@
 	</script>
 
 	<script th:src="@{/js/common_form.js}"></script>
+	<script th:src="@{/js/product_form.js}"></script>
 
 </body>
 
