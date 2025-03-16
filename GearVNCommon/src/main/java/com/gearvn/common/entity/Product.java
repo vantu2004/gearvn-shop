@@ -108,6 +108,8 @@ public class Product {
 	// CascadeType.ALL nghĩa là mọi thao tác trên Product thì bên ProductImage cũng cập nhật theo
 	@OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
 	@Builder.Default
+	// tránh khi in ra set này thì bị lặp vô hạn do quan hệ 2 chiều với product bên productImage kia
+	@ToString.Exclude
 	private Set<ProductImage> images = new HashSet<ProductImage>();
 
 	public void addExtraImages(String imageName) {

@@ -1,6 +1,7 @@
 package com.gearvn.admin.product;
 
 import java.util.List;
+import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,7 @@ import com.gearvn.admin.brand.BrandService;
 import com.gearvn.admin.common.UploadImageService;
 import com.gearvn.common.entity.Brand;
 import com.gearvn.common.entity.Product;
+import com.gearvn.common.entity.ProductImage;
 
 import jakarta.validation.Valid;
 
@@ -89,19 +91,23 @@ public class ProductController {
 	@GetMapping("/products/delete/{id}")
 	public String deleteProduct(@PathVariable("id") Integer id, RedirectAttributes redirectAttributes) {
 		try {
-			// String targetFolder = "../category-images";
+			String targetFolder = "../product-images";
 			Product product = this.productService.getProductById(id);
 			if (product != null) {
+				String mainImage = product.getMainImage();
+				Set<ProductImage> productImages = product.getImages();
+
 				this.productService.deleteProductById(id);
+				
+				/*
+				 * nên để xóa ảnh sau vì trường hợp xóa category thất bại thì ném ngoại lệ trc
+				 * thay vì xóa ảnh
+				 */
+				this.uploadImageService.deletePhotos(targetFolder, mainImage);
+				for (ProductImage productImage : productImages) {
+					this.uploadImageService.deletePhotos(targetFolder, productImage.getName());
+				}
 			}
-			// Category category = this.categoryService.getCategoryById(id);
-			// String imageName = category.getImage();
-			// this.categoryService.deleteCategoryById(id);
-			/*
-			 * nên để xóa ảnh sau vì trường hợp xóa category thất bại thì ném ngoại lệ trc
-			 * thay vì xóa ảnh
-			 */
-			// this.uploadImageService.deletePhotos(targetFolder, imageName);
 
 			redirectAttributes.addFlashAttribute("message", "The product ID " + id + " has been deleted successfully.");
 		} catch (Exception e) {
