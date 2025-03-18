@@ -52,10 +52,13 @@ public class ProductController {
 		return "products/create_product";
 	}
 
+	// required = false nghĩa là tham số ko bắt buộc, nếu ko có thì ko ném lỗi
 	@PostMapping("/products/save")
 	public String handleSaveProduct(Model model, @Valid Product product, BindingResult bindingResult,
 			RedirectAttributes redirectAttributes, @RequestParam("multipartFile") MultipartFile multipartFile,
-			@RequestParam("extraMultipartFile") MultipartFile[] extraMultipartFile) {
+			@RequestParam("extraMultipartFile") MultipartFile[] extraMultipartFile,
+			@RequestParam(name = "detailNames", required=false) String[] detailNames,
+			@RequestParam(name = "detailValues", required=false) String[] detailValues) {
 		// validation
 		if (bindingResult.hasErrors()) {
 			List<Brand> listBrands = this.brandService.getAllBrands();
@@ -81,6 +84,8 @@ public class ProductController {
 				}
 			}
 		}
+		
+		setDetailNamesAndValues(detailNames, detailValues, product);
 
 		this.productService.handleSaveProduct(product);
 
@@ -88,17 +93,29 @@ public class ProductController {
 		return "redirect:/products";
 	}
 
+	private void setDetailNamesAndValues(String[] detailNames, String[] detailValues, @Valid Product product) {
+	    if (detailNames != null && detailValues != null && detailNames.length == detailValues.length) {
+	        for (int i = 0; i < detailNames.length; i++) {
+	            if (!StringUtils.isBlank(detailNames[i]) && !StringUtils.isBlank(detailValues[i])) {
+	                product.addProductDetail(detailNames[i], detailValues[i]);
+	            }
+	        }
+	    }
+	}
+
+
 	@GetMapping("/products/delete/{id}")
 	public String deleteProduct(@PathVariable("id") Integer id, RedirectAttributes redirectAttributes) {
 		try {
 			String targetFolder = "../product-images";
+
 			Product product = this.productService.getProductById(id);
 			if (product != null) {
 				String mainImage = product.getMainImage();
 				Set<ProductImage> productImages = product.getImages();
 
 				this.productService.deleteProductById(id);
-				
+
 				/*
 				 * nên để xóa ảnh sau vì trường hợp xóa category thất bại thì ném ngoại lệ trc
 				 * thay vì xóa ảnh

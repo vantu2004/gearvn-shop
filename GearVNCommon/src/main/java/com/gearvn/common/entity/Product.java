@@ -104,18 +104,30 @@ public class Product {
 	@JoinColumn(name = "brand_id")
 	@NotNull
 	private Brand brand;
-	
-	// CascadeType.ALL nghĩa là mọi thao tác trên Product thì bên ProductImage cũng cập nhật theo
+
+	// CascadeType.ALL nghĩa là mọi thao tác trên Product thì bên ProductImage cũng
+	// cập nhật theo
 	@OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
 	@Builder.Default
-	// tránh khi in ra set này thì bị lặp vô hạn do quan hệ 2 chiều với product bên productImage kia
+	// tránh khi in ra set này thì bị lặp vô hạn do quan hệ 2 chiều với product bên
+	// productImage kia
 	@ToString.Exclude
 	private Set<ProductImage> images = new HashSet<ProductImage>();
+
+	@OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
+	@Builder.Default
+	@ToString.Exclude
+	// Dùng list sẽ bị lỗi
+	private Set<ProductDetail> productDetails = new HashSet<ProductDetail>();
 
 	public void addExtraImages(String imageName) {
 		this.images.add(ProductImage.builder().name(imageName).product(this).build());
 	}
-	
+
+	public void addProductDetail(String name, String value) {
+		this.productDetails.add(ProductDetail.builder().name(name).value(value).product(this).build());
+	}
+
 	@Transient
 	public String getMainImagePath() {
 		if (id == null || mainImage == null) {

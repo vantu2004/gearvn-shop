@@ -174,7 +174,7 @@
 
 	<!-- Description -->
 	<th:block th:fragment="description">
-		<div class="mt-4 mx-auto col-md-12">
+		<!-- 		<div class="mt-4 mx-auto col-md-12">
 			<h3>Description</h3>
 			<div class="row">
 				<div class="col-md-12 mt-3">
@@ -200,6 +200,36 @@
 						class="text-danger"></p>
 				</div>
 			</div>
+		</div> -->
+		<div class="mt-4 mx-auto col-md-12">
+			<h3>Description</h3>
+
+			<div class="form-group mb-3 row">
+				<div class="col-md-12 mt-3">
+					<label for="shortDescription" class="form-label"> Short
+						Description </label>
+					<textarea class="form-control" id="shortDescription" rows="5"
+						th:field="*{shortDescription}"></textarea>
+					<p id="shortDescError"
+						th:if="${#fields.hasErrors('shortDescription')}"
+						th:errorclass="error" th:errors="*{shortDescription}"
+						class="text-danger"></p>
+				</div>
+			</div>
+
+			<div class="form-group mb-3 row">
+				<div class="col-md-12 mt-3">
+					<label for="fullDescription" class="form-label"> Full
+						Description </label>
+					<textarea class="form-control" id="fullDescription" rows="10"
+						th:field="*{fullDescription}"></textarea>
+					<p id="fullDescError"
+						th:if="${#fields.hasErrors('fullDescription')}"
+						th:errorclass="error" th:errors="*{fullDescription}"
+						class="text-danger"></p>
+				</div>
+			</div>
+
 		</div>
 	</th:block>
 	<!-- Description -->
@@ -277,8 +307,7 @@
 					<div>
 						<!-- Giá trị tạm để đảm bảo image ko null -->
 						<input type="hidden" name="mainImage"
-							th:value="${product.mainImage} ?: 'LogoGearvn.png'"> 
-						<input
+							th:value="${product.mainImage} ?: 'LogoGearvn.png'"> <input
 							type="file" class="form-control mb-2" id="inputPhotos"
 							accept=".png, .jpg, .jpeg" name="multipartFile">
 					</div>
@@ -318,6 +347,41 @@
 		</div>
 	</th:block>
 	<!-- Images -->
+
+	<!-- Detail -->
+	<th:block th:fragment="details">
+		<div class="mt-4 mx-auto col-md-12">
+			<h3>Create Product Details</h3>
+
+			<div class="parent-details">
+				<div class="form-group mb-3 row">
+					<div class="col-sm-5">
+						<input type="text" id="inputDetailName" class="form-control"
+							placeholder="Enter detail name" name="detailNames">
+					</div>
+
+					<div class="col-sm-5">
+						<input type="text" id="inputDetailValue" class="form-control"
+							placeholder="Enter detail value" name="detailValues">
+					</div>
+
+					<div class="col-sm-2 text-end">
+						<button class="btn btn-danger delete-detailSection">
+							<i class="fas fa-times fa-lg"></i>
+						</button>
+					</div>
+				</div>
+			</div>
+
+			<div class="form-group mb-3 row" style="margin: 0 12px;">
+				<button type="button" class="btn btn-outline-secondary"
+					onclick="addNextDetailSection()">
+					<i class="fas fa-plus"></i>
+				</button>
+			</div>
+		</div>
+	</th:block>
+	<!-- Detail -->
 
 </body>
 </html>

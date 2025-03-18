@@ -71,3 +71,4 @@ function addExtraFileThumbnail() {
 $(document).on("click", ".btn-danger", function() {
 	$(this).closest(".form-group").remove();
 });
+

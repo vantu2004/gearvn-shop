@@ -116,4 +116,17 @@ public class ProductRepositoryTests {
 		assertThat(product).isNotNull();
 		assertThat(savedProduct.getImages().size()).isEqualTo(7);
 	}
+	
+	@Test
+	public void testCreateProductDetails() {
+		Product product = this.productRepository.findById(19).orElse(null);
+		if (product != null) {
+			product.addProductDetail("ram", "8gb");
+			product.addProductDetail("cpu", "core-i5");
+			product.addProductDetail("ssd", "516gb");
+			
+			Product savedProduct = this.productRepository.save(product);
+			assertThat(savedProduct.getId()).isGreaterThan(0);
+		}
+	}
 }
