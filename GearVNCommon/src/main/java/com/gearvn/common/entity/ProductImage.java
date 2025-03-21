@@ -1,5 +1,7 @@
 package com.gearvn.common.entity;
 
+import java.beans.Transient;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -30,4 +32,9 @@ public class ProductImage {
 	@ManyToOne
 	@JoinColumn(name = "product_id")
 	private Product product;
+	
+	@Transient
+	public String getImagePath() {
+		return "/product-images/" + this.name;
+	}
 }

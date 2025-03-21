@@ -61,15 +61,7 @@
 	<!-- Overview-->
 	<th:block th:fragment="overview">
 		<div class="mt-4 mx-auto col-md-12">
-			<h3>Create New Product</h3>
-
-			<div class="form-group mb-3 row" style="display: none;">
-				<label for="inputId" class="col-sm-3 col-form-label">Id</label>
-				<div class="col-sm-9">
-					<input type="text" id="inputId" class="form-control"
-						th:field="*{id}">
-				</div>
-			</div>
+			<h3>Overview</h3>
 
 			<div class="form-group mb-3 row">
 				<label for="inputName" class="col-sm-3 col-form-label">Product
@@ -108,12 +100,22 @@
 			<div class="form-group row">
 				<label for="inputCategory" class="col-sm-3 col-form-label">Category</label>
 				<div class="col-sm-9">
-					<select class="form-select" id="inputCategory"
-						th:field="*{category}">
-						<th:block th:each="cat : ${listCategories}">
-							<option th:value="${cat.id}">[[${cat.name}]]</option>
-						</th:block>
-					</select>
+
+					<th:block th:if="${product.category != null}">
+						<select th:field="*{category}" class="form-control"
+							id="inputCategory">
+							<th:block th:each="cat : ${product.brand.categories}">
+								<option th:value="${cat.id}">[[${cat.name}]]</option>
+							</th:block>
+						</select>
+					</th:block>
+
+					<th:block th:if="${product.category == null}">
+						<select th:field="*{category}" class="form-control"
+							id="inputCategory">
+						</select>
+					</th:block>
+
 					<p id="categoryError" th:if="${#fields.hasErrors('category')}"
 						th:errorclass="error" th:errors="*{category}" class="text-danger"></p>
 				</div>
@@ -174,33 +176,7 @@
 
 	<!-- Description -->
 	<th:block th:fragment="description">
-		<!-- 		<div class="mt-4 mx-auto col-md-12">
-			<h3>Description</h3>
-			<div class="row">
-				<div class="col-md-12 mt-3">
-					<label for="shortDescription" class="form-label">
-						<h5>Short Description</h5>
-					</label>
-					<textarea class="form-control" id="shortDescription" rows="5"
-						th:field="*{shortDescription}"></textarea>
-					<p id="shortDescError"
-						th:if="${#fields.hasErrors('shortDescription')}"
-						th:errorclass="error" th:errors="*{shortDescription}"
-						class="text-danger"></p>
-				</div>
-				<div class="col-md-12 mt-5">
-					<label for="fullDescription" class="form-label">
-						<h5>Full Description</h5>
-					</label>
-					<textarea class="form-control" id="fullDescription" rows="10"
-						th:field="*{fullDescription}"></textarea>
-					<p id="fullDescError"
-						th:if="${#fields.hasErrors('fullDescription')}"
-						th:errorclass="error" th:errors="*{fullDescription}"
-						class="text-danger"></p>
-				</div>
-			</div>
-		</div> -->
+
 		<div class="mt-4 mx-auto col-md-12">
 			<h3>Description</h3>
 
@@ -312,13 +288,49 @@
 							accept=".png, .jpg, .jpeg" name="multipartFile">
 					</div>
 					<div>
-						<img th:src="@{/images/LogoGearvn.png}" width="50%" height="50%"
-							class="d-inline-block align-top" alt="image"
+						<img th:src="@{${product.getMainImagePath}}" width="50%"
+							height="50%" class="d-inline-block align-top" alt="image"
 							id="inputPhotosPreview" style="border-radius: 10px;" name="image">
 					</div>
 				</div>
 			</div>
 			<!-- Main Images -->
+
+			<!-- Load Product Extra Images -->
+			<th:block th:each="productExtraImage : ${product.images}">
+				<div class="form-group mb-3 row">
+					<label for="inputPhotos" class="col-sm-3 col-form-label">Extra
+						Images</label>
+					<div class="col-sm-9">
+						<div class="image-upload-container">
+
+							<!-- dùng để update extra image -->
+							<input type="hidden" id="inputExtraImageId" name="extraImageIds"
+								th:value="${productExtraImage.id}"> <input type="hidden"
+								id="inputExtraImageName" name="extraImageNames"
+								th:value="${productExtraImage.name}">
+
+							<div class="d-flex align-items-center image-upload mb-2">
+								<!-- data-has-image="true" đam rbaor khi click chọn ảnh khác thì vẫn chỉ tạo đúng 1 input, xử lý bên product_extraImage.js -->
+								<input type="file" class="form-control me-2 image-input"
+									accept=".png, .jpg, .jpeg" name="extraMultipartFile"
+									data-has-image="true">
+								<button class="btn btn-danger">
+									<i class="fas fa-times fa-lg"></i>
+								</button>
+							</div>
+
+							<div>
+								<img th:src="@{${productExtraImage.getImagePath}}" width="50%"
+									height="50%" class="d-inline-block align-top image-preview"
+									style="border-radius: 10px;" alt="image">
+							</div>
+
+						</div>
+					</div>
+				</div>
+			</th:block>
+			<!-- Load Product Extra Images -->
 
 			<!-- Extra Images -->
 			<div class="form-group mb-3 row">
@@ -351,10 +363,43 @@
 	<!-- Detail -->
 	<th:block th:fragment="details">
 		<div class="mt-4 mx-auto col-md-12">
-			<h3>Create Product Details</h3>
+			<h3>Details</h3>
 
 			<div class="parent-details">
+
+				<th:block th:each="detail : ${product.productDetails}">
+					<div class="form-group mb-3 row">
+
+						<!-- dùng để update product details -->
+						<input type="hidden" id="inputDetailId" name="detailIds"
+							th:value="${detail.id}">
+
+						<div class="col-sm-5">
+							<input type="text" id="inputDetailName" class="form-control"
+								placeholder="Enter detail name" name="detailNames"
+								th:value="${detail.name}">
+						</div>
+
+						<div class="col-sm-5">
+							<input type="text" id="inputDetailValue" class="form-control"
+								placeholder="Enter detail value" name="detailValues"
+								th:value="${detail.value}">
+						</div>
+
+						<div class="col-sm-2 text-end">
+							<button class="btn btn-danger delete-detailSection">
+								<i class="fas fa-times fa-lg"></i>
+							</button>
+						</div>
+					</div>
+				</th:block>
+
 				<div class="form-group mb-3 row">
+
+					<!-- dùng để update product details -->
+					<input type="hidden" id="inputDetailId" name="detailIds"
+						th:value="0">
+
 					<div class="col-sm-5">
 						<input type="text" id="inputDetailName" class="form-control"
 							placeholder="Enter detail name" name="detailNames">

@@ -105,16 +105,16 @@ public class Product {
 	@NotNull
 	private Brand brand;
 
-	// CascadeType.ALL nghĩa là mọi thao tác trên Product thì bên ProductImage cũng
-	// cập nhật theo
-	@OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
+	// CascadeType.ALL nghĩa là mọi thao tác trên Product thì bên ProductImage cũng cập nhật theo
+	// orphanRemoval = true nghĩa là khi entity con ko còn đc tham chiếu bởi entity cha thì sẽ tự động xóa
+	@OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
 	@Builder.Default
 	// tránh khi in ra set này thì bị lặp vô hạn do quan hệ 2 chiều với product bên
 	// productImage kia
 	@ToString.Exclude
 	private Set<ProductImage> images = new HashSet<ProductImage>();
 
-	@OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
 	@Builder.Default
 	@ToString.Exclude
 	// Dùng list sẽ bị lỗi
@@ -124,6 +124,11 @@ public class Product {
 		this.images.add(ProductImage.builder().name(imageName).product(this).build());
 	}
 
+	public void addProductDetail(String id, String name, String value) {
+		Integer i = Integer.parseInt(id);
+		this.productDetails.add(ProductDetail.builder().id(i).name(name).value(value).product(this).build());
+	}
+	
 	public void addProductDetail(String name, String value) {
 		this.productDetails.add(ProductDetail.builder().name(name).value(value).product(this).build());
 	}

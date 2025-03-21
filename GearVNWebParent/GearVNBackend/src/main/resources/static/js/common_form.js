@@ -68,6 +68,7 @@ function checkDuplicate(form) {
 
 	$.post(checkDuplicateUrl, param, function(response) {
 		if (response === "OK") {
+			// isCreateMode giải quyết luôn vấn đề khi update thì ko cần hiện modal ép choose file
 			if (isCreateMode && !fileInput.files.length) {
 			    showModalDialog("Warning", "Main image ​​cannot be empty");
 			} else {

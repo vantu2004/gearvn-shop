@@ -4,7 +4,8 @@
 
 <!-- Head -->
 <head>
-<head th:replace="fragments :: page_head('Create New Product', 'tag')" />
+<head
+	th:replace="fragments :: page_head('Create/Update New Product', 'tag')" />
 <link rel="stylesheet" th:href="@{/richtext/richtext.min.css}" />
 <script th:src="@{/richtext/jquery.richtext.min.js}"></script>
 
@@ -32,6 +33,15 @@
 					<div class="col-md-9 mx-auto">
 						<div class="tab-content">
 
+							<!-- dùng để load đúng category khi update product -->
+							<th:block th:if="*{id != null}">
+								<input type="hidden" id="inputId" th:field="*{id}">
+							</th:block>
+							<th:block th:if="*{category != null and category.id != null}">
+								<input type="hidden" id="inputCategoryId"
+									th:value="*{category.id}">
+							</th:block>
+
 							<div class="tab-pane fade active show" id="overview"
 								role="tabpanel">
 								<th:block th:replace="products/product_fragments :: overview"></th:block>
@@ -58,7 +68,7 @@
 							<div class="form-group d-flex justify-content-end">
 								<a th:href="@{/products}" class="btn btn-secondary"
 									style="margin: 0 8px;">Back</a>
-								<button type="submit" class="btn btn-success">Create</button>
+								<button type="submit" class="btn btn-success">Save</button>
 							</div>
 						</div>
 					</div>
@@ -79,6 +89,9 @@
 		// check duplicate productName/productAlias
 		let checkDuplicateUrl = "[[ @{/products/check_duplicate} ]]";
 
+		// get url brand
+		let brand = "[[@{/brands/}]]";
+
 		// upload mainImage
 		let input = "#inputPhotos";
 		let inputPreview = "#inputPhotosPreview";
@@ -90,33 +103,10 @@
 		let dropdownBrands = $("#inputBrand");
 		let dropdownCategories = $("#inputCategory");
 
-		$(document).ready(function() {
+		// mặc định khi update thì không ép update
+		let mainImageValue = "[[${product.mainImage}]]";
 
-			// set richtext function
-			$("#shortDescription").richText();
-			$("#fullDescription").richText();
-
-			// load combobox function
-			dropdownBrands.change(function() {
-				dropdownCategories.empty();
-				getCategories();
-			});
-			// set categories cho brand đầu tiên
-			getCategories();
-		});
-
-		function getCategories() {
-			let brandId = dropdownBrands.val();
-			let url = "[[@{/brands/}]]" + brandId + "/categories";
-
-			$.get(url, function(response) {
-				$.each(response, function(index, category) {
-					$("<option>").val(category.id).text(category.name)
-							.appendTo(dropdownCategories);
-				})
-			});
-		}
-
+		// chặn submit form và xử lý
 		// mặc định của jquery richTextEditor là <div><br></div> và khi nhập r xóa hết thì còn <br> -> xử lý validation
 		function check(form) {
 			setDefaultValueTextArea();
@@ -126,87 +116,14 @@
 			// hàm post bên checkDuplicate chạy kiểu async nên phải return false để chặn hàm này lại cho hàm checkDuplicate xử lý
 			return false;
 		}
-
-		function setDefaultValueTextArea() {
-			let shortDescription = $('#shortDescription');
-			let fullDescription = $('#fullDescription');
-			let content_shortDescription = shortDescription.val().trim();
-			let content_fullDescription = fullDescription.val().trim();
-
-			if (content_shortDescription === '<div><br></div>'
-					|| content_shortDescription === '<br>') {
-				shortDescription.val('');
-			}
-			if (content_fullDescription === '<div><br></div>'
-					|| content_fullDescription === '<br>') {
-				fullDescription.val('');
-			}
-		}
-		
-/* 		// add thêm 1 dòng detail
-		function addNextDetailSection() {
-			let newDetailSection = `
-					<div class="form-group mb-3 row">
-						<div class="col-sm-5">
-							<input type="text" id="inputDetailName" class="form-control"
-								placeholder="Enter detail name">
-						</div>
-
-						<div class="col-sm-5">
-							<input type="text" id="inputDetailValue" class="form-control"
-								placeholder="Enter detail value">
-						</div>
-
-						<div class="col-sm-2 text-end">
-							<button class="btn btn-danger" onclick="addNextDetailSection()">
-								<i class="fas fa-times fa-lg"></i>
-							</button>
-						</div>
-					</div>
-				`;
-
-			$(".parent-details").append(newDetailSection);
-		}
-		
-		// delete 1 detail section
-		$(document).ready(function () {
-		    $(document).on("click", ".delete-detailSection", function () {
-		        $(this).closest(".form-group").remove();
-		    });
-		}); */
-		$(document).ready(function () {
-		    // Xóa form-group khi nhấn nút xóa
-		    $(document).on("click", ".delete-detailSection", function () {
-		        $(this).closest(".form-group").remove();
-		    });
-
-		    // Thêm form-group mới khi nhấn nút Add
-		    window.addNextDetailSection = function () {
-		        let newDetailSection = `
-		            <div class="form-group mb-3 row">
-		                <div class="col-sm-5">
-		                    <input type="text" class="form-control" placeholder="Enter detail name" name="detailNames">
-		                </div>
-		                <div class="col-sm-5">
-		                    <input type="text" class="form-control" placeholder="Enter detail value" name="detailValues">
-		                </div>
-		                <div class="col-sm-2 text-end">
-		                    <button class="btn btn-danger delete-detailSection">
-		                        <i class="fas fa-times fa-lg"></i>
-		                    </button>
-		                </div>
-		            </div>
-		        `;
-
-		        $(".parent-details").append(newDetailSection);
-		    };
-		});
-
-
 	</script>
 
 	<script th:src="@{/js/common_form.js}"></script>
-	<script th:src="@{/js/product_form.js}"></script>
+
+	<script th:src="@{/js/product/product_overview.js}"></script>
+	<script th:src="@{/js/product/product_description.js}"></script>
+	<script th:src="@{/js/product/product_extraImage.js}"></script>
+	<script th:src="@{/js/product/product_detail.js}"></script>
 
 </body>
 

@@ -10,7 +10,8 @@ $(document).ready(function() {
 			$(this).closest(".image-upload-container").find(".image-preview")
 				.attr("src", "/" + contextPath + "/images/LogoGearvn.png");
 			this.value = "";
-			$(this).removeAttr("data-has-image"); // Xóa trạng thái đã chọn ảnh trước đó
+			// Xóa trạng thái đã chọn ảnh trước đó
+			$(this).removeAttr("data-has-image"); 
 			return;
 		}
 
@@ -21,6 +22,10 @@ $(document).ready(function() {
 			$(this).attr("data-has-image", "true");
 			addExtraFileThumbnail();
 		}
+
+		// đảm bảo khi thay đổi extra image thì xóa đi 2 tag input để bên controller khi quét mảng 2 tag ko có tag của input thay đổi
+		let container = $(this).closest(".image-upload-container");
+		container.find("#inputExtraImageId, #inputExtraImageName").remove();
 	});
 });
 
