@@ -89,7 +89,8 @@
 							th:src="@{${product.getMainImagePath}}" width="48" height="48"
 							class="rounded-circle object-fit-cover"></td>
 
-						<td th:text="${product.name}"></td>
+						<td><a th:href="@{'/products/detail/' + ${product.id}}"
+							th:text="${product.name}"></a></td>
 
 						<td style="width: 300px;"><span
 							th:each="brand : ${product.brand}"> <span
@@ -106,7 +107,7 @@
 							th:if="${!product.enabled}" class="fas fa-times text-danger"></i></td>
 
 						<td><a title="View this product"
-							th:href="@{'/products/update/' + ${product.id}}"> <i
+							th:href="@{'/products/detail/' + ${product.id}}"> <i
 								class="fas fa-eye"></i>
 						</a> | <a title="Edit this product"
 							th:href="@{'/products/update/' + ${product.id}}"> <i

@@ -189,7 +189,7 @@ public class ProductController {
 
 			redirectAttributes.addFlashAttribute("message", "The product ID " + id + " has been deleted successfully.");
 		} catch (Exception e) {
-			redirectAttributes.addFlashAttribute("message", "Could not find any product with id " + id);
+			redirectAttributes.addFlashAttribute("message", e.getMessage());
 		}
 
 		return "redirect:/products";
@@ -207,8 +207,22 @@ public class ProductController {
 
 			return "products/create_product";
 		} catch (Exception e) {
-			redirectAttributes.addFlashAttribute("message", "Could not find any product with id " + id);
-			return "redirect:/propducts";
+			redirectAttributes.addFlashAttribute("message", e.getMessage());
+			return "redirect:/products";
+		}
+	}
+	
+	@GetMapping("/products/detail/{id}")
+	public String getDetailsProduct(@PathVariable("id") Integer id , Model model, RedirectAttributes redirectAttributes) {
+
+		try {
+			Product product = this.productService.getProductById(id);
+			model.addAttribute("product", product);
+			
+			return "products/view_product";
+		} catch (Exception e) {
+			redirectAttributes.addFlashAttribute("message", e.getMessage());
+			return "redirect:/products";
 		}
 	}
 }

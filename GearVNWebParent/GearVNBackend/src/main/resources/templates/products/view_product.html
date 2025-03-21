@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<!-- khai báo namespace th để có thể sử dụng các thuộc tính của thymeleaf -->
+<html xmlns:th="http://thymeleaf.org">
+
+<!-- Head -->
+<head>
+<head th:replace="fragments :: page_head('View Product', 'tag')" />
+<link rel="stylesheet" th:href="@{/richtext/richtext.min.css}" />
+<script th:src="@{/richtext/jquery.richtext.min.js}"></script>
+
+</head>
+<!-- Head -->
+
+<body>
+	<!-- Header -->
+	<header th:replace="fragments :: header"></header>
+	<!-- Header -->
+
+	<div class="container">
+		<div class="row flex-nowrap">
+			<!-- Tabs dọc -->
+			<div class="col-auto col-md-3 col-xl-2 px-sm-2 px-0"
+				style="box-shadow: 1px 0px 5px -2px #aaaaaa;">
+				<th:block th:replace="products/product_fragments :: sidebar"></th:block>
+			</div>
+
+			<div class="col mt-4">
+
+				<!-- Nội dung tab -->
+				<div class="col-md-9 mx-auto">
+					<div class="tab-content">
+
+						<div class="tab-pane fade active show" id="overview"
+							role="tabpanel">
+							<th:block
+								th:replace="products/readonly_product_fragments :: overview"></th:block>
+						</div>
+
+						<div class="tab-pane fade" id="description" role="tabpanel">
+							<th:block
+								th:replace="products/readonly_product_fragments :: description"></th:block>
+						</div>
+
+						<div class="tab-pane fade" id="images" role="tabpanel">
+							<th:block
+								th:replace="products/readonly_product_fragments :: images"></th:block>
+						</div>
+
+						<div class="tab-pane fade" id="details" role="tabpanel">
+							<th:block
+								th:replace="products/readonly_product_fragments :: details"></th:block>
+						</div>
+
+						<div class="tab-pane fade" id="shipping" role="tabpanel">
+							<th:block
+								th:replace="products/readonly_product_fragments :: shipping"></th:block>
+						</div>
+
+					</div>
+
+					<div class="form-group row">
+						<div class="form-group d-flex justify-content-end">
+							<a th:href="@{/products}" class="btn btn-secondary">Back</a>
+						</div>
+					</div>
+
+				</div>
+				
+			</div>
+		</div>
+	</div>
+
+	<!-- Modal -->
+	<div th:replace="modal_fragments :: modal_dialog"></div>
+	<!-- Modal -->
+
+	<!-- Footer -->
+	<footer th:replace="fragments :: footer"></footer>
+	<!-- Footer -->
+
+	<script th:src="@{/js/common_form.js}"></script>
+
+</body>
+
+</html>

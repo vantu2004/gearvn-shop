@@ -25,6 +25,8 @@ public class ProductService {
 			product.setCreatedTime(new Date());
 		}
 		
+		product.setUpdatedTime(new Date());
+		
 		String defaultAlias = product.getAlias().toLowerCase().replaceAll(" ", "-");
 		product.setAlias(defaultAlias);
 		
@@ -64,12 +66,16 @@ public class ProductService {
 	}
 
 	public Product getProductById(Integer id) {
-		return this.productRepository.findById(id).orElse(null);
+		Product product = this.productRepository.findById(id).orElse(null);
+		if (product != null) {
+			return product;
+		}
+		throw new NoSuchElementException("Could not find any product with id " + id);
 	}
 
 	public void deleteProductById(Integer id) {
 		Long count = this.productRepository.countById(id);
-		if (count == null || count == 0) {
+		if (count == 0 || count == null) {
 			throw new NoSuchElementException("Could not find any product with id " + id);
 		}
 

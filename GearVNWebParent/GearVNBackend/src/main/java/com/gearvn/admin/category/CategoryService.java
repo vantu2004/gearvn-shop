@@ -167,7 +167,7 @@ public class CategoryService {
 
 	public void deleteCategoryById(Integer id) {
 		Long count = this.categoryRepository.countById(id);
-		if (count == null || count == 0) {
+		if (count == 0 || count == null) {
 			throw new NoSuchElementException("Could not find any category with id " + id);
 		}
 

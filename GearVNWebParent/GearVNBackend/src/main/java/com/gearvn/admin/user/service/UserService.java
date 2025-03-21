@@ -87,7 +87,7 @@ public class UserService {
 
 	public void deleteUser(Integer id) {
 		Long count = this.userRepository.countById(id);
-		if (count == null || count == 0) {
+		if (count == 0 || count == null) {
 			throw new NoSuchElementException("Could not find any user with id " + id);
 		}
 
