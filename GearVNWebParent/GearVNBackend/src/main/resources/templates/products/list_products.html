@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html xmlns:th="http://thymeleaf.org">
+<html xmlns:th="http://thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
 <!-- Head -->
 <head th:replace="fragments :: page_head('Manage Products', 'none')"></head>
@@ -15,37 +16,57 @@
 	</div>
 
 	<!-- create/csv/excel/pdf -->
-	<div class="container mt-3">
-		<div class="row g-2">
-			<div class="col-12 col-sm-6 col-md-3">
-				<a class="btn btn-primary w-100" th:href="@{/products/create}"><i
-					class="fas fa-plus-square"></i> Create New Product </a>
-			</div>
-			<div class="col-12 col-sm-6 col-md-3">
-				<a class="btn btn-warning w-100" th:href="@{/products/export/csv}">
-					<i class="fas fa-file-csv"></i> Export To CSV
-				</a>
+	<th:block sec:authorize="hasAnyAuthority('Admin', 'Editor')">
+		<div class="container mt-3">
+			<div class="row g-2">
+				<div class="col-12 col-sm-6 col-md-3">
+					<a class="btn btn-primary w-100" th:href="@{/products/create}"><i
+						class="fas fa-plus-square"></i> Create New Product </a>
+				</div>
+				<div class="col-12 col-sm-6 col-md-3">
+					<a class="btn btn-warning w-100" th:href="@{/products/export/csv}">
+						<i class="fas fa-file-csv"></i> Export To CSV
+					</a>
+				</div>
 			</div>
 		</div>
-	</div>
+	</th:block>
 	<!-- create/csv/excel/pdf -->
 
 	<div class="container mt-3">
 		<!-- search/reload -->
-		<form th:action="@{/products/page/1}" method="get">
+		<form th:action="@{/products/page/1}" method="get" id="searchForm">
 			<div class="row g-3 align-items-center">
-				<div class="col-auto">
+				<!-- Ô nhập tìm kiếm -->
+				<div class="col-12 col-md-auto">
 					<input type="hidden" id="inputSortType" class="form-control"
 						th:value="${sortType}" name="sortType"> <input
+						type="hidden" id="inputsortField" class="form-control"
+						th:value="${sortField}" name="sortField"> <input
 						type="search" id="inputKeyword" class="form-control"
 						placeholder="Enter keyword" aria-describedby="passwordHelpInline"
 						name="keyword" th:value="${keyword}">
 				</div>
-				<div class="col-auto">
-					<button type="submit" class="btn">
+
+				<!-- Ô chọn danh mục -->
+				<div class="col-12 col-md-auto">
+					<select class="form-select" id="inputSearchCategoryId"
+						name="inputSearchCategoryId">
+						<option value="" selected>Choose category</option>
+						<option th:each="category : ${categories}"
+							th:value="${category.id}"
+							th:selected="(${inputSearchCategoryId} == ${category.id})"
+							th:text="${category.name}"></option>
+					</select>
+				</div>
+
+				<!-- Nút tìm kiếm và làm mới -->
+				<div class="col-12 col-md-auto d-flex gap-2">
+					<button type="submit" class="btn btn-primary">
 						<i class="fas fa-search"></i>
 					</button>
-					<a th:href="@{/products}" class="btn"> <i class="fas fa-redo"></i>
+					<a th:href="@{/products}" class="btn btn-secondary"> <i
+						class="fas fa-redo"></i>
 					</a>
 				</div>
 			</div>
@@ -70,20 +91,24 @@
 			<table class="table table-hover">
 				<thead>
 					<tr>
-						<th scope="col">ID</th>
+						<th th:replace="fragments :: column_link('/products', 'id', 'ID')" />
 						<th scope="col">Main Image</th>
-						<th scope="col">Product Name</th>
-						<th scope="col">Brand</th>
-						<th scope="col">Category</th>
+						<th
+							th:replace="fragments :: column_link('/products', 'name', 'Product Name')" />
+						<th
+							th:replace="fragments :: column_link('/products', 'brand', 'Brand')" />
+						<th
+							th:replace="fragments :: column_link('/products', 'category', 'Category')" />
 						<th scope="col">Enabled</th>
 						<th scope="col">Action</th>
 					</tr>
 				</thead>
 				<tbody>
 					<tr th:each="product : ${listProducts}">
-						<td th:text="${product.id}"></td>
+						<td th:text="${product.id}" style="width: 50px;"></td>
 
-						<td><i th:if="${#strings.isEmpty(product.mainImage)}"
+						<td style="width: 150px;"><i
+							th:if="${#strings.isEmpty(product.mainImage)}"
 							class="fas fa-images fa-3x text-secondary"></i> <img
 							th:if="${not #strings.isEmpty(product.mainImage)}"
 							th:src="@{${product.getMainImagePath}}" width="48" height="48"
@@ -92,31 +117,37 @@
 						<td><a th:href="@{'/products/detail/' + ${product.id}}"
 							th:text="${product.name}"></a></td>
 
-						<td style="width: 300px;"><span
+
+						<td style="width: 200px;"><span
 							th:each="brand : ${product.brand}"> <span
 								class="badge text-bg-success" th:text="${brand.name}"></span>
 						</span></td>
 
-						<td style="width: 300px;"><span
+						<td style="width: 200px;"><span
 							th:each="category : ${product.category}"> <span
 								class="badge text-bg-secondary" th:text="${category.name}"></span>
 						</span></td>
 
-						<td><i th:if="${product.enabled}"
+						<td style="width: 100px;"><i th:if="${product.enabled}"
 							class="fas fa-check text-success"></i> <i
 							th:if="${!product.enabled}" class="fas fa-times text-danger"></i></td>
 
-						<td><a title="View this product"
+						<td style="width: 100px;"><a title="View this product"
 							th:href="@{'/products/detail/' + ${product.id}}"> <i
 								class="fas fa-eye"></i>
-						</a> | <a title="Edit this product"
-							th:href="@{'/products/update/' + ${product.id}}"> <i
-								class="fas fa-edit text-success"></i>
-						</a> | <a title="Delete this product"
-							th:href="@{'/products/delete/' + ${product.id}}"
-							th:productId="${product.id}" class="link-delete"> <i
-								class="fas fa-trash-alt text-danger"></i>
-						</a>
+						</a> <th:block
+								sec:authorize="hasAnyAuthority('Admin', 'Editor', 'Salesperson')"> | <a
+									title="Edit this product"
+									th:href="@{'/products/update/' + ${product.id}}"> <i
+									class="fas fa-edit text-success"></i>
+								</a>
+							</th:block> <th:block sec:authorize="hasAnyAuthority('Admin', 'Editor')"> | <a
+									title="Delete this product"
+									th:href="@{'/products/delete/' + ${product.id}}"
+									th:productId="${product.id}" class="link-delete"> <i
+									class="fas fa-trash-alt text-danger"></i>
+								</a>
+							</th:block>
 					</tr>
 				</tbody>
 			</table>
@@ -127,35 +158,18 @@
 		<nav aria-label="Pagination"
 			class="d-flex flex-column align-items-center mt-5"
 			th:if="${totalElements > 0}">
-			<p class="mb-2">Show brands from [[${startCount}]] to
+			<p class="mb-2">Show products from [[${startCount}]] to
 				[[${endCount}]] of [[${totalElements}]]</p>
-			<ul class="pagination justify-content-center">
-				<li class="page-item"
-					th:classappend="${currentPage == 1} ? 'disabled'"><a
-					th:replace="fragments :: page_link('/brands', 1, 'First')"></a></li>
 
-				<li class="page-item"
-					th:classappend="${currentPage == 1} ? 'disabled'"><a
-					th:replace="fragments :: page_link('/brands', ${currentPage - 1}, 'Previous')"></a></li>
+			<th:block>
+				<div th:replace="fragments :: pagination('/products')"></div>
+			</th:block>
 
-				<li class="page-item"
-					th:each="page : ${#numbers.sequence(startPage, endPage)}"
-					th:classappend="${page == currentPage} ? 'active'"><a
-					th:replace="fragments :: page_link('/brands', ${page}, ${page})"></a></li>
-
-				<li class="page-item"
-					th:classappend="${currentPage == totalPages} ? 'disabled'"><a
-					th:replace="fragments :: page_link('/brands', ${currentPage + 1}, 'Next')"></a></li>
-
-				<li class="page-item"
-					th:classappend="${currentPage == totalPages} ? 'disabled'"><a
-					th:replace="fragments :: page_link('/brands', ${totalPages}, 'Last')"></a></li>
-			</ul>
 		</nav>
 
 
 		<div class="text-center mt-5" th:if="${totalElements <= 0}">No
-			brands found.</div>
+			products found.</div>
 
 	</div>
 
@@ -169,21 +183,30 @@
 
 	<!-- jQuery Script -->
 	<script type="text/javascript">
-		$(".link-delete").on(
-				"click",
-				function(event) {
-					event.preventDefault();
+		$(document).ready(
+				function() {
+					$(".link-delete").on(
+							"click",
+							function(event) {
+								event.preventDefault();
 
-					let link = $(this);
-					let productId = link.attr("productId") || "unknown";
-					let href = link.attr("href") || "#";
+								let link = $(this);
+								let productId = link.attr("productId")
+										|| "unknown";
+								let href = link.attr("href") || "#";
 
-					$("#modalMessage").text(
-							"Are you sure you want to delete product ID "
-									+ productId + "?");
-					$("#deleteButton").attr("href", href);
+								$("#modalMessage").text(
+										"Are you sure you want to delete product ID "
+												+ productId + "?");
+								$("#deleteButton").attr("href", href);
 
-					$("#confirmModal").modal("show");
+								$("#confirmModal").modal("show");
+							});
+
+					$("#inputSearchCategoryId").on("change", function() {
+						$("#searchForm").submit();
+					});
+
 				});
 	</script>
 </body>

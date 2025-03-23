@@ -18,9 +18,9 @@ public class GearvnUserDetails implements UserDetails {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	
+
 	private User user;
-	
+
 	public GearvnUserDetails(User user) {
 		this.user = user;
 	}
@@ -28,15 +28,16 @@ public class GearvnUserDetails implements UserDetails {
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		Set<Role> roles = user.getRoles();
-		
-		// SimpleGrantedAuthority là class kế thừa GrantedAuthority đại diện cho 1 role của 1 user
+
+		// SimpleGrantedAuthority là class kế thừa GrantedAuthority đại diện cho 1 role
+		// của 1 user
 		// 1 user có thể có nhiều role nên dùng list để lấy hết role
 		List<SimpleGrantedAuthority> authorities = new ArrayList<>();
-		
+
 		for (Role role : roles) {
 			authorities.add(new SimpleGrantedAuthority(role.getName()));
 		}
-		
+
 		return authorities;
 	}
 
@@ -56,15 +57,22 @@ public class GearvnUserDetails implements UserDetails {
 	public boolean isEnabled() {
 		return user.isEnabled();
 	}
-	
+
+	/*
+	 * nhờ có quy ước đặt tên trong java (Java Bean Naming Convention) nên mặc dù
+	 * chỉ cần có getter của các thuộc tính thì bên thymeleaf vẫn có thể lấy giá trị
+	 * thuộc tính như thường bằng cách gọi tên thuộc tính đó mặc dù thuộc tính đó ko
+	 * có trong class (vd: gọi name với getName(),...)
+	 */
+
 	public String getFullName() {
 		return this.user.getFirstName() + " " + this.user.getLastName();
 	}
-	
+
 	public String getEmail() {
 		return this.user.getEmail();
 	}
-	
+
 	public String getPhotos() {
 		return this.user.getPhotosImagePath();
 	}
@@ -82,5 +90,9 @@ public class GearvnUserDetails implements UserDetails {
 	public void setPhotos(String photos) {
 		// TODO Auto-generated method stub
 		this.user.setPhotos(photos);
+	}
+
+	public boolean hasRole(String roleName) {
+		return this.user.hasRole(roleName);
 	}
 }

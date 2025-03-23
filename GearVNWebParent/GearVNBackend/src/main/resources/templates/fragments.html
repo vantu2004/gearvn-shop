@@ -77,11 +77,10 @@ body {
 									class="nav-link dropdown-toggle" href="#" role="button"
 									data-bs-toggle="dropdown" aria-expanded="false">Users</a>
 									<ul class="dropdown-menu">
-										<li><a class="dropdown-item" href="#">Action</a></li>
-										<li><a class="dropdown-item" href="#">Another action</a></li>
-										<li><hr class="dropdown-divider"></li>
-										<li><a class="dropdown-item" href="#">Something else
-												here</a></li>
+										<li><a class="dropdown-item" th:href="@{/users/new}">Create
+												New</a></li>
+										<li><a class="dropdown-item" th:href="@{/users}">View
+												All</a></li>
 									</ul></li>
 							</th:block>
 
@@ -90,11 +89,10 @@ body {
 									class="nav-link dropdown-toggle" href="#" role="button"
 									data-bs-toggle="dropdown" aria-expanded="false">Categories</a>
 									<ul class="dropdown-menu">
-										<li><a class="dropdown-item" href="#">Action</a></li>
-										<li><a class="dropdown-item" href="#">Another action</a></li>
-										<li><hr class="dropdown-divider"></li>
-										<li><a class="dropdown-item" href="#">Something else
-												here</a></li>
+										<li><a class="dropdown-item"
+											th:href="@{/categories/create}">Create New</a></li>
+										<li><a class="dropdown-item" th:href="@{/categories}">View
+												All</a></li>
 									</ul></li>
 							</th:block>
 
@@ -103,11 +101,10 @@ body {
 									class="nav-link dropdown-toggle" href="#" role="button"
 									data-bs-toggle="dropdown" aria-expanded="false">Brands</a>
 									<ul class="dropdown-menu">
-										<li><a class="dropdown-item" href="#">Action</a></li>
-										<li><a class="dropdown-item" href="#">Another action</a></li>
-										<li><hr class="dropdown-divider"></li>
-										<li><a class="dropdown-item" href="#">Something else
-												here</a></li>
+										<li><a class="dropdown-item" th:href="@{/brands/create}">Create
+												New</a></li>
+										<li><a class="dropdown-item" th:href="@{/brands}">View
+												All</a></li>
 									</ul></li>
 							</th:block>
 
@@ -117,11 +114,12 @@ body {
 									class="nav-link dropdown-toggle" href="#" role="button"
 									data-bs-toggle="dropdown" aria-expanded="false">Products</a>
 									<ul class="dropdown-menu">
-										<li><a class="dropdown-item" href="#">Action</a></li>
-										<li><a class="dropdown-item" href="#">Another action</a></li>
-										<li><hr class="dropdown-divider"></li>
-										<li><a class="dropdown-item" href="#">Something else
-												here</a></li>
+										<li><a class="dropdown-item"
+											th:href="@{/products/create}"
+											sec:authorize="hasAnyAuthority('Admin', 'Editor')">Create
+												New</a></li>
+										<li><a class="dropdown-item" th:href="@{/products}">View
+												All</a></li>
 									</ul></li>
 							</th:block>
 
@@ -230,55 +228,6 @@ body {
 	</header>
 	<!-- Header -->
 
-	<!-- SideBar -->
-<!-- 	<div th:fragment="sidebar"
-		class="col-auto col-md-3 col-xl-2 px-sm-2 px-0"
-		style="box-shadow: 1px 0px 5px -2px #aaaaaa;">
-		<div
-			class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 min-vh-100">
-
-			<ul
-				class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start mt-3"
-				id="menu">
-				<li class="nav-item mb-3"><span
-					class="d-none d-sm-inline fs-5 fw-bold">Menu</span></li>
-
-				<li class="nav-item mb-3"><a href="#"
-					class="nav-link d-flex align-items-center gap-3 px-0 w-100"> <span
-						class="icon-container d-flex justify-content-center align-items-center"
-						style="width: 35px;"> <i class="fs-5 fas fa-home"></i>
-					</span> <span class="d-none d-sm-inline flex-grow-1 text-start">Overview</span>
-				</a></li>
-				<li class="nav-item mb-3"><a href="#"
-					class="nav-link d-flex align-items-center gap-3 px-0 w-100"> <span
-						class="icon-container d-flex justify-content-center align-items-center"
-						style="width: 35px;"> <i class="fs-5 fas fa-file-alt"></i>
-					</span> <span class="d-none d-sm-inline flex-grow-1 text-start">Description</span>
-				</a></li>
-				<li class="nav-item mb-3"><a href="#"
-					class="nav-link d-flex align-items-center gap-3 px-0 w-100"> <span
-						class="icon-container d-flex justify-content-center align-items-center"
-						style="width: 35px;"> <i class="fs-5 fas fa-image"></i>
-					</span> <span class="d-none d-sm-inline flex-grow-1 text-start">Images</span>
-				</a></li>
-				<li class="nav-item mb-3"><a href="#"
-					class="nav-link d-flex align-items-center gap-3 px-0 w-100"> <span
-						class="icon-container d-flex justify-content-center align-items-center"
-						style="width: 35px;"> <i class="fs-5 fas fa-eye"></i>
-					</span> <span class="d-none d-sm-inline flex-grow-1 text-start">Details</span>
-				</a></li>
-				<li class="nav-item mb-3"><a href="#"
-					class="nav-link d-flex align-items-center gap-3 px-0 w-100"> <span
-						class="icon-container d-flex justify-content-center align-items-center"
-						style="width: 35px;"> <i class="fs-5 fas fa-shipping-fast"></i>
-					</span> <span class="d-none d-sm-inline flex-grow-1 text-start">Shipping</span>
-				</a></li>
-			</ul>
-
-		</div>
-	</div> -->
-	<!-- SideBar -->
-
 	<!-- Footer -->
 	<footer th:fragment="footer" class="mt-5 text-center">
 		<p>GearVN control panel - Copyright &copy; GearVN</p>
@@ -288,9 +237,9 @@ body {
 	<!-- fragment column link user -->
 	<th th:fragment="column_link(rootPath, fieldName, columnLabel)"><a
 		class="a-title" th:if="${sortField} != ${fieldName}"
-		th:href="@{${rootPath} + '/page/' + ${currentPage} + '?sortField=' + ${fieldName} + '&sortType=' + ${sortType} + ${keyword != null ? ('&keyword=' + keyword) : ''}}">[[${columnLabel}]]</a><a
+		th:href="@{${rootPath} + '/page/' + ${currentPage} + '?sortField=' + ${fieldName} + '&sortType=' + ${sortType} + ${keyword != null ? ('&keyword=' + keyword) : ''} + ${inputSearchCategoryId != null ? ('&inputSearchCategoryId=' + inputSearchCategoryId) : ''}}">[[${columnLabel}]]</a><a
 		class="a-title" th:if="${sortField} == ${fieldName}"
-		th:href="@{${rootPath} + '/page/' + ${currentPage} + '?sortField=' + ${fieldName} + '&sortType=' + ${reverseSortType} + ${keyword != null ? ('&keyword=' + keyword) : ''}}">[[${columnLabel}]]</a>
+		th:href="@{${rootPath} + '/page/' + ${currentPage} + '?sortField=' + ${fieldName} + '&sortType=' + ${reverseSortType} + ${keyword != null ? ('&keyword=' + keyword) : ''} + ${inputSearchCategoryId != null ? ('&inputSearchCategoryId=' + inputSearchCategoryId) : ''}}">[[${columnLabel}]]</a>
 		<span th:if="${sortField} == ${fieldName}"
 		th:class="${sortType} == 'asc' ? 'fas fa-angle-up' : 'fas fa-angle-down'"></span>
 	</th>
@@ -299,15 +248,34 @@ body {
 	<!-- fragment page link user -->
 	<a th:fragment="page_link(rootPath, currentPage, label)"
 		class="page-link"
-		th:href="@{${rootPath} + '/page/' + ${currentPage} + ${sortField != null ? ('?sortField=' + sortField) : ''} + ${sortType != null ? ('&sortType=' + sortType) : ''} + ${keyword != null ? ('&keyword=' + keyword) : ''}}">[[${label}]]</a>
+		th:href="@{${rootPath} + '/page/' + ${currentPage} + ${sortField != null ? ('?sortField=' + sortField) : ''} + ${sortType != null ? ('&sortType=' + sortType) : ''} + ${keyword != null ? ('&keyword=' + keyword) : ''} + ${inputSearchCategoryId != null ? ('&inputSearchCategoryId=' + inputSearchCategoryId) : ''}}">[[${label}]]</a>
 	<!-- fragment page link user -->
 
 
-	<!-- fragment page link category -->
-	<!-- 	<a th:fragment="page_link_category(currentPage, label)" class="page-link"
-		th:href="@{'/categories/page/' + ${currentPage} + ${sortType != null ? ('?sortType=' + sortType) : ''} + ${keyword != null ? ('&keyword=' + keyword) : ''}}">
-		[[${label}]] </a> -->
-	<!-- fragment page link category -->
+	<th:block th:fragment="pagination(rootPath)">
+		<ul class="pagination justify-content-center">
+			<li class="page-item"
+				th:classappend="${currentPage == 1} ? 'disabled'"><a
+				th:replace="fragments :: page_link(${rootPath}, 1, 'First')"></a></li>
+
+			<li class="page-item"
+				th:classappend="${currentPage == 1} ? 'disabled'"><a
+				th:replace="fragments :: page_link(${rootPath}, ${currentPage - 1}, 'Previous')"></a></li>
+
+			<li class="page-item"
+				th:each="page : ${#numbers.sequence(startPage, endPage)}"
+				th:classappend="${page == currentPage} ? 'active'"><a
+				th:replace="fragments :: page_link(${rootPath}, ${page}, ${page})"></a></li>
+
+			<li class="page-item"
+				th:classappend="${currentPage == totalPages} ? 'disabled'"><a
+				th:replace="fragments :: page_link(${rootPath}, ${currentPage + 1}, 'Next')"></a></li>
+
+			<li class="page-item"
+				th:classappend="${currentPage == totalPages} ? 'disabled'"><a
+				th:replace="fragments :: page_link(${rootPath}, ${totalPages}, 'Last')"></a></li>
+		</ul>
+	</th:block>
 
 </body>
 </html>

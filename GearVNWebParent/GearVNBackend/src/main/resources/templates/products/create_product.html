@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <!-- khai báo namespace th để có thể sử dụng các thuộc tính của thymeleaf -->
-<html xmlns:th="http://thymeleaf.org">
+<html xmlns:th="http://thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
 <!-- Head -->
 <head>
@@ -42,25 +43,50 @@
 									th:value="*{category.id}">
 							</th:block>
 
+							<!-- với role Salesperson, tab này chỉ cho sửa Cost/ListPrice/Discount -->
 							<div class="tab-pane fade active show" id="overview"
 								role="tabpanel">
 								<th:block th:replace="products/product_fragments :: overview"></th:block>
 							</div>
 
 							<div class="tab-pane fade" id="description" role="tabpanel">
-								<th:block th:replace="products/product_fragments :: description"></th:block>
+								<!-- role admin/editor -->
+								<th:block th:replace="products/product_fragments :: description"
+									sec:authorize="hasAnyAuthority('Admin', 'Editor')"></th:block>
+								<!-- role salesperson -->
+								<th:block
+									th:replace="products/readonly_product_fragments :: description"
+									sec:authorize="hasAnyAuthority('Salesperson')"></th:block>
 							</div>
 
 							<div class="tab-pane fade" id="images" role="tabpanel">
-								<th:block th:replace="products/product_fragments :: images"></th:block>
+								<!-- role admin/editor -->
+								<th:block th:replace="products/product_fragments :: images"
+									sec:authorize="hasAnyAuthority('Admin', 'Editor')"></th:block>
+								<!-- role salesperson -->
+								<th:block
+									th:replace="products/readonly_product_fragments :: images"
+									sec:authorize="hasAnyAuthority('Salesperson')"></th:block>
 							</div>
 
 							<div class="tab-pane fade" id="details" role="tabpanel">
-								<th:block th:replace="products/product_fragments :: details"></th:block>
+								<!-- role admin/editor -->
+								<th:block th:replace="products/product_fragments :: details"
+									sec:authorize="hasAnyAuthority('Admin', 'Editor')"></th:block>
+								<!-- role salesperson -->
+								<th:block
+									th:replace="products/readonly_product_fragments :: details"
+									sec:authorize="hasAnyAuthority('Salesperson')"></th:block>
 							</div>
 
 							<div class="tab-pane fade" id="shipping" role="tabpanel">
-								<th:block th:replace="products/product_fragments :: shipping"></th:block>
+								<!-- role admin/editor -->
+								<th:block th:replace="products/product_fragments :: shipping"
+									sec:authorize="hasAnyAuthority('Admin', 'Editor')"></th:block>
+								<!-- role salesperson -->
+								<th:block
+									th:replace="products/readonly_product_fragments :: shipping"
+									sec:authorize="hasAnyAuthority('Salesperson')"></th:block>
 							</div>
 
 						</div>

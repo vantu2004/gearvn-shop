@@ -54,8 +54,8 @@ public class WebSecurityConfig {
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http, UserService userService) throws Exception {
 		// v6. lamda
-		http.authorizeHttpRequests(
-				authorize -> authorize.dispatcherTypeMatchers(DispatcherType.FORWARD, DispatcherType.INCLUDE).permitAll()
+		http.authorizeHttpRequests(authorize -> authorize
+				.dispatcherTypeMatchers(DispatcherType.FORWARD, DispatcherType.INCLUDE).permitAll()
 				.requestMatchers("/", "/login", "/css/**", "/js/**", "/images/**", "/webjars/**").permitAll()
 				/*
 				 * sau khi tải listRoles từ db bên GearvnUserDetails, lệnh dưới dùng
@@ -63,9 +63,32 @@ public class WebSecurityConfig {
 				 * cx ko có ROLE_, nếu db có lưu ROLE_ thì dùng hasAuthority()/hasRole() (tự
 				 * thêm ROLE_)
 				 */
-				.requestMatchers("/users/**").hasAuthority("Admin")
-				.requestMatchers("/categories/**", "/brands/**").hasAnyAuthority("Admin", "Editor")
-				.requestMatchers("/products/**").hasAnyAuthority("Admin", "Editor", "Salesperson", "Shipper")
+				.requestMatchers("/users/**").hasAuthority("Admin").requestMatchers("/categories/**", "/brands/**")
+				.hasAnyAuthority("Admin", "Editor")
+
+				/*
+				 * admin/editor có full quyền, salesperson có quyền update/save/checkunique/xem
+				 * danh sách/xem chi tiết/pagination, shipper chỉ có quyền xem danh sách/xem
+				 * chi tiết/pagination
+				 */
+
+				// cấp quyền tạo/xóa product
+				.requestMatchers("/products/create", "/products/delete/**").hasAnyAuthority("Admin", "Editor")
+
+				/*
+				 * cấp quyền update/save(sau khi update)/checkUnique(check unique name/alias khi
+				 * update)
+				 */
+				.requestMatchers("/products/update/**", "/products/save*", "/products/check_duplicate")
+				.hasAnyAuthority("Admin", "Editor", "Salesperson")
+
+				// cấp quyền xem danh sách products, pagination, chi tiết product
+				.requestMatchers("/products", "/products/page/**", "/products/detail/**")
+				.hasAnyAuthority("Admin", "Editor", "Salesperson", "Shipper")
+
+				// đảm bảo admin/editor có full quyền với product
+				.requestMatchers("/products/**").hasAnyAuthority("Admin", "Editor")
+
 				.anyRequest().authenticated())
 
 				.formLogin(formLogin -> formLogin.loginPage("/login").usernameParameter("email").permitAll())
@@ -77,10 +100,10 @@ public class WebSecurityConfig {
 						.maximumSessions(1)
 						// thiết bị khác đăng nhập đá thiết bị đã đăng nhập
 						.maxSessionsPreventsLogin(false))
-				
+
 				// xóa cookie và hủy session
 				.logout(logout -> logout.deleteCookies("JSESSIONID").invalidateHttpSession(true))
-				
+
 				// bật rememberMe
 				.rememberMe(r -> r.rememberMeServices(rememberMeServices()));
 

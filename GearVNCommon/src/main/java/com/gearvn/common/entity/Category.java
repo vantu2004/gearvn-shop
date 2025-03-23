@@ -60,6 +60,11 @@ public class Category {
 
 	private boolean enabled;
 
+	// phục vụ việc tìm kiếm product theo category trong combobox
+	// cho phép null vì rootCategory null
+	@Column(name = "all_parent_ids", length = 256, nullable = true)
+	private String allParentIds;
+	
 	// nhiều subCategory tham chiếu tới 1 category
 	@ManyToOne
 	@JoinColumn(name = "parent_id")

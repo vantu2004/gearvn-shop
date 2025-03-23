@@ -42,8 +42,8 @@
 
 	<div class="container mt-3">
 		<form th:action="@{/users/page/1}" method="get">
-			<div class="row g-3 align-items-center">
-				<div class="col-auto">
+			<div class="row g-3">
+				<div class="col-md-3 col-12">
 					<input type="hidden" id="inputSortField" class="form-control"
 						th:value="${sortField}" name="sortField"> <input
 						type="hidden" id="inputSortType" class="form-control"
@@ -52,11 +52,12 @@
 						placeholder="Enter keyword" aria-describedby="passwordHelpInline"
 						name="keyword" th:value="${keyword}">
 				</div>
-				<div class="col-auto">
-					<button type="submit" class="btn">
+				<div class="col-md-3 col-12 d-flex gap-2">
+					<button type="submit" class="btn btn-primary">
 						<i class="fas fa-search"></i>
 					</button>
-					<a th:href="@{/users}" class="btn"> <i class="fas fa-redo"></i>
+					<a th:href="@{/users}" class="btn btn-secondary"> <i
+						class="fas fa-redo"></i>
 					</a>
 				</div>
 			</div>
@@ -77,14 +78,18 @@
 			<table class="table table-hover">
 				<thead>
 					<tr>
-						<th th:replace="fragments :: column_link('/users', 'id', 'User ID')" />
+						<th
+							th:replace="fragments :: column_link('/users', 'id', 'User ID')" />
 						<th scope="col">Photos</th>
-						<th th:replace="fragments :: column_link('/users', 'email', 'Email')" />
+						<th
+							th:replace="fragments :: column_link('/users', 'email', 'Email')" />
 						<th
 							th:replace="fragments :: column_link('/users', 'firstName', 'First Name')" />
-						<th th:replace="fragments :: column_link('/users', 'lastName', 'Last Name')" />
+						<th
+							th:replace="fragments :: column_link('/users', 'lastName', 'Last Name')" />
 						<th scope="col">Roles</th>
-						<th th:replace="fragments :: column_link('/users', 'enabled', 'Enabled')" />
+						<th
+							th:replace="fragments :: column_link('/users', 'enabled', 'Enabled')" />
 						<th scope="col">Action</th>
 					</tr>
 				</thead>
@@ -124,35 +129,11 @@
 			th:if="${totalElements > 0}">
 			<p class="mb-2">Show users from [[${startCount}]] to
 				[[${endCount}]] of [[${totalElements}]]</p>
-			<ul class="pagination justify-content-center">
-				<!-- Nút "First" -->
-				<li class="page-item"
-					th:classappend="${currentPage == 1} ? 'disabled'"><a
-					th:replace="fragments :: page_link('/users', 1, 'First')"></a></li>
 
-				<!-- Nút "Previous" -->
-				<li class="page-item"
-					th:classappend="${currentPage == 1} ? 'disabled'"><a
-					th:replace="fragments :: page_link('/users', ${currentPage - 1}, 'Previous')"></a>
-				</li>
+			<th:block>
+				<div th:replace="fragments :: pagination('/users')"></div>
+			</th:block>
 
-				<!-- Các số trang -->
-				<li class="page-item"
-					th:each="page : ${#numbers.sequence(startPage, endPage)}"
-					th:classappend="${page == currentPage} ? 'active'"><a
-					th:replace="fragments :: page_link('/users', ${page}, ${page})"></a></li>
-
-				<!-- Nút "Next" -->
-				<li class="page-item"
-					th:classappend="${currentPage == totalPages} ? 'disabled'"><a
-					th:replace="fragments :: page_link('/users', ${currentPage + 1}, 'Next')"></a>
-				</li>
-
-				<!-- Nút "Last" -->
-				<li class="page-item"
-					th:classappend="${currentPage == totalPages} ? 'disabled'"><a
-					th:replace="fragments :: page_link('/users', ${totalPages}, 'Last')"></a></li>
-			</ul>
 		</nav>
 
 		<div class="text-center mt-5" th:if="${totalElements <= 0}">No

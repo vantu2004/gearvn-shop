@@ -33,19 +33,20 @@
 	<div class="container mt-3">
 		<!-- search/reload -->
 		<form th:action="@{/categories/page/1}" method="get">
-			<div class="row g-3 align-items-center">
-				<div class="col-auto">
+			<div class="row g-3">
+				<div class="col-md-3 col-12">
 					<input type="hidden" id="inputSortType" class="form-control"
 						th:value="${sortType}" name="sortType"> <input
 						type="search" id="inputKeyword" class="form-control"
 						placeholder="Enter keyword" aria-describedby="passwordHelpInline"
 						name="keyword" th:value="${keyword}">
 				</div>
-				<div class="col-auto">
-					<button type="submit" class="btn">
+				<div class="col-md-3 col-12 d-flex gap-2">
+					<button type="submit" class="btn btn-primary">
 						<i class="fas fa-search"></i>
 					</button>
-					<a th:href="@{/categories}" class="btn"> <i class="fas fa-redo"></i>
+					<a th:href="@{/categories}" class="btn btn-secondary"> <i
+						class="fas fa-redo"></i>
 					</a>
 				</div>
 			</div>
@@ -122,28 +123,11 @@
 			th:if="${totalElements > 0}">
 			<p class="mb-2">Show top-level categories from [[${startCount}]]
 				to [[${endCount}]] of [[${totalElements}]]</p>
-			<ul class="pagination justify-content-center">
-				<li class="page-item"
-					th:classappend="${currentPage == 1} ? 'disabled'"><a
-					th:replace="fragments :: page_link('/categories', 1, 'First')"></a></li>
 
-				<li class="page-item"
-					th:classappend="${currentPage == 1} ? 'disabled'"><a
-					th:replace="fragments :: page_link('/categories', ${currentPage - 1}, 'Previous')"></a></li>
+			<th:block>
+				<div th:replace="fragments :: pagination('/categories')"></div>
+			</th:block>
 
-				<li class="page-item"
-					th:each="page : ${#numbers.sequence(startPage, endPage)}"
-					th:classappend="${page == currentPage} ? 'active'"><a
-					th:replace="fragments :: page_link('/categories', ${page}, ${page})"></a></li>
-
-				<li class="page-item"
-					th:classappend="${currentPage == totalPages} ? 'disabled'"><a
-					th:replace="fragments :: page_link('/categories', ${currentPage + 1}, 'Next')"></a></li>
-
-				<li class="page-item"
-					th:classappend="${currentPage == totalPages} ? 'disabled'"><a
-					th:replace="fragments :: page_link('/categories', ${totalPages}, 'Last')"></a></li>
-			</ul>
 		</nav>
 
 

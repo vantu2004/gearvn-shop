@@ -105,8 +105,10 @@ public class Product {
 	@NotNull
 	private Brand brand;
 
-	// CascadeType.ALL nghĩa là mọi thao tác trên Product thì bên ProductImage cũng cập nhật theo
-	// orphanRemoval = true nghĩa là khi entity con ko còn đc tham chiếu bởi entity cha thì sẽ tự động xóa
+	// CascadeType.ALL nghĩa là mọi thao tác trên Product thì bên ProductImage cũng
+	// cập nhật theo
+	// orphanRemoval = true nghĩa là khi entity con ko còn đc tham chiếu bởi entity
+	// cha thì sẽ tự động xóa
 	@OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
 	@Builder.Default
 	// tránh khi in ra set này thì bị lặp vô hạn do quan hệ 2 chiều với product bên
@@ -128,7 +130,7 @@ public class Product {
 		Integer i = Integer.parseInt(id);
 		this.productDetails.add(ProductDetail.builder().id(i).name(name).value(value).product(this).build());
 	}
-	
+
 	public void addProductDetail(String name, String value) {
 		this.productDetails.add(ProductDetail.builder().name(name).value(value).product(this).build());
 	}
@@ -140,4 +142,22 @@ public class Product {
 		}
 		return "/product-images/" + this.mainImage;
 	}
+
+	/*
+	 * phục vụ xuất csv, bên class ProductCsvExporter đặt tên field là categoryName,
+	 * nhờ Java Bean Naming Convention (quy ước đặt tên trong java) nên mặc dù ko có
+	 * thuộc tính categoryName nhưng chỉ cần có thuộc tính getCategoryName là java
+	 * tự hiểu là cần lấy giá trị thuộc tính categoryName
+	 */
+	@Transient
+	public String getCategoryName() {
+		return category != null ? category.getName() : "";
+	}
+
+	// phục vụ xuất csv
+	@Transient
+	public String getBrandName() {
+		return brand != null ? brand.getName() : "";
+	}
+
 }

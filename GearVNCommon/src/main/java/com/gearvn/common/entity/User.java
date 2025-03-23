@@ -31,7 +31,7 @@ import lombok.ToString;
 @Builder
 @Table(name = "users")
 @ToString
-public class User implements Serializable{
+public class User implements Serializable {
 
 	/**
 	 * 
@@ -94,5 +94,15 @@ public class User implements Serializable{
 		}
 
 		return "/user-photos/" + this.photos;
+	}
+
+	// check role
+	public boolean hasRole(String roleName) {
+		for (Role role : this.roles) {
+			if (role.getName().equals(roleName)) {
+				return true;
+			}
+		}
+		return false;
 	}
 }

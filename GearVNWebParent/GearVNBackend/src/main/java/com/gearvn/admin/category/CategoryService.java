@@ -65,7 +65,7 @@ public class CategoryService {
 	}
 
 	// public để bên brandService có thể truy cập được và lấy categories theo brand
-	public List<Category> getHierarchicalCategories(List<Category> categories, String sortType) {
+	private List<Category> getHierarchicalCategories(List<Category> categories, String sortType) {
 		List<Category> hierarchicalCategories = new ArrayList<>();
 
 		// duyệt lần 1
@@ -114,6 +114,16 @@ public class CategoryService {
 	}
 
 	public void handleSaveCategory(Category category) {
+		
+		// định dạng -id-id-...-...
+		Category parent = category.getParent();
+		if (parent != null) {
+			String allParentIds = parent.getAllParentIds() == null ? "-" : parent.getAllParentIds();
+			allParentIds += String.valueOf(parent.getId() + "-");
+			
+			category.setAllParentIds(allParentIds);
+		}
+		
 		this.categoryRepository.save(category);
 	}
 
