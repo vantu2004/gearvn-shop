@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<!-- Head -->
+<head>
+<head th:replace="fragments :: page_head(${product.name}, 'tag')" />
+<link rel="stylesheet" th:href="@{/css/slider.css}">
+<link rel='stylesheet prefetch'
+	href='https://netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css'>
+</head>
+
+
+<!-- Head -->
+
+<body>
+	<!-- Header -->
+	<header th:replace="fragments :: header"></header>
+	<!-- Header -->
+
+	<div class="container mt-5">
+		<div class="container">
+			<div class="row align-items-center">
+				<!-- Tiêu đề và Form tìm kiếm -->
+				<div class="col-12 col-md-6">
+					<h2 class="m-0">Products Details</h2>
+				</div>
+
+				<div class="col-12 col-md-6">
+					<form
+						th:action="@{/search}"
+						method="get"
+						class="d-flex flex-wrap align-items-stretch justify-content-md-end gap-2 mt-2 mt-md-0">
+						<div class="flex-grow-1">
+							<input type="search" id="inputKeyword" class="form-control"
+								placeholder="Enter keyword" name="keyword">
+						</div>
+						<button type="submit"
+							class="btn btn-primary d-flex align-items-center">
+							<i class="fas fa-search"></i>
+						</button>
+						<a th:href="@{'/p/' + ${product.alias}}"
+							class="btn btn-secondary d-flex align-items-center"> <i
+							class="fas fa-redo"></i>
+						</a>
+					</form>
+				</div>
+			</div>
+		</div>
+
+		<div class="container mt-5 bg-info-subtle pt-2 pb-2"
+			style="border-radius: 10px;">
+			<nav aria-label="breadcrumb">
+				<div class="row align-items-center gx-3">
+					<!-- Breadcrumb -->
+					<div class="col-md">
+						<ol class="breadcrumb mb-0">
+							<li class="breadcrumb-item"><a th:href="@{/}">Home</a></li>
+
+							<th:block th:each="category : ${listCategoryParents}">
+								<li class="breadcrumb-item"><a
+									th:href="@{'/c/' + ${category.alias}}">[[${category.name}]]</a></li>
+							</th:block>
+
+							<li class="breadcrumb-item"><a
+								th:href="@{'/p/' + ${product.alias}}">[[${product.getShortName}]]</a></li>
+						</ol>
+					</div>
+				</div>
+			</nav>
+		</div>
+
+		<div class="container mt-4">
+			<div class="row">
+				<!-- Slider -->
+				<th:block th:replace="fragments :: slider"></th:block>
+				<!-- Slider -->
+
+				<div class="col-12 col-md-6 ps-5">
+					<h3 class="text-center text-md-start">[[${product.name}]]</h3>
+
+					<div class="stars text-center text-md-start">
+						<form>
+							<input class="star star-5" id="star-5" type="radio" name="star" />
+							<label class="star star-5" for="star-5"></label> <input
+								class="star star-4" id="star-4" type="radio" name="star" /> <label
+								class="star star-4" for="star-4"></label> <input
+								class="star star-3" id="star-3" type="radio" name="star" /> <label
+								class="star star-3" for="star-3"></label> <input
+								class="star star-2" id="star-2" type="radio" name="star" /> <label
+								class="star star-2" for="star-2"></label> <input
+								class="star star-1" id="star-1" type="radio" name="star" /> <label
+								class="star star-1" for="star-1"></label>
+						</form>
+					</div>
+
+					<p>
+						<strong>Brand:&nbsp;</strong>[[${product.brand.name}]]
+					</p>
+					<p>
+						<strong>List Price:&nbsp;</strong>$[[${product.price}]]
+					</p>
+					<p>
+						<strong>Price:&nbsp;</strong> <span class="text-danger">$[[${product.getDiscountPrice}]]</span>
+						<span th:if="${product.discountPercent > 0}"> &nbsp;-&nbsp;<span
+							class="text-dark text-decoration-line-through">$[[${product.price}]]</span>
+							&nbsp;&nbsp;<span class="text-danger"><i
+								class="fas fa-tags"></i>&nbsp;[[${product.discountPercent}]]%</span>
+						</span>
+					</p>
+
+					<p>
+						<strong>Status:&nbsp;</strong><span th:if="${product.inStock}"
+							class=text-success>In Stock</span><span
+							th:unless="${product.inStock}" class=text-danger>Out Of
+							Stock</span>
+					</p>
+
+					<div class="d-flex mt-3">
+						<button class="btn btn-outline-secondary"
+							onclick="decreaseValue()">−</button>
+						<input type="text" id="quantity" value="1"
+							class="text-center mx-2 form-control w-25" readonly>
+						<button class="btn btn-outline-secondary"
+							onclick="increaseValue()">+</button>
+					</div>
+
+					<div class="mt-4">
+						<button type="button" class="btn btn-outline-success">Add
+							Product To Cart</button>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="mt-4">
+			<div class="row">
+				<!-- Full Description -->
+				<div class="col-12 col-md-8">
+					<div class="form-group mb-3">
+						<label class="form-label"><strong>Detailed
+								Description</strong></label>
+						<div class="form-control" th:utext="${product.fullDescription}"></div>
+					</div>
+				</div>
+
+				<!-- Short Description + Technical Specifications trong cùng một cột -->
+				<div class="col-12 col-md-4">
+					<div class="form-group mb-3">
+						<label class="form-label"><strong>Short
+								Description</strong></label>
+						<div class="form-control" th:utext="${product.shortDescription}"></div>
+					</div>
+
+					<div class="form-group mb-3">
+						<label class="form-label"><strong>Technical
+								Specifications</strong></label>
+						<div class="form-control">
+							<th:block th:each="detail : ${product.productDetails}">
+								<p>
+									<strong>[[${detail.name}]]:&nbsp;</strong>[[${detail.value}]]
+								</p>
+							</th:block>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</div>
+
+	<!-- Footer -->
+	<footer th:replace="fragments :: footer"></footer>
+	<!-- Footer -->
+
+	<script>
+		function decreaseValue() {
+			let input = document.getElementById("quantity");
+			let value = parseInt(input.value);
+			if (value > 1) {
+				input.value = value - 1;
+			}
+		}
+
+		function increaseValue() {
+			let input = document.getElementById("quantity");
+			let value = parseInt(input.value);
+			input.value = value + 1;
+		}
+	</script>
+</body>
+</html>

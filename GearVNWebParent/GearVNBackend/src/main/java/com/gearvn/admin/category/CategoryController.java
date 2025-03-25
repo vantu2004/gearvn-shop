@@ -176,7 +176,7 @@ public class CategoryController {
 			redirectAttributes.addFlashAttribute("message",
 					"The category ID " + id + " has been deleted successfully.");
 		} catch (Exception e) {
-			redirectAttributes.addFlashAttribute("message", "Could not find any category with id " + id);
+			redirectAttributes.addFlashAttribute("message", e.getMessage());
 		}
 
 		return "redirect:/categories";

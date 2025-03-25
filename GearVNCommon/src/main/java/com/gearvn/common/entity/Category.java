@@ -12,6 +12,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OrderBy;
 import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
 import jakarta.validation.constraints.NotEmpty;
@@ -72,6 +73,7 @@ public class Category {
 
 	// 1 category được tham chiếu bởi nhiều subCategories
 	@OneToMany(mappedBy = "parent")
+	@OrderBy("name asc")
 	@Builder.Default
 	private Set<Category> children = new HashSet<Category>();
 

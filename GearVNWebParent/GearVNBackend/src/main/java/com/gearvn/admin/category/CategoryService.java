@@ -54,7 +54,7 @@ public class CategoryService {
 		// lấy listRootCategories đc sort mặc định
 		List<Category> listCategories = this.categoryRepository.findRootCategories(getSortType(sortType));
 		List<Category> listHierarchicalCategories = getHierarchicalCategories(listCategories, sortType);
-		
+
 		// dựa vào listRootCategories trả về toàn bộ cây category đã dc phân cấp
 		return listHierarchicalCategories;
 	}
@@ -114,16 +114,16 @@ public class CategoryService {
 	}
 
 	public void handleSaveCategory(Category category) {
-		
+
 		// định dạng -id-id-...-...
 		Category parent = category.getParent();
 		if (parent != null) {
 			String allParentIds = parent.getAllParentIds() == null ? "-" : parent.getAllParentIds();
 			allParentIds += String.valueOf(parent.getId() + "-");
-			
+
 			category.setAllParentIds(allParentIds);
 		}
-		
+
 		this.categoryRepository.save(category);
 	}
 
@@ -175,12 +175,16 @@ public class CategoryService {
 		return "OK";
 	}
 
-	public void deleteCategoryById(Integer id) {
-		Long count = this.categoryRepository.countById(id);
-		if (count == 0 || count == null) {
-			throw new NoSuchElementException("Could not find any category with id " + id);
-		}
+	public void deleteCategoryById(Integer id) throws Exception {
+		try {
+			Long count = this.categoryRepository.countById(id);
+			if (count == 0 || count == null) {
+				throw new NoSuchElementException("Could not find any category with id " + id);
+			}
 
-		this.categoryRepository.deleteById(id);
+			this.categoryRepository.deleteById(id);
+		} catch (Exception e) {
+			throw new Exception("Could not delete this product");
+		}
 	}
 }

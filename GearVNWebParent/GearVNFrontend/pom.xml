@@ -30,6 +30,11 @@
 	</properties>
 	
 	<dependencies>
+	<dependency>
+		<groupId>com.gearvn</groupId>
+		<artifactId>GearVNBackend</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+	</dependency>
 	</dependencies>
 
 	<build>

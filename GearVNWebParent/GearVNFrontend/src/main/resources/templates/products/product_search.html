@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<!-- Head -->
+<head th:replace="fragments :: page_head('Search', 'none')"></head>
+<!-- Head -->
+
+<body>
+	<!-- Header -->
+	<header th:replace="fragments :: header"></header>
+	<!-- Header -->
+
+	<div class="container mt-5">
+		<div class="row align-items-center">
+			<!-- Tiêu đề và Form tìm kiếm -->
+			<div class="col-12 col-md-6" th:if="${totalElements > 0}">
+				<h2 class="m-0 text-success">Search results for
+					'[[${keyword}]]'</h2>
+			</div>
+			<div class="col-12 col-md-6" th:unless="${totalElements > 0}">
+				<h2 class="m-0 text-danger">No match found for
+					'[[${keyword}]]'</h2>
+			</div>
+
+			<div class="col-12 col-md-6">
+				<form th:action="@{/search}" method="get"
+					class="d-flex flex-wrap align-items-stretch justify-content-md-end gap-2 mt-2 mt-md-0">
+					<div class="flex-grow-1">
+						<input type="search" id="inputKeyword" class="form-control"
+							placeholder="Enter keyword" name="keyword" th:value="${keyword}">
+					</div>
+					<button type="submit"
+						class="btn btn-primary d-flex align-items-center">
+						<i class="fas fa-search"></i>
+					</button>
+					<a th:href="@{'/search?keyword=' + ${keyword}}"
+						class="btn btn-secondary d-flex align-items-center"> <i
+						class="fas fa-redo"></i>
+					</a>
+				</form>
+			</div>
+		</div>
+
+		<div class="container mt-5 bg-info-subtle pt-2 pb-2"
+			style="border-radius: 10px;">
+			<nav aria-label="breadcrumb">
+				<div class="row align-items-center gx-3">
+					<!-- Breadcrumb -->
+					<div class="col-md">
+						<ol class="breadcrumb mb-0">
+							<li class="breadcrumb-item"><a th:href="@{/}">Home</a></li>
+							<li class="breadcrumb-item"><a
+								th:href="@{'/search/page/' + ${currentPage}} + '?keyword=' + ${keyword}">Search
+									results for '[[${keyword}]]'</a></li>
+						</ol>
+					</div>
+				</div>
+			</nav>
+		</div>
+
+		<!-- Load product -->
+		<div class="row mt-4 mb-4"
+			th:if="${listProducts != null and not #lists.isEmpty(listProducts)}">
+			<!-- Tiêu đề -->
+			<h4 class="mt-4 mb-3 text-danger">Products</h4>
+			<div class="col-6 col-md-3 mb-4" th:each="product : ${listProducts}">
+				<div
+					style="background-color: rgb(255, 255, 255); box-shadow: 1px 1px 15px #ffe9e9; border-radius: 10px;">
+					<div
+						class="card-body d-flex flex-column align-items-center justify-content-between w-100 position-relative">
+
+						<!-- Decoration -->
+						<!-- Nhãn Flash Sale (bên trái) -->
+						<span
+							class="text-danger position-absolute top-0 start-0 mt-2 ms-2 px-2 py-1 bg-white rounded text-wrap"
+							style="font-size: 0.8rem; max-width: 100px;"
+							th:if="${product.discountPercent > 0}"> <i
+							class="fas fa-fire"></i> <span class="d-none d-sm-inline">Flash
+								Sale</span>
+						</span>
+
+						<!-- Nhãn phần trăm giảm giá (bên phải) -->
+						<span
+							class="text-danger position-absolute top-0 end-0 mt-2 me-2 px-2 py-1 bg-white rounded text-wrap"
+							style="font-size: 0.8rem; max-width: 80px;"
+							th:if="${product.discountPercent > 0}"> <i
+							class="fas fa-tags"></i> [[${product.discountPercent}]]%
+						</span>
+						<!-- Decoration -->
+
+						<!-- Phần hình ảnh với chiều cao cố định -->
+						<div class="d-flex align-items-center justify-content-center mt-5"
+							style="height: 150px;">
+							<img th:src="@{${product.getMainImagePath}}"
+								class="img-fluid rounded" alt="Category Image"
+								style="max-height: 100%; object-fit: contain;">
+						</div>
+
+						<!-- Phần tên category với chiều cao cố định -->
+						<h5 class="mt-3 text-center" style="min-height: 50px;">
+							<a th:href="@{'/p/' + ${product.alias}}"
+								class="text-decoration-none text-dark"
+								th:title="${product.name}">[[${product.getShortName}]]</a>
+						</h5>
+
+						<!-- Original price -->
+						<h6 class="mt-3 text-primary" style="min-height: 50px;"
+							th:if="${product.discountPercent <= 0}">
+							<span>$&nbsp;[[${product.price}]]</span>
+						</h6>
+						<!-- Original price -->
+
+						<!-- Discount price -->
+						<h6 class="mt-3" style="min-height: 50px;"
+							th:if="${product.discountPercent > 0}">
+							<span class="text-danger">$[[${product.getDiscountPrice}]]</span>&nbsp;&nbsp;-&nbsp;&nbsp;
+							<span class="text-dark text-decoration-line-through">$[[${product.price}]]</span>
+						</h6>
+						<!-- Discount price -->
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- Load product -->
+
+		<!-- Pagination -->
+		<nav aria-label="Pagination"
+			class="d-flex flex-column align-items-center mt-5"
+			th:if="${totalElements > 0}">
+			<p class="mb-2">Show products from [[${startCount}]] to
+				[[${endCount}]] of [[${totalElements}]]</p>
+
+			<th:block>
+				<div th:replace="fragments :: pagination('/search')"></div>
+			</th:block>
+		</nav>
+		<!-- Pagination -->
+
+		<div class="text-center mt-5" th:if="${totalElements <= 0}">No
+			products found.</div>
+
+	</div>
+
+	<!-- Footer -->
+	<footer th:replace="fragments :: footer"></footer>
+	<!-- Footer -->
+</body>
+</html>

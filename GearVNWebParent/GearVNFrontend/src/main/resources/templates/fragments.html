@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html xmlns:th="http://thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head th:fragment="page_head(title, remove)" th:remove="${remove}">
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>[[${title}]]</title>
+
+<link rel="stylesheet" type="text/css"
+	th:href="@{/webjars/bootstrap/css/bootstrap.min.css}">
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+<script type="text/javascript" th:src="@{/webjars/jquery/jquery.min.js}"></script>
+<script type="text/javascript"
+	th:src="@{/webjars/bootstrap/js/bootstrap.bundle.min.js}"></script>
+<script type="text/javascript" th:src="@{/js/common.js}"></script>
+
+<style>
+a {
+	text-decoration: none;
+}
+
+.a-title {
+	padding-left: 0 !important;
+}
+
+.navbar {
+	padding: 0px !important;
+}
+
+.form-group {
+	margin: 16px 0;
+}
+</style>
+
+</head>
+
+<body>
+
+	<!-- Header -->
+	<header th:fragment="header">
+		<div
+			style="background-color: rgb(255, 255, 255); box-shadow: 1px 1px 15px #aaaaaa;"
+			id="mainNavbar">
+			<nav class="navbar navbar-expand-lg container">
+				<div class="container-fluid">
+					<a class="navbar-brand" th:href="@{/}"> <img
+						th:src="@{/images/LogoGearvn.png}" width="120" height="60"
+						class="d-inline-block align-top" alt="Logo">
+					</a>
+					<button class="navbar-toggler" type="button"
+						data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+						aria-controls="navbarSupportedContent" aria-expanded="false"
+						aria-label="Toggle navigation">
+						<span class="navbar-toggler-icon"></span>
+					</button>
+					<div class="collapse navbar-collapse" id="navbarSupportedContent">
+						<ul class="navbar-nav me-auto mb-2 mb-lg-0">
+
+							<li class="nav-item"><a class="nav-link" href="#">Careers</a></li>
+
+							<li class="nav-item"><a class="nav-link" href="#">Payments</a></li>
+
+							<li class="nav-item"><a class="nav-link" href="#">Shipping
+									& Delivery</a></li>
+
+							<li class="nav-item"><a class="nav-link" href="#">Contact</a></li>
+
+						</ul>
+
+						<ul class="navbar-nav ms-auto">
+
+							<!-- Login -->
+							<li class="nav-item"><a class="nav-link" href="#"><i
+									class="fas fa-sign-in-alt fa-lg"></i>&nbsp;Login</a></li>
+							<!-- Login -->
+
+							<!-- 							<li class="nav-item dropdown"><a
+								class="nav-link dropdown-toggle" href="#" role="button"
+								data-bs-toggle="dropdown" aria-expanded="false"> <i
+									class="fas fa-user fa-lg"></i>
+							</a>
+								<ul class="dropdown-menu dropdown-menu-end text-center">
+									<li><a class="dropdown-item"> <img
+											th:src="@{${#authentication.principal.photos}}" width="120"
+											height="120" class="d-inline-block align-top rounded-circle"
+											alt="User Photo">
+									</a></li>
+									<li><a sec:authentication="principal.email"
+										class="dropdown-item" href="#"></a></li>
+									<li><a sec:authentication="principal.fullName"
+										class="dropdown-item" href="#"></a></li>
+
+									<li><hr class="dropdown-divider"></li>
+
+									<li>
+										<div class="dropdown-item text-center">
+											<a th:href="@{/account}"
+												class="btn btn-primary w-100 text-white"><i
+												class="fas fa-edit"></i>&nbsp;&nbsp;Update</a>
+										</div>
+									</li>
+
+									<li>
+										<form th:action="@{/logout}" method="post">
+											<div>
+												<input type="hidden" name="${_csrf.parameterName}"
+													value="${_csrf.token}" />
+											</div>
+											<div class="dropdown-item text-center">
+												<button type=submit class="btn btn-danger w-100 text-white">
+													<i class="fas fa-sign-out-alt"></i>&nbsp;&nbsp;Logout
+												</button>
+											</div>
+										</form>
+									</li>
+
+								</ul></li>
+
+
+							<li class="nav-item"><a class="nav-link" href="#"><i
+									class="fas fa-ellipsis-h fa-lg"></i></a></li> -->
+						</ul>
+					</div>
+				</div>
+			</nav>
+		</div>
+	</header>
+	<!-- Header -->
+
+	<!-- Footer -->
+	<footer
+		style="background-color: rgb(240, 240, 240); padding: 15px; text-align: center; margin-top: 20px;">
+		<ul class="list-inline">
+			<li class="list-inline-item"><a href="#">About Us</a></li>
+			<li class="list-inline-item"><a href="#">Privacy Notice</a></li>
+			<li class="list-inline-item"><a href="#">Returns & Refunds</a></li>
+		</ul>
+		<p>GearVN control panel - Copyright &copy; GearVN</p>
+	</footer>
+	<!-- Footer -->
+
+	<!-- fragment page link user -->
+	<a th:fragment="page_link(rootPath, currentPage, label)"
+		class="page-link"
+		th:href="@{${rootPath} + '/page/' + ${currentPage} + ${keyword != null ? ('?keyword=' + keyword) : ''}}">[[${label}]]</a>
+	<!-- fragment page link user -->
+
+	<th:block th:fragment="pagination(rootPath)">
+		<ul class="pagination justify-content-center">
+			<li class="page-item"
+				th:classappend="${currentPage == 1} ? 'disabled'"><a
+				th:replace="fragments :: page_link(${rootPath}, 1, 'First')"></a></li>
+
+			<li class="page-item"
+				th:classappend="${currentPage == 1} ? 'disabled'"><a
+				th:replace="fragments :: page_link(${rootPath}, ${currentPage - 1}, 'Previous')"></a></li>
+
+			<li class="page-item"
+				th:each="page : ${#numbers.sequence(startPage, endPage)}"
+				th:classappend="${page == currentPage} ? 'active'"><a
+				th:replace="fragments :: page_link(${rootPath}, ${page}, ${page})"></a></li>
+
+			<li class="page-item"
+				th:classappend="${currentPage == totalPages} ? 'disabled'"><a
+				th:replace="fragments :: page_link(${rootPath}, ${currentPage + 1}, 'Next')"></a></li>
+
+			<li class="page-item"
+				th:classappend="${currentPage == totalPages} ? 'disabled'"><a
+				th:replace="fragments :: page_link(${rootPath}, ${totalPages}, 'Last')"></a></li>
+		</ul>
+	</th:block>
+
+	<!-- Slider -->
+	<th:block th:fragment="slider">
+		<div id="carouselExampleIndicators" class="carousel slide col-md-6 mb-4"
+			style="height: 450px; box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.2); border-radius: 10px;">
+			<!-- Carousel Indicators -->
+			<div class="carousel-indicators">
+				<button type="button" data-bs-target="#carouselExampleIndicators"
+					data-bs-slide-to="0" class="active" aria-current="true"
+					aria-label="Slide 1"></button>
+				<th:block th:each="extraImage, iterStat : ${product.images}">
+					<button type="button" data-bs-target="#carouselExampleIndicators"
+						th:data-bs-slide-to="${iterStat.count}"
+						th:classappend="${iterStat.count == 0 ? 'active' : ''}"
+						th:aria-label="'Slide ' + ${iterStat.count + 1}"></button>
+				</th:block>
+			</div>
+
+			<!-- Carousel Inner -->
+			<div class="carousel-inner" style="height: 100%; width: 100%;">
+				<div class="carousel-item active" style="height: 100%;">
+					<img th:src="@{${product.getMainImagePath}}"
+						style="width: 100%; height: 100%; object-fit: contain; object-position: center;"
+						alt="Main Image">
+				</div>
+				<th:block th:each="extraImage, iterStat : ${product.images}">
+					<div class="carousel-item" style="height: 100%;">
+						<img th:src="@{${extraImage.getImagePath}}"
+							style="width: 100%; height: 100%; object-fit: contain; object-position: center;"
+							alt="Extra Image">
+					</div>
+				</th:block>
+			</div>
+
+			<!-- Carousel Controls -->
+			<button class="carousel-control-prev" type="button"
+				data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
+				<span class="carousel-control-prev-icon" aria-hidden="true"></span>
+				<span class="visually-hidden">Previous</span>
+			</button>
+			<button class="carousel-control-next" type="button"
+				data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
+				<span class="carousel-control-next-icon" aria-hidden="true"></span>
+				<span class="visually-hidden">Next</span>
+			</button>
+		</div>
+	</th:block>
+	<!-- Slider -->
+
+</body>
+</html>

@@ -179,7 +179,7 @@ public class BrandController {
 			redirectAttributes.addFlashAttribute("message",
 					"The brand ID " + id + " has been deleted successfully.");
 		} catch (Exception e) {
-			redirectAttributes.addFlashAttribute("message", "Could not find any brand with id " + id);
+			redirectAttributes.addFlashAttribute("message", e.getMessage());
 		}
 
 		return "redirect:/brands";

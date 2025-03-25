@@ -19,7 +19,7 @@ import jakarta.validation.Valid;
 public class BrandService {
 
 	public static final int BRANDS_PER_PAGE = 10;
-	
+
 	@Autowired
 	private BrandRepository brandRepository;
 
@@ -36,13 +36,17 @@ public class BrandService {
 				.orElseThrow(() -> new NoSuchElementException("Could not find any brand with id " + id));
 	}
 
-	public void deleteBrandById(Integer id) {
-		Long count = this.brandRepository.countById(id);
-		if (count == null || count == 0) {
-			throw new NoSuchElementException("Could not find any brand with id " + id);
-		}
+	public void deleteBrandById(Integer id) throws Exception {
+		try {
+			Long count = this.brandRepository.countById(id);
+			if (count == null || count == 0) {
+				throw new NoSuchElementException("Could not find any brand with id " + id);
+			}
 
-		this.brandRepository.deleteById(id);
+			this.brandRepository.deleteById(id);
+		} catch (Exception e) {
+			throw new Exception("Could not delete this product");
+		}
 	}
 
 	public String isNameUnique(Integer id, String name) {
@@ -55,23 +59,23 @@ public class BrandService {
 
 		// Cùng ID, nghĩa là không đổi tên
 		if (id != null && id.equals(brand.getId())) {
-			return "OK"; 
+			return "OK";
 		}
 
 		// Đã có thương hiệu khác sử dụng tên này
-		return "Duplicated"; 
+		return "Duplicated";
 	}
-	
-	public Page<Brand> getAllBrands(int currentPage, String sortField, String sortType, String keyword){
+
+	public Page<Brand> getAllBrands(int currentPage, String sortField, String sortType, String keyword) {
 		Sort sort = Sort.by(sortField);
 		sort = sortType.equals("asc") ? sort.ascending() : sort.descending();
-		
+
 		Pageable pageable = PageRequest.of(currentPage - 1, BRANDS_PER_PAGE, sort);
-		
+
 		if (StringUtils.isEmpty(keyword)) {
 			return this.brandRepository.findAll(pageable);
 		}
-		
+
 		return this.brandRepository.findAll(keyword, pageable);
 	}
 }

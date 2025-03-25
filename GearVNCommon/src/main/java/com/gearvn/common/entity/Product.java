@@ -160,4 +160,19 @@ public class Product {
 		return brand != null ? brand.getName() : "";
 	}
 
+	@Transient
+	public String getShortName() {
+		if (name.length() > 60) {
+			return name.substring(0, 60).concat("...");
+		}
+		return name;
+	}
+
+	@Transient
+	public float getDiscountPrice() {
+		if (discountPercent > 0) {
+			return Math.round(price * ((100 - discountPercent) / 100) * 100) / 100.0f;
+		}
+		return Math.round(price * 100) / 100.0f;
+	}
 }
