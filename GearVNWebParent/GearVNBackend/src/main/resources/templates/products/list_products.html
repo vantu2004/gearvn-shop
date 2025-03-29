@@ -185,6 +185,7 @@
 	<script type="text/javascript">
 		$(document).ready(
 				function() {
+					// delete product
 					$(".link-delete").on(
 							"click",
 							function(event) {
@@ -203,6 +204,7 @@
 								$("#confirmModal").modal("show");
 							});
 
+					// search by combobox
 					$("#inputSearchCategoryId").on("change", function() {
 						$("#searchForm").submit();
 					});

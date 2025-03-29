@@ -27,9 +27,7 @@
 				</div>
 
 				<div class="col-12 col-md-6">
-					<form
-						th:action="@{/search}"
-						method="get"
+					<form th:action="@{/search}" method="get"
 						class="d-flex flex-wrap align-items-stretch justify-content-md-end gap-2 mt-2 mt-md-0">
 						<div class="flex-grow-1">
 							<input type="search" id="inputKeyword" class="form-control"
@@ -98,22 +96,31 @@
 						<strong>Brand:&nbsp;</strong>[[${product.brand.name}]]
 					</p>
 					<p>
-						<strong>List Price:&nbsp;</strong>$[[${product.price}]]
+						<strong>List Price:&nbsp;</strong> 
+						<span> 
+							<span th:if="${CURRENCY_SYMBOL_POSITION == 'Before price'}">[[${CURRENCY_SYMBOL}]]</span>
+							[[${#numbers.formatDecimal(product.price, 1,
+							THOUSANDS_POINT_TYPE, DECIMAL_DIGITS, DECIMAL_POINT_TYPE)}]] 
+							<span th:if="${CURRENCY_SYMBOL_POSITION == 'After price'}">[[${CURRENCY_SYMBOL}]]</span>
+						</span>
 					</p>
 					<p>
-						<strong>Price:&nbsp;</strong> <span class="text-danger">$[[${product.getDiscountPrice}]]</span>
-						<span th:if="${product.discountPercent > 0}"> &nbsp;-&nbsp;<span
-							class="text-dark text-decoration-line-through">$[[${product.price}]]</span>
-							&nbsp;&nbsp;<span class="text-danger"><i
-								class="fas fa-tags"></i>&nbsp;[[${product.discountPercent}]]%</span>
+						<strong>Price:&nbsp;</strong>
+
+						<!-- Price -->
+						<th:block th:replace="fragments :: formatPrice"></th:block>
+						<!-- Price -->
+
+						<span th:if="${product.discountPercent > 0}" class="text-danger">
+							&nbsp;&nbsp; <i class="fas fa-tags"></i>&nbsp;[[${product.discountPercent}]]%
 						</span>
 					</p>
 
 					<p>
-						<strong>Status:&nbsp;</strong><span th:if="${product.inStock}"
-							class=text-success>In Stock</span><span
+						<strong>Status:&nbsp;</strong><strong th:if="${product.inStock}"
+							class=text-success>In Stock</strong><strong
 							th:unless="${product.inStock}" class=text-danger>Out Of
-							Stock</span>
+							Stock</strong>
 					</p>
 
 					<div class="d-flex mt-3">

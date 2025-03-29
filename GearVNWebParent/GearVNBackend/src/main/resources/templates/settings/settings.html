@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<!-- khai báo namespace th để có thể sử dụng các thuộc tính của thymeleaf -->
+<html xmlns:th="http://thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<!-- Head -->
+<head>
+<head th:replace="fragments :: page_head(Setting, 'tag')" />
+<link rel="stylesheet" th:href="@{/richtext/richtext.min.css}" />
+<script th:src="@{/richtext/jquery.richtext.min.js}"></script>
+
+</head>
+<!-- Head -->
+
+<body>
+	<!-- Header -->
+	<header th:replace="fragments :: header"></header>
+	<!-- Header -->
+
+	<div class="container">
+		<div class="row flex-nowrap">
+			<!-- Tabs dọc -->
+			<div class="col-auto col-md-3 col-xl-2 px-sm-2 px-0"
+				style="box-shadow: 1px 0px 5px -2px #aaaaaa;">
+				<th:block th:replace="settings/setting_fragments :: sidebar"></th:block>
+			</div>
+
+			<div class="col mt-4">
+				<!-- Nội dung tab -->
+				<div class="col-md-9 mx-auto">
+					<div class="tab-content">
+						<div class="tab-pane fade active show" id="overview"
+							role="tabpanel">
+
+							<!-- message -->
+							<div th:if="${message != null}" class="toast show mt-3"
+								style="width: 100%;">
+								<div class="toast-header">
+									<strong class="me-auto">Message</strong>
+									<button type="button" class="btn-close" data-bs-dismiss="toast"></button>
+								</div>
+								<div class="toast-body" style="color: green;">
+									<p th:text="${message}"></p>
+								</div>
+							</div>
+							<!-- message -->
+
+							<th:block th:replace="settings/setting_fragments :: overview"></th:block>
+						</div>
+
+						<div class="tab-pane fade" id="description" role="tabpanel">2</div>
+
+						<div class="tab-pane fade" id="images" role="tabpanel">3</div>
+
+						<div class="tab-pane fade" id="details" role="tabpanel">4</div>
+
+						<div class="tab-pane fade" id="shipping" role="tabpanel">5</div>
+
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- Modal -->
+	<div th:replace="modal_fragments :: modal_dialog"></div>
+	<!-- Modal -->
+
+	<!-- Footer -->
+	<footer th:replace="fragments :: footer"></footer>
+	<!-- Footer -->
+
+	<script type="text/javascript">
+		// upload image
+		let input = "#inputPhotos";
+		let inputPreview = "#inputPhotosPreview";
+	</script>
+
+	<script th:src="@{/js/common_form.js}"></script>
+
+	<!-- 	<script th:src="@{/js/product/product_overview.js}"></script>
+	<script th:src="@{/js/product/product_description.js}"></script>
+	<script th:src="@{/js/product/product_extraImage.js}"></script>
+	<script th:src="@{/js/product/product_detail.js}"></script> -->
+
+</body>
+
+</html>

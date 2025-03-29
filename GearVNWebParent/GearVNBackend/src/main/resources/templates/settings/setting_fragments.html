@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html xmlns:th="http://thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head></head>
+<body>
+	<!-- SideBar -->
+	<th:block th:fragment="sidebar">
+		<div
+			class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 min-vh-100">
+			<ul
+				class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start mt-3 w-100"
+				id="menu">
+				<li class="nav-item mb-3"><span
+					class="d-none d-sm-inline fs-5 fw-bold">Menu</span></li>
+
+				<li class="nav-item mb-3 w-100"><a
+					class="nav-link d-flex align-items-center gap-3 w-100 px-0 w-100 active	"
+					data-bs-toggle="tab" href="#overview" role="tab"> <span
+						class="icon-container d-flex justify-content-center align-items-center"
+						style="width: 35px;"> <i class="fas fa-home"></i>
+					</span> <span class="d-none d-sm-inline flex-grow-1 text-start">General</span>
+				</a></li>
+
+				<li class="nav-item mb-3 w-100"><a
+					class="nav-link d-flex align-items-center gap-3 w-100 px-0 w-100"
+					data-bs-toggle="tab" href="#description" role="tab"> <span
+						class="icon-container d-flex justify-content-center align-items-center"
+						style="width: 35px;"> <i class="fas fa-globe-americas"></i>
+					</span> <span class="d-none d-sm-inline flex-grow-1 text-start">Countries</span>
+				</a></li>
+
+				<li class="nav-item mb-3 w-100"><a
+					class="nav-link d-flex align-items-center gap-3 w-100 px-0 w-100"
+					data-bs-toggle="tab" href="#images" role="tab"> <span
+						class="icon-container d-flex justify-content-center align-items-center"
+						style="width: 35px;"> <i class="fas fa-flag-usa"></i>
+					</span> <span class="d-none d-sm-inline flex-grow-1 text-start">States</span>
+				</a></li>
+
+				<li class="nav-item mb-3 w-100"><a
+					class="nav-link d-flex align-items-center gap-3 w-100 px-0 w-100"
+					data-bs-toggle="tab" href="#details" role="tab"> <span
+						class="icon-container d-flex justify-content-center align-items-center"
+						style="width: 35px;"> <i class="fas fa-mail-bulk"></i>
+					</span> <span class="d-none d-sm-inline flex-grow-1 text-start">Mail
+							Server</span>
+				</a></li>
+
+				<li class="nav-item mb-3 w-100"><a
+					class="nav-link d-flex align-items-center gap-3 w-100 px-0 w-100"
+					data-bs-toggle="tab" href="#shipping" role="tab"> <span
+						class="icon-container d-flex justify-content-center align-items-center"
+						style="width: 35px;"> <i class="far fa-envelope"></i>
+					</span> <span class="d-none d-sm-inline flex-grow-1 text-start">Mail
+							Templates</span>
+				</a></li>
+
+				<li class="nav-item mb-3 w-100"><a
+					class="nav-link d-flex align-items-center gap-3 w-100 px-0 w-100"
+					data-bs-toggle="tab" href="#shipping" role="tab"> <span
+						class="icon-container d-flex justify-content-center align-items-center"
+						style="width: 35px;"> <i class="fas fa-money-check-alt"></i>
+					</span> <span class="d-none d-sm-inline flex-grow-1 text-start">Payment</span>
+				</a></li>
+			</ul>
+		</div>
+	</th:block>
+	<!-- SideBar -->
+
+	<!-- General-->
+	<th:block th:fragment="overview">
+		<form th:action="@{/settings/save_general}" method="post"
+			enctype="multipart/form-data">
+			<div class="mt-4 mx-auto col-md-12">
+				<h3>General</h3>
+
+				<div class="form-group mb-3 row">
+					<label for="inputSiteName" class="col-sm-3 col-form-label">Site
+						Name</label>
+					<div class="col-sm-9">
+						<input type="text" id="inputSiteName" class="form-control"
+							placeholder="Enter site name" name="SITE_NAME"
+							th:value="${SITE_NAME}" required>
+					</div>
+				</div>
+
+				<div class="form-group mb-3 row">
+					<label for="inputCopyright" class="col-sm-3 col-form-label">Copyright</label>
+					<div class="col-sm-9">
+						<input type="text" id="inputCopyright" class="form-control"
+							placeholder="Enter copyright" name="COPYRIGHT"
+							th:value="${COPYRIGHT}" required>
+					</div>
+				</div>
+
+				<!-- Main Images -->
+				<div class="form-group mb-3 row">
+					<label for="inputPhotos" class="col-sm-3 col-form-label">Site
+						Logo</label>
+					<div class="col-sm-9">
+						<div>
+							<input type="file" class="form-control mb-2" id="inputPhotos"
+								accept=".png, .jpg, .jpeg" name="multipartFile">
+						</div>
+						<div>
+							<img th:src="@{${SITE_LOGO}}" width="50%" height="50%"
+								class="d-inline-block align-top" alt="Logo"
+								id="inputPhotosPreview" style="border-radius: 10px;" name="logo">
+						</div>
+					</div>
+				</div>
+				<!-- Main Images -->
+
+				<div class="form-group row">
+					<label for="inputCurrencyType" class="col-sm-3 col-form-label">Currency
+						Type</label>
+					<div class="col-sm-9">
+						<select class="form-select" id="inputCurrencyType"
+							name="CURRENCY_ID">
+							<th:block th:each="currency : ${currencies}">
+								<option th:value="${currency.id}"
+									th:selected="${currency.id} == ${CURRENCY_ID}">[[${currency.toString}]]</option>
+							</th:block>
+						</select>
+					</div>
+				</div>
+
+				<div class="form-group row">
+					<label for="inputCurrencySymbolPosition"
+						class="col-sm-3 col-form-label">Currency Symbol Position</label>
+					<div class="col-sm-9">
+						<select class="form-select" id="inputCurrencySymbolPosition"
+							name="CURRENCY_SYMBOL_POSITION">
+							<option value="Before price"
+								th:selected="${CURRENCY_SYMBOL_POSITION} == 'Before price'">Before
+								price</option>
+							<option value="After price"
+								th:selected="${CURRENCY_SYMBOL_POSITION} == 'After price'">After
+								price</option>
+						</select>
+					</div>
+				</div>
+
+				<div class="form-group row">
+					<label for="inputDecimalPointType" class="col-sm-3 col-form-label">Decimal
+						Point Type</label>
+					<div class="col-sm-9">
+						<select class="form-select" id="inputDecimalPointType"
+							name="DECIMAL_POINT_TYPE">
+							<option value="COMMA"
+								th:selected="${DECIMAL_POINT_TYPE} == 'COMMA'">Comma -
+								(,)</option>
+							<option value="POINT"
+								th:selected="${DECIMAL_POINT_TYPE} == 'POINT'">Point -
+								(.)</option>
+						</select>
+					</div>
+				</div>
+
+				<div class="form-group row">
+					<label for="inputDecimalDigits" class="col-sm-3 col-form-label">Decimal
+						Digits</label>
+					<div class="col-sm-9">
+						<select class="form-select" id="inputDecimalDigits"
+							name="DECIMAL_DIGITS">
+							<option value="1" th:selected="${DECIMAL_DIGITS} == 1">1</option>
+							<option value="2" th:selected="${DECIMAL_DIGITS} == 2">2</option>
+							<option value="3" th:selected="${DECIMAL_DIGITS} == 3">3</option>
+							<option value="4" th:selected="${DECIMAL_DIGITS} == 4">4</option>
+						</select>
+					</div>
+				</div>
+
+				<div class="form-group row">
+					<label for="inputThousandsPointType"
+						class="col-sm-3 col-form-label">Thousands Point Type</label>
+					<div class="col-sm-9">
+						<select class="form-select" id="inputThousandsPointType"
+							name="THOUSANDS_POINT_TYPE">
+							<option value="COMMA"
+								th:selected="${THOUSANDS_POINT_TYPE} == 'COMMA'">Comma
+								- (,)</option>
+							<option value="POINT"
+								th:selected="${THOUSANDS_POINT_TYPE} == 'POINT'">Point
+								- (.)</option>
+						</select>
+					</div>
+				</div>
+			</div>
+
+			<div class="form-group row">
+				<div class="form-group d-flex justify-content-end">
+					<a th:href="@{/}" class="btn btn-secondary"
+						style="margin: 0 8px;">Back</a>
+					<button type="submit" class="btn btn-success">Save</button>
+				</div>
+			</div>
+		</form>
+	</th:block>
+	<!-- General-->
+
+</body>
+</html>
