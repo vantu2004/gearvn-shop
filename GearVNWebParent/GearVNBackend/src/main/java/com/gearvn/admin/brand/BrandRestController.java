@@ -24,6 +24,7 @@ public class BrandRestController {
 		return this.brandService.isNameUnique(id, name);
 	}
 
+	// dùng bên file product_overview.js để load categories khi click chọn 1 brand bất kỳ
 	@GetMapping("/brands/{id}/categories")
 	public List<Category> getCategoriesByBrand(@PathVariable("id") Integer brandId) {
 		Brand brand = this.brandService.getBrandById(brandId);

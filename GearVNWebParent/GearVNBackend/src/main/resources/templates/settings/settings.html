@@ -48,7 +48,9 @@
 							<th:block th:replace="settings/setting_fragments :: overview"></th:block>
 						</div>
 
-						<div class="tab-pane fade" id="description" role="tabpanel">2</div>
+						<div class="tab-pane fade" id="description" role="tabpanel">
+							<th:block th:replace="settings/setting_fragments :: country"></th:block>
+						</div>
 
 						<div class="tab-pane fade" id="images" role="tabpanel">3</div>
 
@@ -74,9 +76,14 @@
 		// upload image
 		let input = "#inputPhotos";
 		let inputPreview = "#inputPhotosPreview";
+		
+		// csrf
+		let csrfHeader = "[[${_csrf.headerName}]]";
+		let csrfValue = "[[${_csrf.token}]]";
 	</script>
 
 	<script th:src="@{/js/common_form.js}"></script>
+	<script th:src="@{/js/countries_setting.js}"></script>
 
 	<!-- 	<script th:src="@{/js/product/product_overview.js}"></script>
 	<script th:src="@{/js/product/product_description.js}"></script>

@@ -191,14 +191,68 @@
 
 			<div class="form-group row">
 				<div class="form-group d-flex justify-content-end">
-					<a th:href="@{/}" class="btn btn-secondary"
-						style="margin: 0 8px;">Back</a>
+					<a th:href="@{/}" class="btn btn-secondary" style="margin: 0 8px;">Back</a>
 					<button type="submit" class="btn btn-success">Save</button>
 				</div>
 			</div>
 		</form>
 	</th:block>
 	<!-- General-->
+
+	<!-- Country-->
+	<th:block th:fragment="country">
+		<div class="container mt-4">
+			<h3>General</h3>
+
+			<p>Use this page to manage countries which will be displayed in
+				the customer registration form.</p>
+
+			<div class="row">
+
+				<div class="col-lg-12 col-md-7 col-sm-12 mb-3">
+					<div class="toast align-items-center w-100 text-center"
+						role="alert" aria-live="assertive" aria-atomic="true" id=>
+						<div class="d-flex justify-content-between w-100">
+							<div class="toast-body flex-grow-1">
+								<strong><span id="toastMessage">Hello, world!
+										This is a toast message.</span></strong>
+							</div>
+							<button type="button" class="btn-close me-2 m-auto"
+								data-bs-dismiss="toast" aria-label="Close"></button>
+						</div>
+					</div>
+				</div>
+
+				<div class="col-lg-8 col-md-7 col-sm-12 mb-3">
+					<select class="form-control" style="height: 450px;" size=10
+						id="selectCountryList">
+						<option value="">Empty list</option>
+					</select>
+				</div>
+				<div class="col-lg-4 col-md-5 col-sm-12 d-flex flex-column"
+					style="height: 450px;">
+					<button class="btn btn-primary w-100 mb-3" id="btnLoadCountryList">Refresh
+						Country List</button>
+					<input type="text" id="inputCountryName"
+						class="form-control w-100 mb-2" placeholder="Enter country name"
+						name="inputCountryName" required> <input type="text"
+						id="inputCode" class="form-control w-100 mb-2"
+						placeholder="Enter code" name="inputCode" required>
+					<button class="btn btn-outline-success w-100 mb-2"
+						id="btnCreateCountry">Create</button>
+					<button class="btn btn-outline-warning w-100 mb-2"
+						id="btnUpdateCountry" disabled>Update</button>
+					<button class="btn btn-outline-danger w-100 mb-2"
+						id="btnDeleteCountry" disabled>Delete</button>
+					<div class="mt-auto">
+						<a th:href="@{/}" class="btn btn-secondary w-100">Back</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</th:block>
+	<!-- Country-->
+
 
 </body>
 </html>

@@ -1,5 +1,7 @@
 package com.gearvn.common.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -21,7 +23,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@ToString
+@ToString(exclude = "country")
 @Table(name = "states")
 public class State {
 
@@ -34,6 +36,7 @@ public class State {
 	
 	@ManyToOne
 	@JoinColumn(name = "country_id")
+	@JsonIgnore
 	private Country country;
 	
 }
