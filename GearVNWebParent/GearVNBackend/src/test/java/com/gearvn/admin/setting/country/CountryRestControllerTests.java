@@ -77,7 +77,7 @@ public class CountryRestControllerTests {
 		 */
 		MvcResult result = mockMvc.perform(post(url).contentType("application/json")
 				.content(objectMapper.writeValueAsString(country)).with(csrf())).andDo(print())
-				.andExpect(status().isOk()).andReturn();
+				.andExpect(status().isCreated()).andReturn();
 
 		String response = result.getResponse().getContentAsString();
 
@@ -110,7 +110,7 @@ public class CountryRestControllerTests {
 
 			MvcResult result = mockMvc.perform(post(url).contentType("application/json")
 					.content(objectMapper.writeValueAsString(newCountry)).with(csrf())).andDo(print())
-					.andExpect(status().isOk()).andReturn();
+					.andExpect(status().isCreated()).andReturn();
 
 			String response = result.getResponse().getContentAsString();
 

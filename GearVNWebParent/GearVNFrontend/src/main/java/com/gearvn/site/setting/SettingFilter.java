@@ -36,12 +36,11 @@ public class SettingFilter implements Filter {
 
 		/*
 		 * khi tải 1 trang, trình duyệt sẽ gửi nhiều request ĐỘC LẬP để yêu cầu tài
-		 * nguyên, vì ĐỘC LẬP nên return khi gặp các tài nguyên tĩnh đến việc load data
-		 * cho request đên html
+		 * nguyên, vì ĐỘC LẬP nên return khi gặp các tài nguyên tĩnh ko ảnh hướng đến
+		 * việc load data cho request đên html
 		 */
 		List<Setting> settings = this.settingService.getGeneralAndCurrencySetting();
 		for (Setting setting : settings) {
-			System.out.println(setting);
 			request.setAttribute(setting.getKey(), setting.getValue());
 		}
 

@@ -164,11 +164,14 @@ body {
 										class="fas fa-cog fa-lg"></i>
 								</a>
 									<ul class="dropdown-menu dropdown-menu-end">
-										<li><a class="dropdown-item" href="#">Action</a></li>
-										<li><a class="dropdown-item" href="#">Another action</a></li>
+										<li><a class="dropdown-item" th:href="@{/settings#general}">General</a></li>
+										<li><a class="dropdown-item" th:href="@{/settings#countries}">Countries</a></li>
+										<li><a class="dropdown-item" th:href="@{/settings#states}">States</a></li>
+										<li><a class="dropdown-item" th:href="@{/settings#mailServer}">Mail Server</a></li>
+										<li><a class="dropdown-item" th:href="@{/settings#mailTemplates}">Mail Templates</a></li>
+										<li><a class="dropdown-item" th:href="@{/settings#payment}">Payment</a></li>
 										<li><hr class="dropdown-divider"></li>
-										<li><a class="dropdown-item" href="#">Something else
-												here</a></li>
+										<li><a class="dropdown-item" th:href="@{/settings}">Settings</a></li>
 									</ul></li>
 							</th:block>
 

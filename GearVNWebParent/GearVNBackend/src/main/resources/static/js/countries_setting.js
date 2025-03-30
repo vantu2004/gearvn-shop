@@ -4,7 +4,8 @@ let btnUpdateCountry = $("#btnUpdateCountry")
 let btnDeleteCountry = $("#btnDeleteCountry")
 let inputCountryName = $("#inputCountryName")
 let inputCode = $("#inputCode")
-let selectCountryList = $("#selectCountryList")
+let selectList = $(".selectList")
+let selectCountryList = $("#selectCountryList");
 
 let contextPathForCountrySetting = "/" + window.location.pathname.split('/')[1];
 
@@ -40,12 +41,12 @@ function loadCountries(message) {
 	let url = contextPathForCountrySetting + "/countries/list";
 
 	$.get(url, function(response) {
-		selectCountryList.empty();
+		selectList.empty();
 
 		$.each(response, function(index, country) {
 			let optionValue = country.id + " - " + country.code;
 			// tham số 1 là text, 2 là value
-			selectCountryList.append(new Option(country.name, optionValue));
+			selectList.append(new Option(country.name, optionValue));
 		});
 	}).done(function() {
 		showToastMessage(message);
@@ -55,14 +56,16 @@ function loadCountries(message) {
 }
 
 function showToastMessage(message) {
-	$("#toastMessage").text(message);
-	$(".toast").toast("show");
+	$("#toastCountryMessage").text(message);
+	$("#toastCountry").toast("show");
 }
 
 // khi click chọn 1 option thì disabled btnCreateCountry và enabled 2 button kia
 function changeFormStateToSelectedCountry() {
-	let selectedIndex = selectCountryList.prop("selectedIndex");
+	let selectedIndex = selectList.prop("selectedIndex");
 
+	// vì selectList dùng cho cả bên tab State nên phải dùng id
+	let selectCountryList = $("#selectCountryList");
 	if (selectedIndex >= 0) {
 		let countryName = selectCountryList.find("option:selected").text();
 		// value option có dạng "0 - VN", lấy phần sau dấu "-"
@@ -100,6 +103,7 @@ function addCountry() {
 	if (!countryName.trim() || !countryCode.trim()) {
 		showToastMessage("Country name or Country code cannot be left blank");
 	} else {
+		// phải ánh xạ đúng tên với field trong country
 		let jsonData = { name: countryName, code: countryCode };
 
 		$.ajax({
@@ -123,7 +127,7 @@ function addCountry() {
 function updateCountry() {
 	let url = contextPathForCountrySetting + "/countries/save";
 
-	let countryId = selectCountryList.val().split(" - ")[0].trim();
+	let countryId = selectList.val().split(" - ")[0].trim();
 	let countryName = inputCountryName.val();
 	let countryCode = inputCode.val();
 
@@ -152,7 +156,7 @@ function updateCountry() {
 
 function deleteCountry() {
 
-	let countryId = selectCountryList.val().split(" - ")[0].trim();
+	let countryId = selectList.val().split(" - ")[0].trim();
 	let url = contextPathForCountrySetting + "/countries/delete/" + countryId;
 
 	$.ajax({

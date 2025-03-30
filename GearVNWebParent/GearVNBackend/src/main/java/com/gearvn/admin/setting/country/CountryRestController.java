@@ -2,6 +2,7 @@ package com.gearvn.admin.setting.country;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -22,9 +23,17 @@ public class CountryRestController {
 	private CountryRepository countryRepository;
 
 	@GetMapping("/countries/list")
-	public ResponseEntity<List<Country>> getAllCountry() {
-		List<Country> countries = countryRepository.findAllByOrderByNameAsc();
-		return ResponseEntity.ok(countries);
+	public ResponseEntity<?> getAllCountry() {
+		try {
+			List<Country> countries = countryRepository.findAllByOrderByNameAsc();
+			List<CountryDTO> result = countries.stream()
+					.map(country -> new CountryDTO(country.getId(), country.getName(), country.getCode()))
+					.collect(Collectors.toList());
+			return ResponseEntity.ok(result);
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+					.body("Error retrieving countries: " + e.getMessage());
+		}
 	}
 
 	@PostMapping("/countries/save")

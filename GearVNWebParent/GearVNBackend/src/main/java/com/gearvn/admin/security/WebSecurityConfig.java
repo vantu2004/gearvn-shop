@@ -63,13 +63,13 @@ public class WebSecurityConfig {
 				 * cx ko có ROLE_, nếu db có lưu ROLE_ thì dùng hasAuthority()/hasRole() (tự
 				 * thêm ROLE_)
 				 */
-				.requestMatchers("/users/**").hasAuthority("Admin").requestMatchers("/categories/**", "/brands/**")
-				.hasAnyAuthority("Admin", "Editor")
+				.requestMatchers("/users/**", "/settings/**", "/countries/**", "/states/**").hasAuthority("Admin")
+				.requestMatchers("/categories/**", "/brands/**").hasAnyAuthority("Admin", "Editor")
 
 				/*
 				 * admin/editor có full quyền, salesperson có quyền update/save/checkunique/xem
-				 * danh sách/xem chi tiết/pagination, shipper chỉ có quyền xem danh sách/xem
-				 * chi tiết/pagination
+				 * danh sách/xem chi tiết/pagination, shipper chỉ có quyền xem danh sách/xem chi
+				 * tiết/pagination
 				 */
 
 				// cấp quyền tạo/xóa product

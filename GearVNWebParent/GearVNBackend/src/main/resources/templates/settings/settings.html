@@ -29,7 +29,7 @@
 				<!-- Nội dung tab -->
 				<div class="col-md-9 mx-auto">
 					<div class="tab-content">
-						<div class="tab-pane fade active show" id="overview"
+						<div class="tab-pane fade active show" id="general"
 							role="tabpanel">
 
 							<!-- message -->
@@ -48,15 +48,19 @@
 							<th:block th:replace="settings/setting_fragments :: overview"></th:block>
 						</div>
 
-						<div class="tab-pane fade" id="description" role="tabpanel">
+						<div class="tab-pane fade" id="countries" role="tabpanel">
 							<th:block th:replace="settings/setting_fragments :: country"></th:block>
 						</div>
 
-						<div class="tab-pane fade" id="images" role="tabpanel">3</div>
+						<div class="tab-pane fade" id="states" role="tabpanel">
+							<th:block th:replace="settings/setting_fragments :: state"></th:block>
+						</div>
 
-						<div class="tab-pane fade" id="details" role="tabpanel">4</div>
+						<div class="tab-pane fade" id="mailServer" role="tabpanel">4</div>
 
-						<div class="tab-pane fade" id="shipping" role="tabpanel">5</div>
+						<div class="tab-pane fade" id="mailTemplates" role="tabpanel">5</div>
+
+						<div class="tab-pane fade" id="payment" role="tabpanel">6</div>
 
 					</div>
 				</div>
@@ -76,7 +80,7 @@
 		// upload image
 		let input = "#inputPhotos";
 		let inputPreview = "#inputPhotosPreview";
-		
+
 		// csrf
 		let csrfHeader = "[[${_csrf.headerName}]]";
 		let csrfValue = "[[${_csrf.token}]]";
@@ -84,6 +88,7 @@
 
 	<script th:src="@{/js/common_form.js}"></script>
 	<script th:src="@{/js/countries_setting.js}"></script>
+	<script th:src="@{/js/states_setting.js}"></script>
 
 	<!-- 	<script th:src="@{/js/product/product_overview.js}"></script>
 	<script th:src="@{/js/product/product_description.js}"></script>
