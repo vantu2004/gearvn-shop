@@ -1,4 +1,4 @@
-package com.gearvn.admin.setting.country;
+package com.gearvn.common.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

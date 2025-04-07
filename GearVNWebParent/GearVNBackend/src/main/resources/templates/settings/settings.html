@@ -26,25 +26,27 @@
 			</div>
 
 			<div class="col mt-4">
+
+				<!-- message -->
+				<div th:if="${message != null}"
+					class="toast show position-fixed top-0 end-0 m-3 "
+					data-bs-delay="3000" data-bs-autohide="true"
+					style="z-index: 1055; min-width: 300px;">
+					<div class="toast-header">
+						<strong class="me-auto">Message</strong>
+						<button type="button" class="btn-close" data-bs-dismiss="toast"></button>
+					</div>
+					<div class="toast-body text-success">
+						<p th:text="${message}"></p>
+					</div>
+				</div>
+				<!-- message -->
+
 				<!-- Nội dung tab -->
 				<div class="col-md-9 mx-auto">
 					<div class="tab-content">
 						<div class="tab-pane fade active show" id="general"
 							role="tabpanel">
-
-							<!-- message -->
-							<div th:if="${message != null}" class="toast show mt-3"
-								style="width: 100%;">
-								<div class="toast-header">
-									<strong class="me-auto">Message</strong>
-									<button type="button" class="btn-close" data-bs-dismiss="toast"></button>
-								</div>
-								<div class="toast-body" style="color: green;">
-									<p th:text="${message}"></p>
-								</div>
-							</div>
-							<!-- message -->
-
 							<th:block th:replace="settings/setting_fragments :: overview"></th:block>
 						</div>
 
@@ -56,9 +58,13 @@
 							<th:block th:replace="settings/setting_fragments :: state"></th:block>
 						</div>
 
-						<div class="tab-pane fade" id="mailServer" role="tabpanel">4</div>
+						<div class="tab-pane fade" id="mailServer" role="tabpanel">
+							<th:block th:replace="settings/setting_fragments :: mailServer"></th:block>
+						</div>
 
-						<div class="tab-pane fade" id="mailTemplates" role="tabpanel">5</div>
+						<div class="tab-pane fade" id="mailTemplates" role="tabpanel">
+							<th:block th:replace="settings/setting_fragments :: mailTemplate"></th:block>
+						</div>
 
 						<div class="tab-pane fade" id="payment" role="tabpanel">6</div>
 
@@ -84,6 +90,36 @@
 		// csrf
 		let csrfHeader = "[[${_csrf.headerName}]]";
 		let csrfValue = "[[${_csrf.token}]]";
+
+		// đảm bảo toast tự động tắt
+		document.addEventListener('DOMContentLoaded', function() {
+			const toastElList = [].slice.call(document
+					.querySelectorAll('.toast'));
+			toastElList.forEach(function(toastEl) {
+				new bootstrap.Toast(toastEl).show();
+			});
+		});
+		
+		$(document).ready(function() {
+			// set richtext function
+			$("#emailContent").richText();
+		});
+
+/* 		function setDefaultValueTextArea() {
+			let shortDescription = $('#shortDescription');
+			let fullDescription = $('#fullDescription');
+			let content_shortDescription = shortDescription.val().trim();
+			let content_fullDescription = fullDescription.val().trim();
+
+			if (content_shortDescription === '<div><br></div>'
+					|| content_shortDescription === '<br>') {
+				shortDescription.val('');
+			}
+			if (content_fullDescription === '<div><br></div>'
+					|| content_fullDescription === '<br>') {
+				fullDescription.val('');
+			}
+		} */
 	</script>
 
 	<script th:src="@{/js/common_form.js}"></script>

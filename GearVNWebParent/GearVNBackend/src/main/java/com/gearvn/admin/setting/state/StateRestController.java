@@ -14,10 +14,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.gearvn.admin.setting.country.CountryDTO;
 import com.gearvn.admin.setting.country.CountryRepository;
 import com.gearvn.common.entity.Country;
+import com.gearvn.common.entity.CountryDTO;
 import com.gearvn.common.entity.State;
+import com.gearvn.common.entity.StateDTO;
 
 @RestController
 public class StateRestController {

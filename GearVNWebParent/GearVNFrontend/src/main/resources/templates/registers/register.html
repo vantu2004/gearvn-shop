@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<!-- Head -->
+<head th:replace="fragments :: page_head('Register', 'none')"></head>
+<!-- Head -->
+
+<body style="background-color: #ECDCE6;">
+
+		<div class="container py-5">
+			<div class="row justify-content-center">
+				<div class="col-12 col-lg-8">
+					<div class="card text-white shadow-lg p-4 rounded-3"
+						style="background-color: #DF94AA;">
+						<div class="card-body">
+							<div class="text-center mb-4">
+								<h2 class="fw-bold text-uppercase">Sign Up</h2>
+								<p class="text-white">Please fill in the information</p>
+							</div>
+
+							<div th:if="${param.error}">
+								<p class="mt-3 text-danger fw-bold text-center">
+									[[${session.SPRING_SECURITY_LAST_EXCEPTION.message}]]</p>
+							</div>
+
+							<div th:if="${param.logout}">
+								<p class="mt-3 text-success fw-bold text-center">You have
+									been logged out.</p>
+							</div>
+
+<form th:action="@{/customers/save}" method="post" th:object="${customer}" onsubmit="return checkDuplicateEmail(this)">
+    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+
+    <div class="row justify-content-center">
+        <!-- Cột 1 -->
+        <div class="col-12 col-md-6 col-lg-6">
+            <!-- First Name -->
+            <div class="mb-3">
+                <input type="text" class="form-control" id="inputFirstName" placeholder="First Name" th:field="*{firstName}" aria-describedby="firstNameError">
+                <p id="firstNameError" th:if="${#fields.hasErrors('firstName')}" th:errorclass="error" th:errors="*{firstName}" class="text-danger"></p>
+            </div>
+
+            <!-- Last Name -->
+            <div class="mb-3">
+                <input type="text" class="form-control" id="inputLastName" placeholder="Last Name" th:field="*{lastName}" aria-describedby="lastNameError">
+                <p id="lastNameError" th:if="${#fields.hasErrors('lastName')}" th:errorclass="error" th:errors="*{lastName}" class="text-danger"></p>
+            </div>
+
+            <!-- Email -->
+            <div class="mb-3">
+                <input type="text" class="form-control" id="inputEmail" placeholder="Email" th:field="*{email}" aria-describedby="emailError">
+                <p id="emailError" th:if="${#fields.hasErrors('email')}" th:errorclass="error" th:errors="*{email}" class="text-danger"></p>
+            </div>
+
+            <!-- Password -->
+            <div class="mb-3">
+                <input type="password" class="form-control" id="inputPassword" placeholder="Password" th:field="*{password}" aria-describedby="passwordError" oninput="checkPasswordMatch(document.getElementById('inputRePassword'))">
+                <p id="passwordError" th:if="${#fields.hasErrors('password')}" th:errorclass="error" th:errors="*{password}" class="text-danger"></p>
+            </div>
+
+            <!-- Re-type Password -->
+            <div class="mb-3">
+                <input type="password" class="form-control" id="inputRePassword" placeholder="Re-type Password" aria-describedby="rePasswordError" oninput="checkPasswordMatch(this)">
+                <!-- <p id="rePasswordError" th:if="${#fields.hasErrors('rePassword')}" th:errorclass="error" th:errors="*{rePassword}" class="text-danger"></p> -->
+	        </div>
+
+            <!-- Country -->
+            <div class="mb-3">
+                <label for="selectCountryList" class="form-label text-light">Country</label>
+                <select id="selectCountryList" class="form-select" th:field="*{country}" aria-describedby="countryError">
+                   	<th:block th:each="country : ${countries}">
+						<option th:value="${country.id}">[[${country.name}]]</option>
+					</th:block>
+                </select>
+                <p id="countryError" th:if="${#fields.hasErrors('country')}" th:errorclass="error" th:errors="*{country}" class="text-danger"></p>
+            </div>
+        </div>
+
+        <!-- Cột 2 -->
+        <div class="col-12 col-md-6 col-lg-6">
+            <!-- Phone Number -->
+            <div class="mb-3">
+                <input type="text" class="form-control" id="inputPhoneNumber" placeholder="Phone Number" th:field="*{phoneNumber}" aria-describedby="phoneNumberError">
+                <p id="phoneNumberError" th:if="${#fields.hasErrors('phoneNumber')}" th:errorclass="error" th:errors="*{phoneNumber}" class="text-danger"></p>
+            </div>
+
+            <!-- Address Line 1 -->
+            <div class="mb-3">
+                <input type="text" class="form-control" id="inputAddressLine1" placeholder="Address Line 1" th:field="*{addressLine1}" aria-describedby="addressLine1Error">
+                <p id="addressLine1Error" th:if="${#fields.hasErrors('addressLine1')}" th:errorclass="error" th:errors="*{addressLine1}" class="text-danger"></p>
+            </div>
+
+            <!-- Address Line 2 -->
+            <div class="mb-3">
+                <input type="text" class="form-control" id="inputAddressLine2" placeholder="Address Line 2" th:field="*{addressLine2}" aria-describedby="addressLine2Error">
+<!--                 <p id="addressLine2Error" th:if="${#fields.hasErrors('addressLine2')}" th:errorclass="error" th:errors="*{addressLine2}" class="text-danger"></p>
+ -->            </div>
+
+            <!-- City -->
+            <div class="mb-3">
+                <input type="text" class="form-control" id="inputCity" placeholder="City" th:field="*{city}" aria-describedby="cityError">
+                <p id="cityError" th:if="${#fields.hasErrors('city')}" th:errorclass="error" th:errors="*{city}" class="text-danger"></p>
+            </div>
+
+            <!-- Postal Code -->
+            <div class="mb-3">
+                <input type="text" class="form-control" id="inputPostalCode" placeholder="Postal Code" th:field="*{postalCode}" aria-describedby="postalCodeError">
+                <p id="postalCodeError" th:if="${#fields.hasErrors('postalCode')}" th:errorclass="error" th:errors="*{postalCode}" class="text-danger"></p>
+            </div>
+
+            <!-- State/Province -->
+			<div class="mb-3">
+			    <label for="inputState" class="form-label text-light">State/Province</label>
+			    <input type="text" id="inputState" list="selectStateList" class="form-control" th:field="*{state}" aria-describedby="stateError">
+			    
+			    <datalist id="selectStateList">
+			
+			    </datalist>
+			
+			    <p id="stateError" th:if="${#fields.hasErrors('state')}" th:errorclass="error" th:errors="*{state}" class="text-danger"></p>
+			</div>
+        </div>
+
+        <!-- Nút Submit -->
+        <div class="col-12 d-flex justify-content-center mt-3">
+            <div class="col-12 col-lg-12">
+                <button type="submit" class="btn btn-outline-light w-100">Sign Up</button>
+            </div>
+        </div>
+    </div>
+</form>
+
+							<p class="mt-4 text-center">
+								Have already an account? <a href="#" class="text-white fw-bold">Sign
+									In</a>
+							</p>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+	<!-- Modal -->
+	<div th:replace="modal_fragments :: modal_dialog"></div>
+	<!-- Modal -->
+
+<script type="text/javascript">
+// check duplicate email
+let url = "[[ @{/customers/check_duplicate_email} ]]";
+
+</script>
+
+<script th:src="@{/js/customer.js}"></script>
+
+</body>
+</html>

@@ -21,10 +21,11 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.gearvn.admin.setting.country.CountryDTO;
 import com.gearvn.admin.setting.country.CountryRepository;
 import com.gearvn.common.entity.Country;
+import com.gearvn.common.entity.CountryDTO;
 import com.gearvn.common.entity.State;
+import com.gearvn.common.entity.StateDTO;
 
 import jakarta.transaction.Transactional;
 

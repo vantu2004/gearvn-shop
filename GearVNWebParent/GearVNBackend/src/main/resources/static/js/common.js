@@ -1,3 +1,4 @@
+// setting module
 $(document).ready(function() {
 	customizeTabs();
 })

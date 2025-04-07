@@ -15,4 +15,5 @@ public interface SettingRepository extends JpaRepository<Setting, String> {
 	 * dùng @Enumerated(EnumType.STRING) để chuyển từ enum về string
 	 */
 	List<Setting> findBySettingCategory(SettingCategory settingCategory);
+
 }

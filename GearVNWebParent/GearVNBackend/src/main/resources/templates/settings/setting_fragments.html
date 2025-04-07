@@ -201,7 +201,7 @@
 
 	<!-- Country-->
 	<th:block th:fragment="country">
-		<div class="container mt-4">
+		<div class="mt-4 mx-auto col-md-12">
 			<h3>Countries</h3>
 
 			<p>Use this page to manage countries which will be displayed in
@@ -244,7 +244,7 @@
 
 	<!-- State/Province -->
 	<th:block th:fragment="state">
-		<div class="container mt-4">
+		<div class="mt-4 mx-auto col-md-12">
 			<h3>States/Provinces</h3>
 
 			<p>
@@ -310,5 +310,174 @@
 		</div>
 	</th:block>
 	<!-- toast -->
+
+	<!-- Mail server -->
+	<th:block th:fragment="mailServer">
+		<form th:action="@{/settings/save_mailServer}" method="post"
+			enctype="multipart/form-data">
+			<div class="mt-4 mx-auto col-md-12">
+				<h3>Mail Server</h3>
+
+				<div class="form-group mb-3 row">
+					<label for="smtpServerHost" class="col-sm-3 col-form-label">SMTP
+						Server Host Name</label>
+					<div class="col-sm-9">
+						<input type="text" id="smtpServerHost" class="form-control"
+							placeholder="Enter SMTP server host" name="MAIL_HOST"
+							th:value="${MAIL_HOST}" required>
+					</div>
+				</div>
+
+				<div class="form-group mb-3 row">
+					<label for="portNumber" class="col-sm-3 col-form-label">Port
+						Number</label>
+					<div class="col-sm-9">
+						<input type="text" id="portNumber" class="form-control"
+							placeholder="Enter port number" name="MAIL_PORT"
+							th:value="${MAIL_PORT}" required>
+					</div>
+				</div>
+
+				<div class="form-group mb-3 row">
+					<label for="userName" class="col-sm-3 col-form-label">User
+						Name</label>
+					<div class="col-sm-9">
+						<input type="text" id="userName" class="form-control"
+							placeholder="Enter user name" name="MAIL_USERNAME"
+							th:value="${MAIL_USERNAME}" required>
+					</div>
+				</div>
+
+				<div class="form-group mb-3 row">
+					<label for="password" class="col-sm-3 col-form-label">Password</label>
+					<div class="col-sm-9">
+						<input type="text" id="password" class="form-control"
+							placeholder="Enter password" name="MAIL_PASSWORD"
+							th:value="${MAIL_PASSWORD}" required>
+					</div>
+				</div>
+
+				<div class="form-group mb-3 row">
+					<label for="authRequired" class="col-sm-3 col-form-label">Server
+						Authentication Required</label>
+					<div class="col-sm-9">
+						<select class="form-select" id="authRequired" name="SMTP_AUTH">
+							<option value="true" th:selected="${SMTP_AUTH} == 'true'">True</option>
+							<option value="false" th:selected="${SMTP_AUTH} == 'false'">False</option>
+						</select>
+					</div>
+				</div>
+
+				<div class="form-group mb-3 row">
+					<label for="tlsRequired" class="col-sm-3 col-form-label">Server
+						Requires Secured Connection (TLS)</label>
+					<div class="col-sm-9">
+						<select class="form-select" id="tlsRequired" name="SMTP_SECURED">
+							<option value="true" th:selected="${SMTP_SECURED} == 'true'">True</option>
+							<option value="false" th:selected="${SMTP_SECURED} == 'false'">False</option>
+						</select>
+					</div>
+				</div>
+
+				<div class="form-group mb-3 row">
+					<label for="fromEmail" class="col-sm-3 col-form-label">From
+						E-mail Address</label>
+					<div class="col-sm-9">
+						<input type="email" id="fromEmail" class="form-control"
+							placeholder="Enter from e-mail address" name="MAIL_FROM"
+							th:value="${MAIL_FROM}" required>
+					</div>
+				</div>
+
+				<div class="form-group mb-3 row">
+					<label for="senderName" class="col-sm-3 col-form-label">Sender
+						Name</label>
+					<div class="col-sm-9">
+						<input type="text" id="senderName" class="form-control"
+							placeholder="Enter sender name" name="MAIL_SENDER_NAME"
+							th:value="${MAIL_SENDER_NAME}" required>
+					</div>
+				</div>
+			</div>
+
+			<div class="form-group row">
+				<div class="d-flex justify-content-end">
+					<a th:href="@{/}" class="btn btn-secondary" style="margin: 0 8px;">Back</a>
+					<button type="submit" class="btn btn-success">Save</button>
+				</div>
+			</div>
+		</form>
+	</th:block>
+	<!-- Mail server -->
+
+	<!-- Mail Template -->
+	<th:block th:fragment="mailTemplate">
+		<div class="mt-4 mx-auto col-md-12">
+			<h3>Mail Templates</h3>
+
+			<!-- nav-tabs -->
+			<nav>
+				<div class="nav nav-tabs" id="nav-tab" role="tablist">
+					<a class="nav-link active" id="nav-customer-verification-tab"
+						data-bs-toggle="tab" href="#nav-customer-verification" role="tab"
+						aria-controls="nav-customer-verification" aria-selected="true">Customer
+						Verification</a> <a class="nav-link" id="nav-order-confirmation-tab"
+						data-bs-toggle="tab" href="#nav-order-confirmation" role="tab"
+						aria-controls="nav-order-confirmation" aria-selected="false">Order
+						Confirmation</a>
+				</div>
+			</nav>
+			<!-- nav-tabs -->
+
+			<!-- tab-content -->
+			<div class="tab-content" id="myTabContent">
+				<div class="tab-pane fade show active"
+					id="nav-customer-verification" role="tabpanel"
+					aria-labelledby="nav-customer-verification-tab">
+
+					<form th:action="@{/settings/save_mailTemplate}" method="post">
+
+						<div class="form-group mb-3 row">
+							<label for="emailSubject" class="col-sm-3 col-form-label">E-mail
+								Subject</label>
+							<div class="col-sm-9">
+								<input type="text" id="emailSubject" class="form-control"
+									placeholder="Please verify your registration to continue shopping"
+									name="CUSTOMER_VERIFY_SUBJECT"
+									th:value="${CUSTOMER_VERIFY_SUBJECT}" required>
+							</div>
+						</div>
+
+						<div class="form-group mb-3 row">
+							<div class="col-md-12 mt-3">
+								<label for="emailContent" class="form-label">Email
+									Content</label>
+								<textarea class="form-control" id="emailContent" rows="8"
+									name="CUSTOMER_VERIFY_CONTENT"
+									th:text=${CUSTOMER_VERIFY_CONTENT} required></textarea>
+							</div>
+						</div>
+
+						<div class="form-group row">
+							<div class="d-flex justify-content-end">
+								<a th:href="@{/}" class="btn btn-secondary"
+									style="margin: 0 8px;">Back</a>
+								<button type="submit" class="btn btn-success">Save</button>
+							</div>
+						</div>
+
+					</form>
+
+				</div>
+				<div class="tab-pane fade" id="nav-order-confirmation"
+					role="tabpanel" aria-labelledby="nav-order-confirmation-tab">
+
+					tab-02</div>
+			</div>
+			<!-- tab-content -->
+
+		</div>
+	</th:block>
+	<!-- Mail Template -->
 </body>
 </html>

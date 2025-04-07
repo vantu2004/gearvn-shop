@@ -42,8 +42,9 @@ public class SettingController {
 		return "settings/settings";
 	}
 
+	// cơ chế dirty checking giúp tự update mà ko cần gọi save
 	@PostMapping("/settings/save_general")
-	public String svaeGeneralSettings(RedirectAttributes redirectAttributes,
+	public String saveGeneralSettings(RedirectAttributes redirectAttributes,
 			@RequestParam("multipartFile") MultipartFile multipartFile, HttpServletRequest request) {
 
 		GeneralSettingBag generalSettingBag = this.settingService.getGeneralSettingBag();
@@ -90,10 +91,46 @@ public class SettingController {
 			}
 		}
 
-		this.settingService.saveAllSettings(generalSettingBag.getSettings());
+		// this.settingService.saveAllSettings(generalSettingBag.getSettings());
 
 		redirectAttributes.addFlashAttribute("message", "General settings have been saved.");
 
 		return "redirect:/settings";
+	}
+
+	// cơ chế dirty checking giúp tự update mà ko cần gọi save
+	@PostMapping("/settings/save_mailServer")
+	public String saveMailServerSettings(RedirectAttributes redirectAttributes, HttpServletRequest request) {
+		List<Setting> mailServerSettings = this.settingService.getMailServerSettings();
+		for (Setting setting : mailServerSettings) {
+			String value = request.getParameter(setting.getKey());
+			if (!StringUtils.isBlank(value)) {
+				setting.setValue(value);
+			}
+		}
+
+		// this.settingService.saveAllSettings(mailServerSettings);
+
+		redirectAttributes.addFlashAttribute("message", "Mail server settings have been saved.");
+
+		return "redirect:/settings#mailServer";
+	}
+
+	// cơ chế dirty checking giúp tự update mà ko cần gọi save
+	@PostMapping("/settings/save_mailTemplate")
+	public String saveMailTemplateSettings(RedirectAttributes redirectAttributes, HttpServletRequest request) {
+		List<Setting> mailTemplateSettings = this.settingService.getMailTemplateSettings();
+		for (Setting setting : mailTemplateSettings) {
+			String value = request.getParameter(setting.getKey());
+			if (!StringUtils.isBlank(value)) {
+				setting.setValue(value);
+			}
+		}
+
+		// this.settingService.saveAllSettings(mailTemplateSettings);
+
+		redirectAttributes.addFlashAttribute("message", "Mail template settings have been saved.");
+
+		return "redirect:/settings#mailTemplates";
 	}
 }
