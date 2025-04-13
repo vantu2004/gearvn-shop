@@ -124,7 +124,8 @@ body {
 							</th:block>
 
 							<th:block sec:authorize="hasAnyAuthority('Admin', 'Salesperson')">
-								<li class="nav-item"><a class="nav-link" href="#">Customers</a></li>
+								<li class="nav-item"><a class="nav-link"
+									th:href="@{/customers}">Customers</a></li>
 							</th:block>
 
 							<th:block sec:authorize="hasAnyAuthority('Admin', 'Salesperson')">
@@ -164,12 +165,18 @@ body {
 										class="fas fa-cog fa-lg"></i>
 								</a>
 									<ul class="dropdown-menu dropdown-menu-end">
-										<li><a class="dropdown-item" th:href="@{/settings#general}">General</a></li>
-										<li><a class="dropdown-item" th:href="@{/settings#countries}">Countries</a></li>
-										<li><a class="dropdown-item" th:href="@{/settings#states}">States</a></li>
-										<li><a class="dropdown-item" th:href="@{/settings#mailServer}">Mail Server</a></li>
-										<li><a class="dropdown-item" th:href="@{/settings#mailTemplates}">Mail Templates</a></li>
-										<li><a class="dropdown-item" th:href="@{/settings#payment}">Payment</a></li>
+										<li><a class="dropdown-item"
+											th:href="@{/settings#general}">General</a></li>
+										<li><a class="dropdown-item"
+											th:href="@{/settings#countries}">Countries</a></li>
+										<li><a class="dropdown-item"
+											th:href="@{/settings#states}">States</a></li>
+										<li><a class="dropdown-item"
+											th:href="@{/settings#mailServer}">Mail Server</a></li>
+										<li><a class="dropdown-item"
+											th:href="@{/settings#mailTemplates}">Mail Templates</a></li>
+										<li><a class="dropdown-item"
+											th:href="@{/settings#payment}">Payment</a></li>
 										<li><hr class="dropdown-divider"></li>
 										<li><a class="dropdown-item" th:href="@{/settings}">Settings</a></li>
 									</ul></li>
@@ -238,47 +245,47 @@ body {
 	<!-- Footer -->
 
 	<!-- fragment column link user -->
-	<th th:fragment="column_link(rootPath, fieldName, columnLabel)"><a
+	<th th:fragment="column_link(fieldName, columnLabel)"><a
 		class="a-title" th:if="${sortField} != ${fieldName}"
-		th:href="@{${rootPath} + '/page/' + ${currentPage} + '?sortField=' + ${fieldName} + '&sortType=' + ${sortType} + ${keyword != null ? ('&keyword=' + keyword) : ''} + ${inputSearchCategoryId != null ? ('&inputSearchCategoryId=' + inputSearchCategoryId) : ''}}">[[${columnLabel}]]</a><a
+		th:href="@{${moduleUrl} + '/page/' + ${currentPage} + '?sortField=' + ${fieldName} + '&sortType=' + ${sortType} + ${keyword != null ? ('&keyword=' + keyword) : ''} + ${inputSearchCategoryId != null ? ('&inputSearchCategoryId=' + inputSearchCategoryId) : ''}}">[[${columnLabel}]]</a><a
 		class="a-title" th:if="${sortField} == ${fieldName}"
-		th:href="@{${rootPath} + '/page/' + ${currentPage} + '?sortField=' + ${fieldName} + '&sortType=' + ${reverseSortType} + ${keyword != null ? ('&keyword=' + keyword) : ''} + ${inputSearchCategoryId != null ? ('&inputSearchCategoryId=' + inputSearchCategoryId) : ''}}">[[${columnLabel}]]</a>
+		th:href="@{${moduleUrl} + '/page/' + ${currentPage} + '?sortField=' + ${fieldName} + '&sortType=' + ${reverseSortType} + ${keyword != null ? ('&keyword=' + keyword) : ''} + ${inputSearchCategoryId != null ? ('&inputSearchCategoryId=' + inputSearchCategoryId) : ''}}">[[${columnLabel}]]</a>
 		<span th:if="${sortField} == ${fieldName}"
 		th:class="${sortType} == 'asc' ? 'fas fa-angle-up' : 'fas fa-angle-down'"></span>
 	</th>
 	<!-- fragment column link user-->
 
-	<!-- fragment page link user -->
-	<a th:fragment="page_link(rootPath, currentPage, label)"
-		class="page-link"
-		th:href="@{${rootPath} + '/page/' + ${currentPage} + ${sortField != null ? ('?sortField=' + sortField) : ''} + ${sortType != null ? ('&sortType=' + sortType) : ''} + ${keyword != null ? ('&keyword=' + keyword) : ''} + ${inputSearchCategoryId != null ? ('&inputSearchCategoryId=' + inputSearchCategoryId) : ''}}">[[${label}]]</a>
-	<!-- fragment page link user -->
+	<!-- fragment page link -->
+	<a th:fragment="page_link(currentPage, label)" class="page-link"
+		th:href="@{${moduleUrl} + '/page/' + ${currentPage} + ${sortField != null ? ('?sortField=' + sortField) : ''} + ${sortType != null ? ('&sortType=' + sortType) : ''} + ${keyword != null ? ('&keyword=' + keyword) : ''} + ${inputSearchCategoryId != null ? ('&inputSearchCategoryId=' + inputSearchCategoryId) : ''}}">[[${label}]]</a>
+	<!-- fragment page link -->
 
-
-	<th:block th:fragment="pagination(rootPath)">
+	<!-- pagination -->
+	<th:block th:fragment="pagination">
 		<ul class="pagination justify-content-center">
 			<li class="page-item"
 				th:classappend="${currentPage == 1} ? 'disabled'"><a
-				th:replace="fragments :: page_link(${rootPath}, 1, 'First')"></a></li>
+				th:replace="fragments :: page_link(1, 'First')"></a></li>
 
 			<li class="page-item"
 				th:classappend="${currentPage == 1} ? 'disabled'"><a
-				th:replace="fragments :: page_link(${rootPath}, ${currentPage - 1}, 'Previous')"></a></li>
+				th:replace="fragments :: page_link(${currentPage - 1}, 'Previous')"></a></li>
 
 			<li class="page-item"
 				th:each="page : ${#numbers.sequence(startPage, endPage)}"
 				th:classappend="${page == currentPage} ? 'active'"><a
-				th:replace="fragments :: page_link(${rootPath}, ${page}, ${page})"></a></li>
+				th:replace="fragments :: page_link(${page}, ${page})"></a></li>
 
 			<li class="page-item"
 				th:classappend="${currentPage == totalPages} ? 'disabled'"><a
-				th:replace="fragments :: page_link(${rootPath}, ${currentPage + 1}, 'Next')"></a></li>
+				th:replace="fragments :: page_link(${currentPage + 1}, 'Next')"></a></li>
 
 			<li class="page-item"
 				th:classappend="${currentPage == totalPages} ? 'disabled'"><a
-				th:replace="fragments :: page_link(${rootPath}, ${totalPages}, 'Last')"></a></li>
+				th:replace="fragments :: page_link(${totalPages}, 'Last')"></a></li>
 		</ul>
 	</th:block>
+	<!-- pagination -->
 
 </body>
 </html>

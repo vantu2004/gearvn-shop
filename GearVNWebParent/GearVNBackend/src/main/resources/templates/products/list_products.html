@@ -91,14 +91,14 @@
 			<table class="table table-hover">
 				<thead>
 					<tr>
-						<th th:replace="fragments :: column_link('/products', 'id', 'ID')" />
+						<th th:replace="fragments :: column_link('id', 'ID')" />
 						<th scope="col">Main Image</th>
 						<th
-							th:replace="fragments :: column_link('/products', 'name', 'Product Name')" />
+							th:replace="fragments :: column_link('name', 'Product Name')" />
 						<th
-							th:replace="fragments :: column_link('/products', 'brand', 'Brand')" />
+							th:replace="fragments :: column_link('brand', 'Brand')" />
 						<th
-							th:replace="fragments :: column_link('/products', 'category', 'Category')" />
+							th:replace="fragments :: column_link('category', 'Category')" />
 						<th scope="col">Enabled</th>
 						<th scope="col">Action</th>
 					</tr>
@@ -147,7 +147,7 @@
 									th:productId="${product.id}" class="link-delete"> <i
 									class="fas fa-trash-alt text-danger"></i>
 								</a>
-							</th:block>
+							</th:block></td>
 					</tr>
 				</tbody>
 			</table>
@@ -162,7 +162,7 @@
 				[[${endCount}]] of [[${totalElements}]]</p>
 
 			<th:block>
-				<div th:replace="fragments :: pagination('/products')"></div>
+				<div th:replace="fragments :: pagination"></div>
 			</th:block>
 
 		</nav>

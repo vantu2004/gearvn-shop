@@ -1,9 +1,8 @@
 <!DOCTYPE html>
-<!-- khai báo namespace th để có thể sử dụng các thuộc tính của thymeleaf -->
 <html xmlns:th="http://thymeleaf.org">
 
 <!-- Head -->
-<head th:replace="fragments :: page_head('Manage Users', 'none')"></head>
+<head th:replace="fragments :: page_head('Manage Customers', 'none')"></head>
 <!-- Head -->
 
 <body>
@@ -12,36 +11,24 @@
 	<!-- Header -->
 
 	<div class="container mt-5">
-		<h2>Manage Users</h2>
+		<h2>Manage Customers</h2>
 	</div>
 
+	<!-- create/csv/excel/pdf -->
 	<div class="container mt-3">
 		<div class="row g-2">
 			<div class="col-12 col-sm-6 col-md-3">
-				<a class="btn btn-primary w-100" th:href="@{/users/new}"> <i
-					class="fas fa-user-plus"></i> Create New User
-				</a>
-			</div>
-			<div class="col-12 col-sm-6 col-md-3">
-				<a class="btn btn-warning w-100" th:href="@{/users/export/csv}">
+				<a class="btn btn-warning w-100" th:href="@{/customers/export/csv}">
 					<i class="fas fa-file-csv"></i> Export To CSV
-				</a>
-			</div>
-			<div class="col-12 col-sm-6 col-md-3">
-				<a class="btn btn-success w-100" th:href="@{/users/export/excel}">
-					<i class="fas fa-file-excel"></i> Export To Excel
-				</a>
-			</div>
-			<div class="col-12 col-sm-6 col-md-3">
-				<a class="btn btn-danger w-100" th:href="@{/users/export/pdf}">
-					<i class="fas fa-file-pdf"></i> Export To PDF
 				</a>
 			</div>
 		</div>
 	</div>
+	<!-- create/csv/excel/pdf -->
 
 	<div class="container mt-3">
-		<form th:action="@{/users/page/1}" method="get">
+		<!-- search/reload -->
+		<form th:action="@{/customers/page/1}" method="get">
 			<div class="row g-3">
 				<div class="col-md-3 col-12">
 					<input type="hidden" id="inputSortField" class="form-control"
@@ -56,13 +43,15 @@
 					<button type="submit" class="btn btn-primary">
 						<i class="fas fa-search"></i>
 					</button>
-					<a th:href="@{/users}" class="btn btn-secondary"> <i
+					<a th:href="@{/customers}" class="btn btn-secondary"> <i
 						class="fas fa-redo"></i>
 					</a>
 				</div>
 			</div>
 		</form>
+		<!-- search/reload -->
 
+		<!-- message -->
 		<div th:if="${message != null}" class="toast show mt-3"
 			style="width: 100%;">
 			<div class="toast-header">
@@ -73,61 +62,68 @@
 				<p th:text="${message}"></p>
 			</div>
 		</div>
+		<!-- message -->
 
+		<!-- list categories -->
 		<div class="table-responsive mt-3">
 			<table class="table table-hover">
 				<thead>
 					<tr>
 						<th
-							th:replace="fragments :: column_link('id', 'User ID')" />
-						<th scope="col">Photos</th>
-						<th
-							th:replace="fragments :: column_link('email', 'Email')" />
+							th:replace="fragments :: column_link('id', 'ID')" />
 						<th
 							th:replace="fragments :: column_link('firstName', 'First Name')" />
 						<th
 							th:replace="fragments :: column_link('lastName', 'Last Name')" />
-						<th scope="col">Roles</th>
+						<th
+							th:replace="fragments :: column_link('email', 'Email')" />
+						<th
+							th:replace="fragments :: column_link('city', 'City')" />
+						<th
+							th:replace="fragments :: column_link('state', 'State')" />
+						<th
+							th:replace="fragments :: column_link('country', 'Country')" />
 						<th
 							th:replace="fragments :: column_link('enabled', 'Enabled')" />
 						<th scope="col">Action</th>
 					</tr>
 				</thead>
 				<tbody>
-					<tr th:each="user : ${listUsers}">
-						<td th:text="${user.id}"></td>
-						<td><i th:if="${#strings.isEmpty(user.photos)}"
-							class="fas fa-user-circle fa-3x text-secondary"></i> <img
-							th:if="${not #strings.isEmpty(user.photos)}"
-							th:src="@{${user.getPhotosImagePath}}" width="48" height="48"
-							class="rounded-circle object-fit-cover"></td>
-						<td th:text="${user.email}"></td>
-						<td th:text="${user.firstName}"></td>
-						<td th:text="${user.lastName}"></td>
-						<td><span th:each="role : ${user.roles}"> <span
-								th:text="${role.name}"></span><br>
-						</span></td>
-						<td><i th:if="${user.enabled}"
+					<tr th:each="customer : ${listCustomers}">
+						<td th:text="${customer.id}"></td>
+						<td th:text="${customer.firstName}"></td>
+						<td th:text="${customer.lastName}"></td>
+						<td th:text="${customer.email}"></td>
+						<td th:text="${customer.city}"></td>
+						<td th:text="${customer.state}"></td>
+						<td th:text="${customer.country.name}"></td>
+
+						<td><i th:if="${customer.enabled}"
 							class="fas fa-check text-success"></i> <i
-							th:if="${!user.enabled}" class="fas fa-times text-danger"></i></td>
-						<td><a title="Edit this user"
-							th:href="@{/users/update/} + ${user.id}"> <i
+							th:if="${!customer.enabled}" class="fas fa-times text-danger"></i></td>
+
+						<td><a title="View this customer"
+							th:href="@{'/customers/detail/' + ${customer.id}}"> <i
+								class="fas fa-eye"></i>
+						</a> | <a title="Edit this customer"
+							th:href="@{'/customers/update/' + ${customer.id}}"> <i
 								class="fas fa-edit text-success"></i>
-						</a> | <a title="Delete this user"
-							th:href="@{'/users/delete/' + ${user.id}}" th:userId="${user.id}"
-							class="link-delete"> <i class="fas fa-trash-alt text-danger"></i>
-						</a></td>
+						</a> | <a title="Delete this customer"
+							th:href="@{'/customers/delete/' + ${customer.id}}"
+							th:customerId="${customer.id}" class="link-delete"> <i
+								class="fas fa-trash-alt text-danger"></i>
+						</a> </th:block></td>
 					</tr>
 				</tbody>
 			</table>
 		</div>
-
+		<!-- list categories -->
 
 		<!-- Pagination -->
 		<nav aria-label="Pagination"
 			class="d-flex flex-column align-items-center mt-5"
 			th:if="${totalElements > 0}">
-			<p class="mb-2">Show users from [[${startCount}]] to
+			<p class="mb-2">Show brands from [[${startCount}]] to
 				[[${endCount}]] of [[${totalElements}]]</p>
 
 			<th:block>
@@ -136,9 +132,10 @@
 
 		</nav>
 
+
 		<div class="text-center mt-5" th:if="${totalElements <= 0}">No
-			users found.</div>
-		<!-- Pagination -->
+			customers found.</div>
+
 	</div>
 
 	<!-- Modal delete-->
@@ -157,12 +154,12 @@
 					event.preventDefault();
 
 					let link = $(this);
-					let userId = link.attr("userId") || "unknown";
+					let brandId = link.attr("customerId") || "unknown";
 					let href = link.attr("href") || "#";
 
 					$("#modalMessage").text(
-							"Are you sure you want to delete user ID " + userId
-									+ "?");
+							"Are you sure you want to delete customer ID "
+									+ brandId + "?");
 					$("#deleteButton").attr("href", href);
 
 					$("#confirmModal").modal("show");

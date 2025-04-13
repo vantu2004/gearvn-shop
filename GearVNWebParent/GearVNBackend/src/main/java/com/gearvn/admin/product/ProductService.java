@@ -7,11 +7,10 @@ import java.util.NoSuchElementException;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import com.gearvn.admin.paging.PagingAndSortingHelper;
 import com.gearvn.common.entity.Product;
 
 import jakarta.validation.Valid;
@@ -26,31 +25,29 @@ public class ProductService {
 		return this.productRepository.findAll();
 	}
 
-	public Page<Product> getAllProduct_pageable(int currentPage, String sortField, String sortType, String keyword,
-			Integer inputSearchCategoryId) {
-		Sort sort = Sort.by(sortField);
-		sort = sortType.equals("asc") ? sort.ascending() : sort.descending();
+	public void getAllProduct_pageable(int currentPage, PagingAndSortingHelper helper, Integer inputSearchCategoryId) {
+		Pageable pageable = helper.createPageable(currentPage, PRODUCTS_PER_PAGE);
+		System.out.println("Keyword: " + helper.getKeyword());
+		Page<Product> page = null;
 
-		Pageable pageable = PageRequest.of(currentPage - 1, PRODUCTS_PER_PAGE, sort);
-
-		if (!StringUtils.isBlank(keyword)) {
+		if (!StringUtils.isBlank(helper.getKeyword())) {
 			if (inputSearchCategoryId != null && inputSearchCategoryId > 0) {
 				String categoryIdMatch = "-" + inputSearchCategoryId.toString() + "-";
-				return this.productRepository.findAll(inputSearchCategoryId, categoryIdMatch, keyword, pageable);
+				page = this.productRepository.findAll(inputSearchCategoryId, categoryIdMatch, helper.getKeyword(),
+						pageable);
+			} else {
+				page = this.productRepository.findAll(helper.getKeyword(), pageable);
 			}
-			return this.productRepository.findAll(keyword, pageable);
+		} else {
+			if (inputSearchCategoryId != null && inputSearchCategoryId > 0) {
+				String categoryIdMatch = "-" + inputSearchCategoryId.toString() + "-";
+				page = this.productRepository.findAll(inputSearchCategoryId, categoryIdMatch, pageable);
+			} else {
+				page = this.productRepository.findAll(pageable);
+			}
 		}
-
-		/*
-		 * nếu để findAll khi keyword null/rỗng trong if trên thì nó sẽ chạy vào if trên
-		 * trc tiên thay vì chạy vào if này
-		 */
-		if (inputSearchCategoryId != null && inputSearchCategoryId > 0) {
-			String categoryIdMatch = "-" + inputSearchCategoryId.toString() + "-";
-			return this.productRepository.findAll(inputSearchCategoryId, categoryIdMatch, pageable);
-		}
-
-		return this.productRepository.findAll(pageable);
+		
+		helper.updateModelAttributes(currentPage, page);
 	}
 
 	public void handleSaveProduct(@Valid Product product) {
@@ -125,7 +122,7 @@ public class ProductService {
 			productInDb.setDiscountPercent(product.getDiscountPercent());
 
 			productInDb.setUpdatedTime(new Date());
-			
+
 			this.productRepository.save(productInDb);
 		}
 	}

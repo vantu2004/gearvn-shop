@@ -5,13 +5,11 @@ import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.gearvn.admin.paging.PagingAndSortingHelper;
 import com.gearvn.admin.user.repository.RoleRepository;
 import com.gearvn.admin.user.repository.UserRepository;
 import com.gearvn.common.entity.Role;
@@ -36,18 +34,8 @@ public class UserService {
 		return this.userRepository.findAll(Sort.by("firstName").ascending());
 	}
 
-	public Page<User> pagination_getAllUsers(int pageNumber, String sortField, String sortType, String keyword) {
-		Sort sort = Sort.by(sortField);
-		sort = sortType.equals("asc") ? sort.ascending() : sort.descending();
-
-		// pageNumber truyền vào ko bắt đầu từ 0 nên phải -1
-		Pageable pageable = PageRequest.of(pageNumber - 1, USER_PER_PAGE, sort);
-
-		if (keyword != null) {
-			return this.userRepository.findAll(keyword, pageable);
-		}
-
-		return this.userRepository.findAll(pageable);
+	public void pagination_getAllUsers(int pageNumber, PagingAndSortingHelper helper) {
+		helper.listEntitites(pageNumber, USER_PER_PAGE, userRepository);
 	}
 
 	public List<Role> getAllRoles() {

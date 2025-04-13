@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<!-- khai báo namespace th để có thể sử dụng các thuộc tính của thymeleaf -->
+<html xmlns:th="http://thymeleaf.org">
+
+<!-- Head -->
+<head th:replace="fragments :: page_head('Customer Details', 'none')"></head>
+<!-- Head -->
+
+<body>
+	<!-- Header -->
+	<header th:replace="fragments :: header"></header>
+	<!-- Header -->
+
+	<div class="container mt-5">
+		<nav aria-label="breadcrumb">
+			<ol class="breadcrumb">
+				<li class="breadcrumb-item"><a th:href="@{/customers}">Manage
+						Customers</a></li>
+				<li class="breadcrumb-item"><a
+					th:href="@{'/customers/detail/' + ${customer.id}}">Customer
+						Details</a></li>
+			</ol>
+		</nav>
+	</div>
+
+	<div class="container mt-3">
+		<h2>Customer Details | ID = [[${customer.id}]]</h2>
+	</div>
+
+	<div class="container mt-3">
+		<div class="mx-auto col-md-6">
+			<div class="form-group row">
+				<label for="email" class="col-sm-3 col-form-label">Email</label>
+				<div class="col-sm-9">
+					<input type="text" class="form-control" id="email" name="email"
+						th:value="${customer.email}" readonly placeholder="Email">
+				</div>
+			</div>
+
+			<div class="form-group row">
+				<label for="firstName" class="col-sm-3 col-form-label">First
+					Name</label>
+				<div class="col-sm-9">
+					<input type="text" class="form-control" id="firstName"
+						name="firstName" th:value="${customer.firstName}" readonly
+						placeholder="First Name">
+				</div>
+			</div>
+
+			<div class="form-group row">
+				<label for="lastName" class="col-sm-3 col-form-label">Last
+					Name</label>
+				<div class="col-sm-9">
+					<input type="text" class="form-control" id="lastName"
+						name="lastName" th:value="${customer.lastName}" readonly
+						placeholder="Last Name">
+				</div>
+			</div>
+
+			<div class="form-group row">
+				<label for="phoneNumber" class="col-sm-3 col-form-label">Phone
+					Number</label>
+				<div class="col-sm-9">
+					<input type="text" class="form-control" id="phoneNumber"
+						name="phoneNumber" th:value="${customer.phoneNumber}" readonly
+						placeholder="Phone Number">
+				</div>
+			</div>
+
+			<div class="form-group row">
+				<label for="addressLine1" class="col-sm-3 col-form-label">Address
+					Line 1</label>
+				<div class="col-sm-9">
+					<input type="text" class="form-control" id="addressLine1"
+						name="addressLine1" th:value="${customer.addressLine1}" readonly
+						placeholder="Address Line 1">
+				</div>
+			</div>
+
+			<div class="form-group row">
+				<label for="addressLine2" class="col-sm-3 col-form-label">Address
+					Line 2</label>
+				<div class="col-sm-9">
+					<input type="text" class="form-control" id="addressLine2"
+						name="addressLine2" th:value="${customer.addressLine2}" readonly
+						placeholder="Address Line 2">
+				</div>
+			</div>
+
+			<div class="form-group row">
+				<label for="postalCode" class="col-sm-3 col-form-label">Postal
+					Code</label>
+				<div class="col-sm-9">
+					<input type="text" class="form-control" id="postalCode"
+						name="postalCode" th:value="${customer.postalCode}" readonly
+						placeholder="Postal Code">
+				</div>
+			</div>
+
+			<div class="form-group row">
+				<label for="country" class="col-sm-3 col-form-label">Country</label>
+				<div class="col-sm-9">
+					<input type="text" class="form-control" id="country" name="country"
+						th:value="${customer.country.name}" readonly placeholder="Country">
+				</div>
+			</div>
+
+			<div class="form-group row">
+				<label for="city" class="col-sm-3 col-form-label">City</label>
+				<div class="col-sm-9">
+					<input type="text" class="form-control" id="city" name="city"
+						th:value="${customer.city}" readonly placeholder="City">
+				</div>
+			</div>
+
+			<div class="form-group row">
+				<label for="state" class="col-sm-3 col-form-label">State/Province</label>
+				<div class="col-sm-9">
+					<input type="text" class="form-control" id="state" name="state"
+						th:value="${customer.state}" readonly placeholder="State">
+				</div>
+			</div>
+
+			<div class="form-group row">
+				<div class="col-sm-3">Enabled</div>
+				<div class="col-sm-9">
+					<div class="form-check">
+						<input class="form-check-input" type="checkbox"
+							th:checked="${customer.enabled}" disabled>
+					</div>
+				</div>
+			</div>
+
+			<div class="form-group row">
+				<label for="createdTime" class="col-sm-3 col-form-label">Created
+					Time</label>
+				<div class="col-sm-9">
+					<input type="text" class="form-control" id="createdTime"
+						name="createdTime" th:value="${#dates.format(customer.createdTime, 'yyyy-MM-dd HH:mm:ss')}"
+						readonly placeholder="Created Time">
+				</div>
+			</div>
+
+			<div class="form-group row">
+				<div class="col-sm-12 d-flex justify-content-end">
+					<a th:href="@{/customers}" class="btn btn-secondary">Back</a>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- Modal -->
+	<div th:replace="modal_fragments :: modal_dialog"></div>
+	<!-- Modal -->
+
+	<!-- Footer -->
+	<footer th:replace="fragments :: footer"></footer>
+	<!-- Footer -->
+
+	<script>
+		let checkDuplicateUrl = "[[ @{/categories/check_duplicate} ]]";
+
+		// upload image
+		let input = "#inputPhotos";
+		let inputPreview = "#inputPhotosPreview";
+	</script>
+
+	<script th:src="@{/js/common_form.js}"></script>
+
+</body>
+
+</html>

@@ -2,10 +2,14 @@ package com.gearvn.admin.security;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
 
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
+import com.gearvn.admin.paging.PagingAndSortingArgumentResolve;
 
 //	Đánh dấu class này là class cấu hình chức năng giống file XML
 @Configuration
@@ -36,6 +40,17 @@ public class WebMvcConfig implements WebMvcConfigurer {
 		// addResourceHandler cho quyền truy cập tài nguyên bên trong logicPath
 		// addResourceLocations chỉ định đường dẫn đến thư mục được cấp quyền
 		registry.addResourceHandler(logicalPath).addResourceLocations("file:/" + absolutePath + "/");
+	}
+
+	/*
+	 * Là một phương thức của interface WebMvcConfigurer, cho phép thêm các
+	 * HandlerMethodArgumentResolver tùy chỉnh vào danh sách mà Spring MVC sử dụng.
+	 * Là cách đăng ký thủ công một custom argument resolver với Spring MVC.
+	 */
+	@Override
+	public void addArgumentResolvers(List<HandlerMethodArgumentResolver> resolvers) {
+		// TODO Auto-generated method stub
+		resolvers.add(new PagingAndSortingArgumentResolve());
 	}
 
 }

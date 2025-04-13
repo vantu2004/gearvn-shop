@@ -4,8 +4,6 @@ import java.io.IOException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -19,6 +17,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import jakarta.servlet.http.HttpServletResponse;
 
 import com.gearvn.admin.common.UploadImageService;
+import com.gearvn.admin.paging.PagingAndSortingHelper;
+import com.gearvn.admin.paging.PagingAndSortingParam;
 import com.gearvn.admin.user.export.UserCsvExporter;
 import com.gearvn.admin.user.export.UserExcelExporter;
 import com.gearvn.admin.user.export.UserPdfExporter;
@@ -39,48 +39,15 @@ public class UserController {
 
 	// bắt buộc phải trả về String vì @GetMapping phải nhận tên template để render
 	@GetMapping("/users")
-	public String getFirstUserPage(Model model) {
-		return getUserPageByPageNumber(1, model, "firstName", "asc", null);
+	public String getFirstUserPage() {
+		return "redirect:/users/page/1?sortField=firstName&sortType=asc";
 	}
 
 	@GetMapping("/users/page/{pageNumber}")
-	public String getUserPageByPageNumber(@PathVariable("pageNumber") int pageNumber, Model model,
-			@Param("sortField") String sortField, @Param("sortType") String sortType,
-			@Param("keyword") String keyword) {
-		Page<User> paginationUsers = this.userService.pagination_getAllUsers(pageNumber, sortField, sortType, keyword);
-		List<User> listUsers = paginationUsers.getContent();
-
-		long totalElements = paginationUsers.getTotalElements();
-		long totalPages = paginationUsers.getTotalPages();
-
-		long startCount = (pageNumber - 1) * UserService.USER_PER_PAGE + 1;
-		long endCount = startCount + UserService.USER_PER_PAGE - 1;
-		if (endCount > totalElements) {
-			endCount = totalElements;
-		}
-
-		long startPage = (pageNumber - 2 < 1) ? 1 : pageNumber - 2;
-		long endPage = (pageNumber + 2 > totalPages) ? totalPages : pageNumber + 2;
-
-		model.addAttribute("listUsers", listUsers);
-
-		// pagination
-		model.addAttribute("totalElements", totalElements);
-		model.addAttribute("totalPages", totalPages);
-		model.addAttribute("currentPage", pageNumber);
-		model.addAttribute("startPage", startPage);
-		model.addAttribute("endPage", endPage);
-		model.addAttribute("startCount", startCount);
-		model.addAttribute("endCount", endCount);
-
-		// sort
-		String reverseSortType = sortType.equals("asc") ? "desc" : "asc";
-		model.addAttribute("sortField", sortField);
-		model.addAttribute("sortType", sortType);
-		model.addAttribute("reverseSortType", reverseSortType);
-
-		// filter
-		model.addAttribute("keyword", keyword);
+	public String getUserPageByPageNumber(@PathVariable("pageNumber") int pageNumber,
+			@PagingAndSortingParam(listName = "listUsers", moduleUrl = "/users") PagingAndSortingHelper helper) {
+		
+		this.userService.pagination_getAllUsers(pageNumber, helper);
 
 		return "users/users";
 	}
@@ -146,14 +113,14 @@ public class UserController {
 			throws Exception {
 
 		User oldUser = this.userService.getUserById(user.getId());
-		
+
 		// validation
 		if (newUserBindingResult.hasErrors()) {
 			List<Role> listRoles = this.userService.getAllRoles();
 			model.addAttribute("listRoles", listRoles);
 
 			user.setPhotos(oldUser.getPhotos());
-			
+
 			return "users/admin_update_form";
 		}
 
@@ -187,12 +154,12 @@ public class UserController {
 			String targetFolder = "user-photos";
 			User user = this.userService.getUserById(id);
 			String fileName = user.getPhotos();
-			
+
 			this.userService.deleteUser(id);
 			if (fileName != null && !fileName.isEmpty()) {
 				this.uploadImageService.deletePhotos(targetFolder, fileName);
 			}
-			
+
 			redirectAttributes.addFlashAttribute("message", "The user ID " + id + " has been deleted successfully.");
 		} catch (Exception e) {
 			redirectAttributes.addFlashAttribute("message", "Could not find any user with id " + id);

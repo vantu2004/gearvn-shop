@@ -68,6 +68,8 @@ public class CategoryController {
 		model.addAttribute("startCount", startCount);
 		model.addAttribute("endCount", endCount);
 
+		model.addAttribute("moduleUrl", "/categories");
+		
 		// sortType
 		String reverseSortType = sortType.equals("asc") ? "desc" : "asc";
 		// mặc dù ko cần dùng bên list_categories nhưng vẫn truyền để refactor code (tận dụng fragments)

@@ -49,44 +49,72 @@
 								<th:block th:replace="products/product_fragments :: overview"></th:block>
 							</div>
 
+							<!-- khi user có ít nhất 1 trong 2 role admin/editor thì cho hiện product_fragments 
+							và chỉ hiện readonly_product_fragments khi ko user ko chứa role nào trong admin/editor 
+							(nghĩa là chỉ có role salePersons) -->
 							<div class="tab-pane fade" id="description" role="tabpanel">
 								<!-- role admin/editor -->
-								<th:block th:replace="products/product_fragments :: description"
-									sec:authorize="hasAnyAuthority('Admin', 'Editor')"></th:block>
+								<th:block
+									th:if="${#authorization.expression('hasAuthority(''Admin'')') || #authorization.expression('hasAuthority(''Editor'')')}">
+									<th:block
+										th:replace="products/product_fragments :: description"></th:block>
+								</th:block>
+
 								<!-- role salesperson -->
 								<th:block
-									th:replace="products/readonly_product_fragments :: description"
-									sec:authorize="hasAnyAuthority('Salesperson')"></th:block>
+									th:if="${!#authorization.expression('hasAuthority(''Admin'')') && !#authorization.expression('hasAuthority(''Editor'')')}">
+									<th:block
+										th:if="${#authorization.expression('hasAuthority(''Salesperson'')')}"
+										th:replace="products/readonly_product_fragments :: description"></th:block>
+								</th:block>
 							</div>
 
 							<div class="tab-pane fade" id="images" role="tabpanel">
 								<!-- role admin/editor -->
-								<th:block th:replace="products/product_fragments :: images"
-									sec:authorize="hasAnyAuthority('Admin', 'Editor')"></th:block>
+								<th:block
+									th:if="${#authorization.expression('hasAuthority(''Admin'')') || #authorization.expression('hasAuthority(''Editor'')')}">
+									<th:block th:replace="products/product_fragments :: images"></th:block>
+								</th:block>
+
 								<!-- role salesperson -->
 								<th:block
-									th:replace="products/readonly_product_fragments :: images"
-									sec:authorize="hasAnyAuthority('Salesperson')"></th:block>
+									th:if="${!#authorization.expression('hasAuthority(''Admin'')') && !#authorization.expression('hasAuthority(''Editor'')')}">
+									<th:block
+										th:if="${#authorization.expression('hasAuthority(''Salesperson'')')}"
+										th:replace="products/readonly_product_fragments :: images"></th:block>
+								</th:block>
 							</div>
 
 							<div class="tab-pane fade" id="details" role="tabpanel">
 								<!-- role admin/editor -->
-								<th:block th:replace="products/product_fragments :: details"
-									sec:authorize="hasAnyAuthority('Admin', 'Editor')"></th:block>
+								<th:block
+									th:if="${#authorization.expression('hasAuthority(''Admin'')') || #authorization.expression('hasAuthority(''Editor'')')}">
+									<th:block th:replace="products/product_fragments :: details"></th:block>
+								</th:block>
+
 								<!-- role salesperson -->
 								<th:block
-									th:replace="products/readonly_product_fragments :: details"
-									sec:authorize="hasAnyAuthority('Salesperson')"></th:block>
+									th:if="${!#authorization.expression('hasAuthority(''Admin'')') && !#authorization.expression('hasAuthority(''Editor'')')}">
+									<th:block
+										th:if="${#authorization.expression('hasAuthority(''Salesperson'')')}"
+										th:replace="products/readonly_product_fragments :: details"></th:block>
+								</th:block>
 							</div>
 
 							<div class="tab-pane fade" id="shipping" role="tabpanel">
 								<!-- role admin/editor -->
-								<th:block th:replace="products/product_fragments :: shipping"
-									sec:authorize="hasAnyAuthority('Admin', 'Editor')"></th:block>
+								<th:block
+									th:if="${#authorization.expression('hasAuthority(''Admin'')') || #authorization.expression('hasAuthority(''Editor'')')}">
+									<th:block th:replace="products/product_fragments :: shipping"></th:block>
+								</th:block>
+
 								<!-- role salesperson -->
 								<th:block
-									th:replace="products/readonly_product_fragments :: shipping"
-									sec:authorize="hasAnyAuthority('Salesperson')"></th:block>
+									th:if="${!#authorization.expression('hasAuthority(''Admin'')') && !#authorization.expression('hasAuthority(''Editor'')')}">
+									<th:block
+										th:if="${#authorization.expression('hasAuthority(''Salesperson'')')}"
+										th:replace="products/readonly_product_fragments :: shipping"></th:block>
+								</th:block>
 							</div>
 
 						</div>

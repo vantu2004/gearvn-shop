@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,6 +19,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.gearvn.admin.brand.BrandService;
 import com.gearvn.admin.category.CategoryService;
 import com.gearvn.admin.common.UploadImageService;
+import com.gearvn.admin.paging.PagingAndSortingHelper;
+import com.gearvn.admin.paging.PagingAndSortingParam;
 import com.gearvn.admin.security.GearvnUserDetails;
 import com.gearvn.common.entity.Brand;
 import com.gearvn.common.entity.Category;
@@ -39,63 +40,28 @@ public class ProductController {
 
 	@Autowired
 	private UploadImageService uploadImageService;
-	
+
 	@Autowired
 	private CategoryService categoryService;
-	
+
 	@Autowired
 	private ProductSaveHelper productSaveHelper;
 
 	@GetMapping("/products")
 	public String getProductsFirstPage(Model model) {
-		return getProductPage_pageable(1, model, "asc", "name", null, null);
+		// return getProductPage_pageable(1, model, "asc", "name", null, null);
+		return "redirect:/products/page/1?sortField=name&sortType=asc";
 	}
 
 	@GetMapping("/products/page/{currentPage}")
-	public String getProductPage_pageable(@PathVariable("currentPage") int currentPage, Model model,
-			@RequestParam("sortType") String sortType, @RequestParam("sortField") String sortField,
-			@RequestParam(name = "keyword", required = false) String keyword,
+	public String getProductPage_pageable(Model model, @PathVariable("currentPage") int currentPage,
+			@PagingAndSortingParam(listName = "listProducts", moduleUrl = "/products") PagingAndSortingHelper helper,
 			@RequestParam(name = "inputSearchCategoryId", required = false) Integer inputSearchCategoryId) {
 
-		Page<Product> pageableProducts = this.productService.getAllProduct_pageable(currentPage, sortField, sortType,
-				keyword, inputSearchCategoryId);
-		List<Product> listProducts = pageableProducts.getContent();
-
-		int totalPages = pageableProducts.getTotalPages();
-		long totalElements = pageableProducts.getTotalElements();
-
-		long startCount = (currentPage - 1) * ProductService.PRODUCTS_PER_PAGE + 1;
-		long endCount = startCount + ProductService.PRODUCTS_PER_PAGE - 1;
-		if (endCount > totalElements) {
-			endCount = totalElements;
-		}
-
-		long startPage = (currentPage - 2 < 1) ? 1 : currentPage - 2;
-		long endPage = (currentPage + 2 > totalPages) ? totalPages : currentPage + 2;
+		this.productService.getAllProduct_pageable(currentPage, helper, inputSearchCategoryId);
 
 		List<Category> categories = this.categoryService.getAllCategories("asc");
 
-		model.addAttribute("listProducts", listProducts);
-
-		// pagination
-		model.addAttribute("totalElements", totalElements);
-		model.addAttribute("totalPages", totalPages);
-		model.addAttribute("currentPage", currentPage);
-		model.addAttribute("startPage", startPage);
-		model.addAttribute("endPage", endPage);
-		model.addAttribute("startCount", startCount);
-		model.addAttribute("endCount", endCount);
-
-		// sortType
-		String reverseSortType = sortType.equals("asc") ? "desc" : "asc";
-		// mặc dù ko cần dùng bên list_categories nhưng vẫn truyền để refactor code (tận
-		// dụng fragments)
-		model.addAttribute("sortField", sortField);
-		model.addAttribute("sortType", sortType);
-		model.addAttribute("reverseSortType", reverseSortType);
-
-		// filter with keyword
-		model.addAttribute("keyword", keyword);
 		// filter with category
 		model.addAttribute("categories", categories);
 
@@ -138,7 +104,9 @@ public class ProductController {
 			@AuthenticationPrincipal GearvnUserDetails gearvnUserDetails) {
 
 		// trường hợp Salesperson update cost/price/discountPercent
-		if (gearvnUserDetails.hasRole("Salesperson")) {
+		if (gearvnUserDetails.hasRole("Salesperson") && !gearvnUserDetails.hasRole("Admin")
+				&& !gearvnUserDetails.hasRole("Editor")) {
+
 			return this.productSaveHelper.updateProductBySalesperson(product, model, redirectAttributes);
 		}
 
@@ -160,7 +128,8 @@ public class ProductController {
 		 * khiến cho bất kỳ row giá trị nào trước đó trong images/productDetails ko còn
 		 * đc tham chiếu sẽ tự động xóa khỏi db
 		 */
-		this.productSaveHelper.handleExtraImages(extraMultipartFile, extraImageIds, extraImageNames, targetFolder, product, existingProduct);
+		this.productSaveHelper.handleExtraImages(extraMultipartFile, extraImageIds, extraImageNames, targetFolder,
+				product, existingProduct);
 		this.productSaveHelper.setProductDetails(detailIds, detailNames, detailValues, product);
 
 		productService.handleSaveProduct(product);
@@ -204,6 +173,8 @@ public class ProductController {
 	public String getUpdateProductPage(@PathVariable("id") Integer id, Model model,
 			RedirectAttributes redirectAttributes) {
 		try {
+			System.out.println("im here");
+
 			Product product = this.productService.getProductById(id);
 			List<Brand> listBrands = this.brandService.getAllBrands();
 
@@ -231,7 +202,7 @@ public class ProductController {
 			return "redirect:/products";
 		}
 	}
-	
+
 	@GetMapping("/products/export/csv")
 	public void exportToCSV(HttpServletResponse response) throws IOException {
 		List<Product> listProducts = this.productService.getAllProducts();
