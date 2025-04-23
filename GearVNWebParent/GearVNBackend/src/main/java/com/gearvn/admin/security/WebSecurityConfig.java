@@ -91,12 +91,16 @@ public class WebSecurityConfig {
 
 				.anyRequest().authenticated())
 
-				.formLogin(formLogin -> formLogin.loginPage("/login").usernameParameter("email").permitAll())
-				// .defaultSuccessUrl("/", true).failureUrl("/login?error=true"))
+				.formLogin(formLogin -> formLogin.loginPage("/login").usernameParameter("email").permitAll()
+				.defaultSuccessUrl("/", true).failureUrl("/login?error=true"))
 
 				.sessionManagement((sessionManagement) -> sessionManagement
+						// luôn tạo session cho mọi request
 						.sessionCreationPolicy(SessionCreationPolicy.ALWAYS).invalidSessionUrl("/logout?expired")
-						// tối đa 1 thiết bị đăng nhập
+						/*
+						 * tối đa 1 thiết bị đăng nhập trong 1 tài khoản, kết hợp đoạn dưới để cho biết
+						 * có nên đá tài khoản còn lại ra không
+						 */
 						.maximumSessions(1)
 						// thiết bị khác đăng nhập đá thiết bị đã đăng nhập
 						.maxSessionsPreventsLogin(false))

@@ -1,5 +1,6 @@
 package com.gearvn.common.entity;
 
+import java.io.Serializable;
 import java.util.Set;
 
 import jakarta.persistence.Column;
@@ -24,18 +25,24 @@ import lombok.ToString;
 @Builder
 @ToString
 @Table(name = "countries")
-public class Country {
+// session đang cố lưu customer vì customer có Customer và session cần convert sang mảng byte[]
+public class Country implements Serializable {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
-	
+
 	@Column(nullable = false, length = 45)
 	private String name;
-	
+
 	@Column(nullable = false, length = 45)
 	private String code;
-	
+
 	@OneToMany(mappedBy = "country")
 	private Set<State> states;
 }

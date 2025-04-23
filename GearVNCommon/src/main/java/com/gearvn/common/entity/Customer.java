@@ -1,10 +1,13 @@
 package com.gearvn.common.entity;
 
+import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -30,13 +33,18 @@ import lombok.ToString;
 @AllArgsConstructor
 @ToString
 @Table(name = "customers")
-public class Customer {
+//session đang cố lưu customer dạng byte[], phải serilize luôn Country
+public class Customer implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 
 	@Column(nullable = false, unique = true, length = 45)
-	@Size(min = 6, max = 45)
 	@NotBlank
 	@Email(message = "Email is not valid", regexp = "^[a-zA-Z0-9_!#$%&'*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$")
 	private String email;
@@ -70,12 +78,12 @@ public class Customer {
 	private String addressLine2;
 
 	@Column(nullable = false, length = 45)
-	@Size(min = 6, max = 45)
+	@Size(min = 2, max = 45)
 	@NotBlank
 	private String city;
 
 	@Column(nullable = false, length = 45)
-	@Size(min = 6, max = 45)
+	@Size(min = 2, max = 45)
 	@NotBlank
 	private String state;
 
@@ -95,27 +103,33 @@ public class Customer {
 	@ManyToOne
 	@JoinColumn(name = "country_id")
 	private Country country;
+	
+	@Enumerated(EnumType.STRING)
+	@Column(name = "authentication_type", length = 10)
+	private AuthenticationType authenticationType;
 
 	// dùng cho xuất csv
 	@jakarta.persistence.Transient
 	private String countryNameCsv;
 	@jakarta.persistence.Transient
 	private String createdTimeCsv;
-	
-	public CharSequence getFullName() {
+
+	@Transient
+	public String getFullName() {
 		// TODO Auto-generated method stub
 		return this.firstName + " " + this.lastName;
 	}
-	
+
 	@Transient
 	public String getCountryNameCsv() {
-	    return country != null ? country.getName() : "";
+		return country != null ? country.getName() : "";
 	}
 
 	@Transient
 	public String getCreatedTimeCsv() {
-	    if (createdTime == null) return "";
-	    return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(createdTime);
+		if (createdTime == null)
+			return "";
+		return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(createdTime);
 	}
 
 }

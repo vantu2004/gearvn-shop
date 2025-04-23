@@ -8,6 +8,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>[[${title}]]</title>
 
+<link rel="icon" type="image/svg+xml" href="images/gearvn.svg">
+
 <link rel="stylesheet" type="text/css"
 	th:href="@{/webjars/bootstrap/css/bootstrap.min.css}">
 <link rel="stylesheet"
@@ -162,7 +164,7 @@ body {
 								<li class="nav-item dropdown"><a
 									class="nav-link dropdown-toggle" href="#" role="button"
 									data-bs-toggle="dropdown" aria-expanded="false"> <i
-										class="fas fa-cog fa-lg"></i>
+										class="fas fa-cog fa-spin"></i>
 								</a>
 									<ul class="dropdown-menu dropdown-menu-end">
 										<li><a class="dropdown-item"
@@ -186,7 +188,7 @@ body {
 							<li class="nav-item dropdown"><a
 								class="nav-link dropdown-toggle" href="#" role="button"
 								data-bs-toggle="dropdown" aria-expanded="false"> <i
-									class="fas fa-user fa-lg"></i>
+									class="fas fa-user"></i>
 							</a>
 								<ul class="dropdown-menu dropdown-menu-end text-center">
 									<li><a class="dropdown-item"> <img
@@ -228,7 +230,7 @@ body {
 							<th:block sec:authorize="hasAnyAuthority('Admin', 'Editor')">
 								<!-- Menu -->
 								<li class="nav-item"><a class="nav-link" href="#"><i
-										class="fas fa-ellipsis-h fa-lg"></i></a></li>
+										class="fas fa-bars"></i></a></li>
 							</th:block>
 						</ul>
 					</div>

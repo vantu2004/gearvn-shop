@@ -99,9 +99,6 @@ public class CustomerController {
 		helper.setText(content, true);
 
 		javaMailSenderImpl.send(message);
-
-		System.out.println("to Address: " + toAddress);
-		System.out.println("Verify URL: " + verifyURL);
 	}
 
 	@GetMapping("/customers/verify")

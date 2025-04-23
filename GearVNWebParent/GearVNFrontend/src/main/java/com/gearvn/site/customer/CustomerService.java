@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.gearvn.common.entity.AuthenticationType;
 import com.gearvn.common.entity.Country;
 import com.gearvn.common.entity.Customer;
 import com.gearvn.site.country.CountryRepository;
@@ -36,6 +37,7 @@ public class CustomerService {
 		customer.setEnabled(false);
 		customer.setCreatedTime(new Date());
 		customer.setVerificationCode(generateVerificationCode());
+		customer.setAuthenticationType(AuthenticationType.DATABASE);
 
 		this.customerRepository.save(customer);
 	}
@@ -69,4 +71,54 @@ public class CustomerService {
 			return true;
 		}
 	}
+
+	public void updateAuthenticationType(Customer customer, AuthenticationType authenticationType) {
+		if (!customer.getAuthenticationType().equals(authenticationType)) {
+			this.customerRepository.updateAuthenticationType(customer.getId(), authenticationType);
+		}
+	}
+
+	public Customer getCustomerByEmail(String email) {
+		// TODO Auto-generated method stub
+		return this.customerRepository.findByEmail(email);
+	}
+
+	public void addNewCustomerByGoggleInfo(String name, String email, String countryCode,
+			AuthenticationType authenticationType) {
+		Customer customer = new Customer();
+		customer.setEmail(email);
+		customer.setPassword("******");
+
+		setName(name, customer);
+
+		customer.setPhoneNumber("******");
+		customer.setAddressLine1("******");
+		customer.setAddressLine2("******");
+		customer.setCity("******");
+		customer.setState("******");
+		customer.setPostalCode("******");
+		customer.setEnabled(true);
+		customer.setCreatedTime(new Date());
+		customer.setVerificationCode("******");
+		customer.setAuthenticationType(authenticationType);
+		customer.setCountry(this.countryRepository.findByCode(countryCode));
+
+		this.customerRepository.save(customer);
+	}
+
+	private void setName(String name, Customer customer) {
+		// TODO Auto-generated method stub
+		String[] names = name.split(" ");
+		if (names.length < 2) {
+			customer.setFirstName(name);
+			customer.setLastName("******");
+		} else {
+			String firstName = names[0];
+			String lastName = name.replaceFirst(firstName + " ", "");
+
+			customer.setFirstName(firstName);
+			customer.setLastName(lastName);
+		}
+	}
+
 }

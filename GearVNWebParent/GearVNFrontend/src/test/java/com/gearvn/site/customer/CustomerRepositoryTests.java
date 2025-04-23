@@ -14,6 +14,7 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.annotation.Rollback;
 
+import com.gearvn.common.entity.AuthenticationType;
 import com.gearvn.common.entity.Country;
 import com.gearvn.common.entity.Customer;
 
@@ -24,7 +25,7 @@ public class CustomerRepositoryTests {
 
 	@Autowired
 	private CustomerRepository customerRepository;
-
+	
 	private static final List<Integer> customerIds = new ArrayList<>();
 
 	@Test
@@ -87,4 +88,15 @@ public class CustomerRepositoryTests {
 
 		assertThat(customer).isNotNull();
 	}
+
+	@Test
+	public void testUpdateAuthenticationType() {
+		this.customerRepository.updateAuthenticatioType(2, AuthenticationType.DATABASE);
+
+		Customer customer = this.customerRepository.findById(2).orElse(null);
+
+		assertThat(customer).isNotNull();
+		assertThat(customer.getAuthenticationType()).isEqualTo(AuthenticationType.DATABASE);
+	}
+	
 }

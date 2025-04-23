@@ -31,6 +31,7 @@ import lombok.ToString;
 @Builder
 @Table(name = "users")
 @ToString
+//session đang cố lưu user dạng byte[]
 public class User implements Serializable {
 
 	/**
