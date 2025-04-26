@@ -18,7 +18,7 @@ import jakarta.validation.Valid;
 
 @Service
 public class ProductSaveHelper {
-	
+
 	@Autowired
 	private ProductService productService;
 
@@ -27,9 +27,9 @@ public class ProductSaveHelper {
 
 	@Autowired
 	private UploadImageService uploadImageService;
-	
-	public String updateProductBySalesperson(@Valid Product product, Model model,
-			RedirectAttributes redirectAttributes) {
+
+	public String updateProductBySalesperson(@Valid Product product, Model model, RedirectAttributes redirectAttributes,
+			boolean isReadOnlyForSalesperson) {
 		// nếu 1 trong 3 field đc update <= 0 thì chuyển về trang update
 		Product p = this.productService.getProductById(product.getId());
 		if (product.getCost() <= 0 || product.getPrice() <= 0 || product.getDiscountPercent() < 0) {
@@ -47,6 +47,8 @@ public class ProductSaveHelper {
 			model.addAttribute("discountError", discountError);
 
 			model.addAttribute("listBrands", brandService.getAllBrands());
+			
+			model.addAttribute("isReadOnlyForSalesperson", isReadOnlyForSalesperson);
 
 			return "products/create_product";
 		}

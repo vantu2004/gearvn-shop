@@ -30,7 +30,7 @@
 							</div>
 
 <form th:action="@{/customers/save}" method="post" th:object="${customer}" onsubmit="return checkDuplicateEmail(this)">
-    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+    <input type="hidden" name="${_csrf.parameterName}" th:value="${_csrf.token}" />
 
     <div class="row justify-content-center">
         <!-- Cột 1 -->

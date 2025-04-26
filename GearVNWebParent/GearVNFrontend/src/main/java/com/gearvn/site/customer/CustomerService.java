@@ -2,6 +2,7 @@ package com.gearvn.site.customer;
 
 import java.util.Date;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,6 +53,8 @@ public class CustomerService {
 
 		customer.setEnabled(oldCustomer.isEnabled());
 		customer.setCreatedTime(oldCustomer.getCreatedTime());
+		customer.setVerificationCode(oldCustomer.getVerificationCode());
+		customer.setResetPasswordToken(oldCustomer.getResetPasswordToken());
 
 		this.customerRepository.save(customer);
 	}
@@ -134,4 +137,35 @@ public class CustomerService {
 		}
 	}
 
+	public String updateResetPasswordToken(String email) {
+		// TODO Auto-generated method stub
+		Customer customer = this.getCustomerByEmail(email);
+		if (customer != null) {
+			String token = generateVerificationCode();
+			customer.setResetPasswordToken(token);
+
+			this.customerRepository.save(customer);
+
+			return token;
+		} else {
+			throw new NoSuchElementException("Could not find any customer with the email " + email);
+		}
+	}
+
+	public Customer getCustomerByResetPasswordToken(String token) {
+		return this.customerRepository.findByResetPasswordToken(token);
+	}
+
+	public void handleResetPassword(String token, String password) {
+		Customer customer = this.getCustomerByResetPasswordToken(token);
+		if (customer != null) {
+			customer.setPassword(password);
+			this.encodePassword(customer);
+			customer.setResetPasswordToken(null);
+			
+			this.customerRepository.save(customer);
+		} else {
+			throw new NoSuchElementException("No customer found: Invalid token.");
+		}
+	}
 }

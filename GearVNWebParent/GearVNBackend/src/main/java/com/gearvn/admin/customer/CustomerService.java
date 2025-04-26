@@ -30,7 +30,7 @@ public class CustomerService {
 	}
 
 	public void getAllCustomersPageable(int currentPage, PagingAndSortingHelper helper) {
-		 helper.listEntitites(currentPage, CUSTOMERS_PER_PAGE, customerRepository);
+		helper.listEntitites(currentPage, CUSTOMERS_PER_PAGE, customerRepository);
 	}
 
 	public Customer getCustomerById(Integer id) {
@@ -67,6 +67,8 @@ public class CustomerService {
 
 		customerInForm.setCreatedTime(customerInDB.getCreatedTime());
 		customerInForm.setVerificationCode(customerInDB.getVerificationCode());
+		customerInForm.setAuthenticationType(customerInDB.getAuthenticationType());
+		customerInForm.setResetPasswordToken(customerInDB.getResetPasswordToken());
 
 		this.customerRepository.save(customerInForm);
 	}

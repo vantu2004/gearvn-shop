@@ -9,6 +9,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -47,10 +48,11 @@ public class ProductController {
 	@Autowired
 	private ProductSaveHelper productSaveHelper;
 
+	private String getLinkProductsFirstPage = "redirect:/products/page/1?sortField=name&sortType=asc";
+
 	@GetMapping("/products")
 	public String getProductsFirstPage(Model model) {
-		// return getProductPage_pageable(1, model, "asc", "name", null, null);
-		return "redirect:/products/page/1?sortField=name&sortType=asc";
+		return getLinkProductsFirstPage;
 	}
 
 	@GetMapping("/products/page/{currentPage}")
@@ -74,11 +76,14 @@ public class ProductController {
 	}
 
 	@GetMapping("/products/create")
-	public String getCreateProductPage(Model model) {
+	public String getCreateProductPage(Model model, @AuthenticationPrincipal GearvnUserDetails gearvnUserDetails) {
 		List<Brand> listBrands = this.brandService.getAllBrands();
+
+		boolean isReadOnlyForSalesperson = isOnlySalespersonRole(gearvnUserDetails);
 
 		model.addAttribute("product", new Product());
 		model.addAttribute("listBrands", listBrands);
+		model.addAttribute("isReadOnlyForSalesperson", isReadOnlyForSalesperson);
 
 		return "products/create_product";
 	}
@@ -103,21 +108,39 @@ public class ProductController {
 			@RequestParam(name = "extraImageNames", required = false) String[] extraImageNames,
 			@AuthenticationPrincipal GearvnUserDetails gearvnUserDetails) {
 
+		boolean isReadOnlyForSalesperson = isOnlySalespersonRole(gearvnUserDetails);
+
 		// trường hợp Salesperson update cost/price/discountPercent
 		if (gearvnUserDetails.hasRole("Salesperson") && !gearvnUserDetails.hasRole("Admin")
 				&& !gearvnUserDetails.hasRole("Editor")) {
 
-			return this.productSaveHelper.updateProductBySalesperson(product, model, redirectAttributes);
-		}
-
-		// Kiểm tra lỗi validation, nếu có thì quay lại trang tạo sản phẩm
-		if (bindingResult.hasErrors()) {
-			model.addAttribute("listBrands", this.brandService.getAllBrands());
-			return "products/create_product";
+			return this.productSaveHelper.updateProductBySalesperson(product, model, redirectAttributes,
+					isReadOnlyForSalesperson);
 		}
 
 		// Nếu sản phẩm đã tồn tại (có ID), lấy sản phẩm từ database
 		Product existingProduct = product.getId() != null ? productService.getProductById(product.getId()) : null;
+		
+		// Kiểm tra lỗi validation, nếu có thì quay lại trang tạo sản phẩm
+		if (bindingResult.hasErrors()) {
+			String errorMessages = "";
+			for (FieldError error : bindingResult.getFieldErrors()) {
+				errorMessages += error.getField() + ": " + error.getDefaultMessage() + "<br>";
+			}
+
+			// phải add lại product để đảm bảo load lại ảnh khi lỗi
+			if (existingProduct != null) {
+				model.addAttribute("product", existingProduct);
+			}
+			
+			model.addAttribute("listBrands", this.brandService.getAllBrands());
+			model.addAttribute("errorMessages", errorMessages);
+
+			model.addAttribute("isReadOnlyForSalesperson", isReadOnlyForSalesperson);
+
+			return "products/create_product";
+		}
+
 		// Thư mục lưu ảnh sản phẩm
 		String targetFolder = "../product-images";
 
@@ -135,7 +158,8 @@ public class ProductController {
 		productService.handleSaveProduct(product);
 
 		redirectAttributes.addFlashAttribute("message", "The product has been saved successfully.");
-		return "redirect:/products";
+		// nếu redirect về /products thì sẽ redirect 2 lần --> mất message
+		return getLinkProductsFirstPage;
 	}
 
 	@GetMapping("/products/delete/{id}")
@@ -166,26 +190,40 @@ public class ProductController {
 			redirectAttributes.addFlashAttribute("message", e.getMessage());
 		}
 
-		return "redirect:/products";
+		// nếu redirect về /products thì sẽ redirect 2 lần --> mất message
+		return getLinkProductsFirstPage;
 	}
 
 	@GetMapping("/products/update/{id}")
 	public String getUpdateProductPage(@PathVariable("id") Integer id, Model model,
-			RedirectAttributes redirectAttributes) {
+			RedirectAttributes redirectAttributes, @AuthenticationPrincipal GearvnUserDetails gearvnUserDetails) {
 		try {
-			System.out.println("im here");
-
 			Product product = this.productService.getProductById(id);
 			List<Brand> listBrands = this.brandService.getAllBrands();
 
+			boolean isReadOnlyForSalesperson = isOnlySalespersonRole(gearvnUserDetails);
+
 			model.addAttribute("product", product);
 			model.addAttribute("listBrands", listBrands);
+			model.addAttribute("isReadOnlyForSalesperson", isReadOnlyForSalesperson);
 
 			return "products/create_product";
 		} catch (Exception e) {
 			redirectAttributes.addFlashAttribute("message", e.getMessage());
-			return "redirect:/products";
+			// nếu redirect về /products thì sẽ redirect 2 lần --> mất message
+			return getLinkProductsFirstPage;
 		}
+	}
+
+	private boolean isOnlySalespersonRole(GearvnUserDetails gearvnUserDetails) {
+		// kiểm tra trường hợp user chỉ có đúng 1 role là Salasperson
+		boolean isReadOnlyForSalesperson = false;
+		if (!gearvnUserDetails.hasRole("Admin") && !gearvnUserDetails.hasRole("Editor")) {
+			if (gearvnUserDetails.hasRole("Salesperson")) {
+				isReadOnlyForSalesperson = true;
+			}
+		}
+		return isReadOnlyForSalesperson;
 	}
 
 	@GetMapping("/products/detail/{id}")
@@ -199,7 +237,8 @@ public class ProductController {
 			return "products/view_product";
 		} catch (Exception e) {
 			redirectAttributes.addFlashAttribute("message", e.getMessage());
-			return "redirect:/products";
+			// nếu redirect về /products thì sẽ redirect 2 lần --> mất message
+			return getLinkProductsFirstPage;
 		}
 	}
 

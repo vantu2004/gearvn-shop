@@ -18,6 +18,21 @@
 	<header th:replace="fragments :: header"></header>
 	<!-- Header -->
 
+	<!-- message -->
+	<div th:if="${errorMessages != null}"
+		class="toast show position-fixed top-0 end-0 m-3 "
+		data-bs-delay="5000" data-bs-autohide="true"
+		style="z-index: 1055; min-width: 300px;">
+		<div class="toast-header">
+			<strong class="me-auto">Message</strong>
+			<button type="button" class="btn-close" data-bs-dismiss="toast"></button>
+		</div>
+		<div class="toast-body text-danger">
+			<p th:utext="${errorMessages}"></p>
+		</div>
+	</div>
+	<!-- message -->
+
 	<div class="container">
 		<div class="row flex-nowrap">
 			<!-- Tabs dọc -->
@@ -54,65 +69,53 @@
 							(nghĩa là chỉ có role salePersons) -->
 							<div class="tab-pane fade" id="description" role="tabpanel">
 								<!-- role admin/editor -->
-								<th:block
-									th:if="${#authorization.expression('hasAuthority(''Admin'')') || #authorization.expression('hasAuthority(''Editor'')')}">
+								<th:block th:unless="${isReadOnlyForSalesperson}">
 									<th:block
 										th:replace="products/product_fragments :: description"></th:block>
 								</th:block>
 
 								<!-- role salesperson -->
-								<th:block
-									th:if="${!#authorization.expression('hasAuthority(''Admin'')') && !#authorization.expression('hasAuthority(''Editor'')')}">
+								<th:block th:if="${isReadOnlyForSalesperson}">
 									<th:block
-										th:if="${#authorization.expression('hasAuthority(''Salesperson'')')}"
 										th:replace="products/readonly_product_fragments :: description"></th:block>
 								</th:block>
 							</div>
 
 							<div class="tab-pane fade" id="images" role="tabpanel">
 								<!-- role admin/editor -->
-								<th:block
-									th:if="${#authorization.expression('hasAuthority(''Admin'')') || #authorization.expression('hasAuthority(''Editor'')')}">
+								<th:block th:unless="${isReadOnlyForSalesperson}">
 									<th:block th:replace="products/product_fragments :: images"></th:block>
 								</th:block>
 
 								<!-- role salesperson -->
-								<th:block
-									th:if="${!#authorization.expression('hasAuthority(''Admin'')') && !#authorization.expression('hasAuthority(''Editor'')')}">
+								<th:block th:if="${isReadOnlyForSalesperson}">
 									<th:block
-										th:if="${#authorization.expression('hasAuthority(''Salesperson'')')}"
 										th:replace="products/readonly_product_fragments :: images"></th:block>
 								</th:block>
 							</div>
 
 							<div class="tab-pane fade" id="details" role="tabpanel">
 								<!-- role admin/editor -->
-								<th:block
-									th:if="${#authorization.expression('hasAuthority(''Admin'')') || #authorization.expression('hasAuthority(''Editor'')')}">
+								<th:block th:unless="${isReadOnlyForSalesperson}">
 									<th:block th:replace="products/product_fragments :: details"></th:block>
 								</th:block>
 
 								<!-- role salesperson -->
-								<th:block
-									th:if="${!#authorization.expression('hasAuthority(''Admin'')') && !#authorization.expression('hasAuthority(''Editor'')')}">
+								<th:block th:if="${isReadOnlyForSalesperson}">
 									<th:block
-										th:if="${#authorization.expression('hasAuthority(''Salesperson'')')}"
 										th:replace="products/readonly_product_fragments :: details"></th:block>
 								</th:block>
 							</div>
 
 							<div class="tab-pane fade" id="shipping" role="tabpanel">
 								<!-- role admin/editor -->
-								<th:block
-									th:if="${#authorization.expression('hasAuthority(''Admin'')') || #authorization.expression('hasAuthority(''Editor'')')}">
+								<th:block th:unless="${isReadOnlyForSalesperson}">
 									<th:block th:replace="products/product_fragments :: shipping"></th:block>
 								</th:block>
 
 								<!-- role salesperson -->
-								<th:block
-									th:if="${!#authorization.expression('hasAuthority(''Admin'')') && !#authorization.expression('hasAuthority(''Editor'')')}">
+								<th:block th:if="${isReadOnlyForSalesperson}">
 									<th:block
-										th:if="${#authorization.expression('hasAuthority(''Salesperson'')')}"
 										th:replace="products/readonly_product_fragments :: shipping"></th:block>
 								</th:block>
 							</div>
@@ -170,6 +173,15 @@
 			// hàm post bên checkDuplicate chạy kiểu async nên phải return false để chặn hàm này lại cho hàm checkDuplicate xử lý
 			return false;
 		}
+
+		// đảm bảo toast tự động tắt
+		document.addEventListener('DOMContentLoaded', function() {
+			const toastElList = [].slice.call(document
+					.querySelectorAll('.toast'));
+			toastElList.forEach(function(toastEl) {
+				new bootstrap.Toast(toastEl).show();
+			});
+		});
 	</script>
 
 	<script th:src="@{/js/common_form.js}"></script>

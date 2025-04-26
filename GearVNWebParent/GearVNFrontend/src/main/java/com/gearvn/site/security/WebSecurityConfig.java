@@ -94,7 +94,7 @@ public class WebSecurityConfig {
 
 				.sessionManagement((sessionManagement) -> sessionManagement
 						// luôn tạo session cho mọi request
-						.sessionCreationPolicy(SessionCreationPolicy.ALWAYS).invalidSessionUrl("/logout?expired")
+						.sessionCreationPolicy(SessionCreationPolicy.ALWAYS).invalidSessionUrl("/")
 						/*
 						 * tối đa 1 thiết bị đăng nhập trong 1 tài khoản, kết hợp đoạn dưới để cho biết
 						 * có nên đá tài khoản còn lại ra không

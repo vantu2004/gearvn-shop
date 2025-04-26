@@ -31,7 +31,7 @@
 							<form th:action="@{/login}" method="post">
 								<div>
 									<input type="hidden" name="${_csrf.parameterName}"
-										value="${_csrf.token}" />
+										th:value="${_csrf.token}" />
 								</div>
 								<div class="mb-3">
 									<input type="email" id="typeEmailX" class="form-control"
@@ -67,7 +67,8 @@
 							</p>
 
 							<p class="small">
-								<a class="text-white" href="#">Forgot password?</a>
+								<a class="text-white" th:href="@{/forgot_password}">Forgot
+									password?</a>
 							</p>
 						</div>
 					</div>

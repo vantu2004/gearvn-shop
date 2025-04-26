@@ -215,7 +215,7 @@ body {
 										<form th:action="@{/logout}" method="post">
 											<div>
 												<input type="hidden" name="${_csrf.parameterName}"
-													value="${_csrf.token}" />
+													th:value="${_csrf.token}" />
 											</div>
 											<div class="dropdown-item text-center">
 												<button type=submit class="btn btn-danger w-100 text-white">
