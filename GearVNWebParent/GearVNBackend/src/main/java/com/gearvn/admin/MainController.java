@@ -20,9 +20,8 @@ public class MainController {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		/*
 		 * AnonymousAuthenticationToken được dùng khi người dùng chưa đăng nhập, nhưng
-		 * vẫn có một phiên bản authentication ẩn danh. Điều kiện này có nghĩa là: Nếu
-		 * người dùng chưa đăng nhập (ẩn danh), thì chuyển hướng về /, nhưng đáng lẽ chỉ
-		 * nên chuyển hướng nếu họ đã đăng nhập.
+		 * vẫn có một phiên bản authentication ẩn danh. trường hợp người dùng đã login
+		 * thì chuyển về home luôn tránh chuyển về login nữa
 		 */
 		if (authentication != null && !(authentication instanceof AnonymousAuthenticationToken)) {
 			return "redirect:/";

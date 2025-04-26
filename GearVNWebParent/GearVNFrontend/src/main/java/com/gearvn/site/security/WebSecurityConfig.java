@@ -81,7 +81,7 @@ public class WebSecurityConfig {
 				.requestMatchers("/", "/login", "/css/**", "/js/**", "/images/**", "/webjars/**").permitAll()
 
 				// đảm bảo admin/editor có full quyền với product
-				// .requestMatchers("/customers/**").authenticated()
+				.requestMatchers("/customers/update", "/customers/save-update").authenticated()
 
 				.anyRequest().permitAll())
 

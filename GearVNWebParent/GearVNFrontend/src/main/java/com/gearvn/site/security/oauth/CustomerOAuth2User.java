@@ -17,6 +17,7 @@ public class CustomerOAuth2User implements OAuth2User, Serializable {
 
 	private OAuth2User oAuth2User;
 	private String clientName;
+	private String fullName;
 
 	public CustomerOAuth2User(OAuth2User oAuth2User, String clientName) {
 		this.oAuth2User = oAuth2User;
@@ -38,7 +39,7 @@ public class CustomerOAuth2User implements OAuth2User, Serializable {
 	@Override
 	public String getName() {
 		// TODO Auto-generated method stub
-		return this.oAuth2User.getAttribute("name");
+		return this.fullName != null ? this.fullName : this.oAuth2User.getAttribute("name");
 	}
 
 	// dùng khi login gg, thêm 1 hàm bên GearvnCustomerDetails để khi login thường
@@ -54,4 +55,7 @@ public class CustomerOAuth2User implements OAuth2User, Serializable {
 		return clientName;
 	}
 
+	public void setFullName(String fullName) {
+		this.fullName = fullName;
+	}
 }

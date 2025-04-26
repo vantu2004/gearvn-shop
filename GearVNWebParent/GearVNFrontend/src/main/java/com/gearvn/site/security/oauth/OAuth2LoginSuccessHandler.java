@@ -38,6 +38,8 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
 		if (customer == null) {
 			this.customerService.addNewCustomerByGoggleInfo(name, email, countryCode, authenticationType);
 		} else {
+			// lấy tên trong db thay vì tên tài khoản OAuth2
+			customerOAuth2User.setFullName(customer.getFullName());
 			this.customerService.updateAuthenticationType(customer, authenticationType);
 		}
 
@@ -49,7 +51,7 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
 	}
 
 	private AuthenticationType getAuthenticationType(String clientName) {
-		if (clientName.equals("Gooogle")) {
+		if (clientName.equals("Google")) {
 			return AuthenticationType.GOOGLE;
 		} else if (clientName.equals("Facebook")) {
 			return AuthenticationType.FACEBOOK;

@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<!-- khai báo namespace th để có thể sử dụng các thuộc tính của thymeleaf -->
+<html xmlns:th="http://thymeleaf.org">
+
+<!-- Head -->
+<head th:replace="fragments :: page_head('Update Account', 'none')"></head>
+<!-- Head -->
+
+<body>
+	<!-- Header -->
+	<header th:replace="fragments :: header"></header>
+	<!-- Header -->
+
+	<div class="container mt-5">
+		<nav aria-label="breadcrumb">
+			<ol class="breadcrumb">
+				<li class="breadcrumb-item"><a th:href="@{/}">Home</a></li>
+				<li class="breadcrumb-item"><a th:href="@{/customers/update}">Update
+						Account</a></li>
+			</ol>
+		</nav>
+	</div>
+
+	<div class="container mt-3">
+		<h2>Update Account | ID = [[${customer.id}]]</h2>
+	</div>
+
+	<!-- message -->
+	<div th:if="${message != null}"
+		class="toast show position-fixed top-0 end-0 m-3 "
+		data-bs-delay="3000" data-bs-autohide="true"
+		style="z-index: 1055; min-width: 300px;">
+		<div class="toast-header">
+			<strong class="me-auto">Message</strong>
+			<button type="button" class="btn-close" data-bs-dismiss="toast"></button>
+		</div>
+		<div class="toast-body text-success">
+			<p th:text="${message}"></p>
+		</div>
+	</div>
+	<!-- message -->
+
+	<div class="container mt-3">
+		<form class="mx-auto col-md-6" th:action="@{/customers/save-update}"
+			method="post" th:object="${customer}" enctype="multipart/form-data"
+			onsubmit="return isChangedInputPassword(this)">
+
+			<!-- Id -->
+			<div class="form-group row mb-3" style="display: none;">
+				<label for="inputId" class="col-sm-3 col-form-label">Id</label>
+				<div class="col-sm-9">
+					<input type="text" class="form-control" id="inputId"
+						th:field="*{id}">
+					<p id="idError" th:if="${#fields.hasErrors('id')}"
+						th:errorclass="error" th:errors="*{id}" class="text-danger"></p>
+				</div>
+			</div>
+
+			<!-- First Name -->
+			<div class="form-group row mb-3">
+				<label for="inputFirstName" class="col-sm-3 col-form-label">First
+					Name</label>
+				<div class="col-sm-9">
+					<input type="text" class="form-control" id="inputFirstName"
+						th:field="*{firstName}">
+					<p id="firstNameError" th:if="${#fields.hasErrors('firstName')}"
+						th:errorclass="error" th:errors="*{firstName}" class="text-danger"></p>
+				</div>
+			</div>
+
+			<!-- Last Name -->
+			<div class="form-group row mb-3">
+				<label for="inputLastName" class="col-sm-3 col-form-label">Last
+					Name</label>
+				<div class="col-sm-9">
+					<input type="text" class="form-control" id="inputLastName"
+						th:field="*{lastName}">
+					<p id="lastNameError" th:if="${#fields.hasErrors('lastName')}"
+						th:errorclass="error" th:errors="*{lastName}" class="text-danger"></p>
+				</div>
+			</div>
+
+			<!-- AuthenticationType -->
+			<div class="form-group row mb-3">
+				<label for="inputAuthenticationType" class="col-sm-3 col-form-label">Authentication
+					Type</label>
+				<div class="col-sm-9">
+					<input type="text" class="form-control"
+						id="inputAuthenticationType" th:field="*{authenticationType}"
+						readonly>
+					<p id="authenticationTypeError"
+						th:if="${#fields.hasErrors('authenticationType')}"
+						th:errorclass="error" th:errors="*{authenticationType}"
+						class="text-danger"></p>
+				</div>
+			</div>
+
+			<!-- Email -->
+			<div class="form-group row mb-3">
+				<label for="inputEmail" class="col-sm-3 col-form-label">Email</label>
+				<div class="col-sm-9">
+					<input type="text" class="form-control" id="inputEmail"
+						th:field="*{email}" readonly>
+					<p id="emailError" th:if="${#fields.hasErrors('email')}"
+						th:errorclass="error" th:errors="*{email}" class="text-danger"></p>
+				</div>
+			</div>
+
+			<!-- authenticatioNType để nguyên là 1 enum nhưng khi so sánh cần convert sang string, khi authenticationType khác DATABSE thì cho ẩn đi -->
+			<div
+				th:attr="style=${customer.authenticationType.name() != 'DATABASE'} ? 'display: none;' : null">
+				<!-- Password -->
+				<div class="form-group row mb-3">
+					<label for="inputPassword" class="col-sm-3 col-form-label">Password</label>
+					<div class="col-sm-9">
+						<input type="password" class="form-control" id="inputPassword"
+							th:field="*{password}"
+							placeholder="Leave blank if you don't want to change the password."
+							th:attr="data-original-value=*{password}"
+							oninput="checkPasswordMatch(document.getElementById('inputRePassword'))">
+						<p id="passwordError" th:if="${#fields.hasErrors('password')}"
+							th:errorclass="error" th:errors="*{password}" class="text-danger"></p>
+					</div>
+				</div>
+
+				<!-- Re-type Password -->
+				<div class="form-group row mb-3">
+					<label for="inputRePassword" class="col-sm-3 col-form-label">Re-type
+						Password</label>
+					<div class="col-sm-9">
+						<input type="password" class="form-control" id="inputRePassword"
+							placeholder="Leave blank if you don't want to change the password."
+							oninput="checkPasswordMatch(this)">
+					</div>
+				</div>
+			</div>
+
+			<!-- Phone Number -->
+			<div class="form-group row mb-3">
+				<label for="inputPhoneNumber" class="col-sm-3 col-form-label">Phone</label>
+				<div class="col-sm-9">
+					<input type="text" class="form-control" id="inputPhoneNumber"
+						th:field="*{phoneNumber}">
+					<p id="phoneNumberError"
+						th:if="${#fields.hasErrors('phoneNumber')}" th:errorclass="error"
+						th:errors="*{phoneNumber}" class="text-danger"></p>
+				</div>
+			</div>
+
+			<!-- Address Line 1 -->
+			<div class="form-group row mb-3">
+				<label for="inputAddressLine1" class="col-sm-3 col-form-label">Address
+					Line 1</label>
+				<div class="col-sm-9">
+					<input type="text" class="form-control" id="inputAddressLine1"
+						th:field="*{addressLine1}">
+					<p id="addressLine1Error"
+						th:if="${#fields.hasErrors('addressLine1')}" th:errorclass="error"
+						th:errors="*{addressLine1}" class="text-danger"></p>
+				</div>
+			</div>
+
+			<!-- Address Line 2 -->
+			<div class="form-group row mb-3">
+				<label for="inputAddressLine2" class="col-sm-3 col-form-label">Address
+					Line 2</label>
+				<div class="col-sm-9">
+					<input type="text" class="form-control" id="inputAddressLine2"
+						th:field="*{addressLine2}">
+				</div>
+			</div>
+
+			<!-- Postal Code -->
+			<div class="form-group row mb-3">
+				<label for="inputPostalCode" class="col-sm-3 col-form-label">Postal
+					Code</label>
+				<div class="col-sm-9">
+					<input type="text" class="form-control" id="inputPostalCode"
+						th:field="*{postalCode}">
+					<p id="postalCodeError" th:if="${#fields.hasErrors('postalCode')}"
+						th:errorclass="error" th:errors="*{postalCode}"
+						class="text-danger"></p>
+				</div>
+			</div>
+
+			<!-- Country -->
+			<div class="form-group row mb-3">
+				<label for="selectCountryList" class="col-sm-3 col-form-label">Country</label>
+				<div class="col-sm-9">
+					<select id="selectCountryList" class="form-select"
+						th:field="*{country}">
+						<th:block th:each="country : ${countries}">
+							<option th:value="${country.id}">[[${country.name}]]</option>
+						</th:block>
+					</select>
+					<p id="countryError" th:if="${#fields.hasErrors('country')}"
+						th:errorclass="error" th:errors="*{country}" class="text-danger"></p>
+				</div>
+			</div>
+
+			<!-- City -->
+			<div class="form-group row mb-3">
+				<label for="inputCity" class="col-sm-3 col-form-label">City</label>
+				<div class="col-sm-9">
+					<input type="text" class="form-control" id="inputCity"
+						th:field="*{city}">
+					<p id="cityError" th:if="${#fields.hasErrors('city')}"
+						th:errorclass="error" th:errors="*{city}" class="text-danger"></p>
+				</div>
+			</div>
+
+			<!-- State/Province -->
+			<div class="form-group row mb-3">
+				<label for="inputState" class="col-sm-3 col-form-label">State/Province</label>
+				<div class="col-sm-9">
+					<input type="text" id="inputState" list="selectStateList"
+						class="form-control" th:field="*{state}">
+					<datalist id="selectStateList"></datalist>
+					<p id="stateError" th:if="${#fields.hasErrors('state')}"
+						th:errorclass="error" th:errors="*{state}" class="text-danger"></p>
+				</div>
+			</div>
+
+			<!-- Buttons -->
+			<div class="form-group row mt-4">
+				<div class="col-sm-9 offset-sm-3 d-flex justify-content-end">
+					<a th:href="@{/}" class="btn btn-secondary me-2">Back</a>
+					<button type="submit" class="btn btn-success">Save</button>
+				</div>
+			</div>
+
+		</form>
+
+	</div>
+
+	<!-- Modal -->
+	<div th:replace="modal_fragments :: modal_dialog"></div>
+	<!-- Modal -->
+
+	<!-- Footer -->
+	<footer th:replace="fragments :: footer"></footer>
+	<!-- Footer -->
+
+	<script>
+		// dùng để fill lại inputPassword trong trường hợp để trống inputPassword
+		let originalPassword = "[[${customer.password}]]";
+
+		// đảm bảo toast tự động tắt
+		document.addEventListener('DOMContentLoaded', function() {
+			const toastElList = [].slice.call(document
+					.querySelectorAll('.toast'));
+			toastElList.forEach(function(toastEl) {
+				new bootstrap.Toast(toastEl).show();
+			});
+		});
+	</script>
+
+	<script th:src="@{/js/customer.js}"></script>
+
+</body>
+
+</html>

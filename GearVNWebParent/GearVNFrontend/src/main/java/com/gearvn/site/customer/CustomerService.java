@@ -42,6 +42,20 @@ public class CustomerService {
 		this.customerRepository.save(customer);
 	}
 
+	public void handleSaveUpdateCustomer(@Valid Customer customer) {
+		// TODO Auto-generated method stub
+		Customer oldCustomer = this.customerRepository.findByEmail(customer.getEmail());
+		if (!customer.getPassword().equals(oldCustomer.getPassword())
+				&& oldCustomer.getAuthenticationType().equals(AuthenticationType.DATABASE)) {
+			encodePassword(customer);
+		}
+
+		customer.setEnabled(oldCustomer.isEnabled());
+		customer.setCreatedTime(oldCustomer.getCreatedTime());
+
+		this.customerRepository.save(customer);
+	}
+
 	private String generateVerificationCode() {
 		Random random = new Random();
 		int otpValue = 100000 + random.nextInt(900000);
@@ -99,7 +113,6 @@ public class CustomerService {
 		customer.setPostalCode("******");
 		customer.setEnabled(true);
 		customer.setCreatedTime(new Date());
-		customer.setVerificationCode("******");
 		customer.setAuthenticationType(authenticationType);
 		customer.setCountry(this.countryRepository.findByCode(countryCode));
 

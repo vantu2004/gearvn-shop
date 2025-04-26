@@ -53,4 +53,8 @@ public class GearvnCustomerDetails implements UserDetails {
 	public Customer getCustomer() {
 		return this.customer;
 	}
+	
+	public void setCustomer(Customer customer) {
+		this.customer = customer;
+	}
 }

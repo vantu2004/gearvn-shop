@@ -81,3 +81,14 @@ function showModalDialog(title, message) {
 	// modal() có sẵn dùng để show/hide modal
 	$('#duplicateModal').modal('show');
 }
+
+// khi update, nếu ko có sự thay đổi trong inputPassword thì autofill password cũ
+function isChangedInputPassword(form){
+	let inputPassword = $("#inputPassword");
+	let inputRePassword = $("#inputRePassword");
+	if (!inputPassword.val() || !inputRePassword.val()) {
+		inputPassword.val(originalPassword);
+	}
+	
+	form.submit();
+}
