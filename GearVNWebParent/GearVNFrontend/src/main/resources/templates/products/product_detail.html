@@ -18,6 +18,12 @@
 	<header th:replace="fragments :: header"></header>
 	<!-- Header -->
 
+	<!-- message dùng khi update customer -->
+	<th:block th:replace="modal_fragments :: message_toast(${message})" />
+
+	<!-- message dùng khi addProductToCart -->
+	<th:block th:replace="modal_fragments :: toast_addProductToCart" />
+
 	<div class="container mt-5">
 		<div class="container">
 			<div class="row align-items-center">
@@ -96,12 +102,11 @@
 						<strong>Brand:&nbsp;</strong>[[${product.brand.name}]]
 					</p>
 					<p>
-						<strong>List Price:&nbsp;</strong> 
-						<span> 
-							<span th:if="${CURRENCY_SYMBOL_POSITION == 'Before price'}">[[${CURRENCY_SYMBOL}]]</span>
+						<strong>List Price:&nbsp;</strong> <span> <span
+							th:if="${CURRENCY_SYMBOL_POSITION == 'Before price'}">[[${CURRENCY_SYMBOL}]]</span>
 							[[${#numbers.formatDecimal(product.price, 1,
-							THOUSANDS_POINT_TYPE, DECIMAL_DIGITS, DECIMAL_POINT_TYPE)}]] 
-							<span th:if="${CURRENCY_SYMBOL_POSITION == 'After price'}">[[${CURRENCY_SYMBOL}]]</span>
+							THOUSANDS_POINT_TYPE, DECIMAL_DIGITS, DECIMAL_POINT_TYPE)}]] <span
+							th:if="${CURRENCY_SYMBOL_POSITION == 'After price'}">[[${CURRENCY_SYMBOL}]]</span>
 						</span>
 					</p>
 					<p>
@@ -123,19 +128,23 @@
 							Stock</strong>
 					</p>
 
-					<div class="d-flex mt-3">
-						<button class="btn btn-outline-secondary"
-							onclick="decreaseValue()">−</button>
-						<input type="text" id="quantity" value="1"
-							class="text-center mx-2 form-control w-25" readonly>
-						<button class="btn btn-outline-secondary"
-							onclick="increaseValue()">+</button>
-					</div>
+					<!-- chỉ cho addProductToCart khi in of stock  -->
+					<th:block th:if="${product.inStock}">
+						<div class="d-flex mt-3">
+							<button class="btn btn-outline-secondary"
+								onclick="decreaseValue()">−</button>
+							<input type="text" id="quantity" value="1"
+								class="text-center mx-2 form-control w-25" readonly>
+							<button class="btn btn-outline-secondary"
+								onclick="increaseValue()">+</button>
+						</div>
 
-					<div class="mt-4">
-						<button type="button" class="btn btn-outline-success">Add
-							Product To Cart</button>
-					</div>
+						<div class="mt-4">
+							<button type="button" class="btn btn-outline-success"
+								id="addProductToCart">Add Product To Cart</button>
+						</div>
+					</th:block>
+
 				</div>
 			</div>
 		</div>
@@ -180,20 +189,15 @@
 	<footer th:replace="fragments :: footer"></footer>
 	<!-- Footer -->
 
-	<script>
-		function decreaseValue() {
-			let input = document.getElementById("quantity");
-			let value = parseInt(input.value);
-			if (value > 1) {
-				input.value = value - 1;
-			}
-		}
+	<script type="text/javascript">
+		// url
+		let contextPath = "[[@{/}]]";
+		let productId = "[[${product.id}]]";
 
-		function increaseValue() {
-			let input = document.getElementById("quantity");
-			let value = parseInt(input.value);
-			input.value = value + 1;
-		}
-	</script>
+		// csrf
+		let csrfHeader = "[[${_csrf.headerName}]]";
+		let csrfValue = "[[${_csrf.token}]]";
+	</script><script th:src="@{/js/cart_item.js}"></script>
+
 </body>
 </html>

@@ -91,7 +91,7 @@ public class CustomerRepositoryTests {
 
 	@Test
 	public void testUpdateAuthenticationType() {
-		this.customerRepository.updateAuthenticatioType(2, AuthenticationType.DATABASE);
+		this.customerRepository.updateAuthenticationType(2, AuthenticationType.DATABASE);
 
 		Customer customer = this.customerRepository.findById(2).orElse(null);
 

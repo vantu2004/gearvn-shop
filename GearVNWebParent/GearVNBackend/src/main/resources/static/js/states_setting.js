@@ -34,6 +34,7 @@ $(document).ready(function() {
 	btnDeleteState.click(function() {
 		deleteState();
 	});
+
 });
 
 function showToastMessageTabState(message) {
@@ -60,6 +61,8 @@ function loadStateList(message) {
 	}).fail(function() {
 		showToastMessageTabState("ERROR: Could not connect to server or server encountered an error.");
 	});
+
+	autoCloseToast();
 }
 
 function setInitialState() {
@@ -117,6 +120,8 @@ function addState() {
 			showToastMessageTabState("ERROR: Could not connect to server or server encountered an error.");
 		});
 	}
+
+	autoCloseToast();
 }
 
 function updateState() {
@@ -151,6 +156,8 @@ function updateState() {
 			showToastMessageTabState("ERROR: Could not connect to server or server encountered an error.");
 		});
 	}
+
+	autoCloseToast();
 }
 
 function deleteState() {
@@ -171,4 +178,14 @@ function deleteState() {
 		showToastMessageTabState("ERROR: Could not connect to server or server encountered an error.");
 	});
 
+	autoCloseToast();
 }
+
+// đảm bảo toast tự động tắt
+function autoCloseToast() {
+	const toastElList = [].slice.call(document
+		.querySelectorAll('.toast'));
+	toastElList.forEach(function(toastEl) {
+		new bootstrap.Toast(toastEl).show();
+	});
+};

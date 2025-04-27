@@ -119,7 +119,7 @@ public class CustomerController {
 	@GetMapping("/customers/update")
 	public String getAccoutnDetails(Model model, HttpServletRequest request) {
 
-		String email = this.getEmailOfAuthenticatedCustomer(request);
+		String email = Utility.getEmailOfAuthenticatedCustomer(request);
 
 		if (!StringUtils.isBlank(email)) {
 			Customer customer = this.customerService.getCustomerByEmail(email);
@@ -130,34 +130,6 @@ public class CustomerController {
 		}
 
 		return "customer/update_customer";
-	}
-
-	// có thể dùng @AuthenticationPrincipal như bên class AccountControler
-	private String getEmailOfAuthenticatedCustomer(HttpServletRequest request) {
-		String email = "";
-
-		Object principal = request.getUserPrincipal();
-
-		/*
-		 * chưa login: AnonymousAuthenticationToken
-		 */
-
-		/*
-		 * đã login: UsernamePasswordAuthenticationToken, OAuth2AuthenticationToken,
-		 * RememberMeAuthenticationToken (tick chọn remember-me, thử nhiều lần nhưng vẫn
-		 * ko thấy, nhưng để đảm bào thì vẫn thêm vào)
-		 */
-
-		if (principal instanceof UsernamePasswordAuthenticationToken
-				|| principal instanceof RememberMeAuthenticationToken) {
-			email = request.getUserPrincipal().getName();
-		} else if (principal instanceof OAuth2AuthenticationToken) {
-			OAuth2AuthenticationToken oAuth2AuthenticationToken = (OAuth2AuthenticationToken) principal;
-			CustomerOAuth2User customerOAuth2User = (CustomerOAuth2User) oAuth2AuthenticationToken.getPrincipal();
-			email = customerOAuth2User.getEmail();
-		}
-
-		return email;
 	}
 
 	@PostMapping("/customers/save-update")

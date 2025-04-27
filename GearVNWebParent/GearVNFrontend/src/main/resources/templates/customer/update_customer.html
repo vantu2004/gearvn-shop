@@ -26,18 +26,7 @@
 	</div>
 
 	<!-- message -->
-	<div th:if="${message != null}"
-		class="toast show position-fixed top-0 end-0 m-3 "
-		data-bs-delay="3000" data-bs-autohide="true"
-		style="z-index: 1055; min-width: 300px;">
-		<div class="toast-header">
-			<strong class="me-auto">Message</strong>
-			<button type="button" class="btn-close" data-bs-dismiss="toast"></button>
-		</div>
-		<div class="toast-body text-success">
-			<p th:text="${message}"></p>
-		</div>
-	</div>
+	<th:block th:replace="modal_fragments :: message_toast(${message})"/>
 	<!-- message -->
 
 	<div class="container mt-3">

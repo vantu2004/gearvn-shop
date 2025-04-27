@@ -1,7 +1,6 @@
 package com.gearvn.site.category;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.catchException;
 
 import java.util.List;
 

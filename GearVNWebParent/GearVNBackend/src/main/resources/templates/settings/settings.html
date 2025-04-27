@@ -27,7 +27,7 @@
 
 			<div class="col mt-4">
 
-				<!-- message -->
+				<!-- message dùng cho mailServer và mailTemplate-->
 				<div th:if="${message != null}"
 					class="toast show position-fixed top-0 end-0 m-3 "
 					data-bs-delay="3000" data-bs-autohide="true"
@@ -90,46 +90,17 @@
 		// csrf
 		let csrfHeader = "[[${_csrf.headerName}]]";
 		let csrfValue = "[[${_csrf.token}]]";
-
-		// đảm bảo toast tự động tắt
-		document.addEventListener('DOMContentLoaded', function() {
-			const toastElList = [].slice.call(document
-					.querySelectorAll('.toast'));
-			toastElList.forEach(function(toastEl) {
-				new bootstrap.Toast(toastEl).show();
-			});
-		});
 		
 		$(document).ready(function() {
 			// set richtext function
 			$("#emailContent").richText();
 		});
 
-/* 		function setDefaultValueTextArea() {
-			let shortDescription = $('#shortDescription');
-			let fullDescription = $('#fullDescription');
-			let content_shortDescription = shortDescription.val().trim();
-			let content_fullDescription = fullDescription.val().trim();
-
-			if (content_shortDescription === '<div><br></div>'
-					|| content_shortDescription === '<br>') {
-				shortDescription.val('');
-			}
-			if (content_fullDescription === '<div><br></div>'
-					|| content_fullDescription === '<br>') {
-				fullDescription.val('');
-			}
-		} */
 	</script>
 
 	<script th:src="@{/js/common_form.js}"></script>
 	<script th:src="@{/js/countries_setting.js}"></script>
 	<script th:src="@{/js/states_setting.js}"></script>
-
-	<!-- 	<script th:src="@{/js/product/product_overview.js}"></script>
-	<script th:src="@{/js/product/product_description.js}"></script>
-	<script th:src="@{/js/product/product_extraImage.js}"></script>
-	<script th:src="@{/js/product/product_detail.js}"></script> -->
 
 </body>
 
