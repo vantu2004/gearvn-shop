@@ -103,7 +103,7 @@ a {
 										<li><a class="dropdown-item" href="#">Questions</a></li>
 										<li><a class="dropdown-item" href="#">Reviews</a></li>
 										<li><a class="dropdown-item" href="#">Orders</a></li>
-										<li><a class="dropdown-item" href="#">Cart</a></li>
+										<li><a class="dropdown-item" th:href="@{/cart}">Cart</a></li>
 										<li><hr class="dropdown-divider"></li>
 										<li>
 											<form th:action="@{/logout}" method="post">
@@ -227,7 +227,7 @@ a {
 	<!-- Slider -->
 
 	<!-- format-price -->
-	<th:block th:fragment="formatPrice">
+	<th:block th:fragment="formatPrice(product)">
 		<span class="mt-3" style="min-height: 50px;"> <strong
 			th:classappend="${product.discountPercent > 0} ? 'text-danger' : 'text-primary'">
 				<span th:if="${CURRENCY_SYMBOL_POSITION == 'Before price'}">[[${CURRENCY_SYMBOL}]]</span>

@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html xmlns:th="http://thymeleaf.org">
+
+<!-- Head -->
+<head th:replace="fragments :: page_head('Cart', 'none')"></head>
+<!-- Head -->
+
+<body class="d-flex flex-column min-vh-100">
+	<!-- Header -->
+	<header th:replace="fragments :: header"></header>
+	<!-- Header -->
+
+	<!-- message dùng khi addProductToCart -->
+	<th:block th:replace="modal_fragments :: toast_addProductToCart" />
+
+	<div class="container mt-5 flex-grow-1">
+		<h2>Your Shopping Cart</h2>
+
+		<div class="container mt-3">
+			<!-- list cartItems -->
+			<div class="table-responsive mt-3">
+				<table class="table table-hover">
+					<thead>
+						<tr>
+							<th scope="col">Cart Item ID</th>
+							<th scope="col">Product Image</th>
+							<th scope="col">Product Name</th>
+							<th scope="col">Increase/Decrease</th>
+							<th scope="col">Price</th>
+							<th scope="col">Total Price</th>
+							<th scope="col">Action</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="cartItem: ${cartItems}">
+
+							<td th:text="${cartItem.id}"></td>
+
+							<td><i
+								th:if="${#strings.isEmpty(cartItem.product.mainImage)}"
+								class="fas fa-images fa-3x text-secondary"></i> <img
+								th:if="${not #strings.isEmpty(cartItem.product.mainImage)}"
+								th:src="@{${cartItem.product.getMainImagePath}}" width="48"
+								height="48" class="rounded-circle object-fit-cover"></td>
+
+							<td><a th:href="@{'/p/' + ${cartItem.product.alias}}"
+								target="_blank"> [[${cartItem.product.getShortName}]] </a></td>
+
+							<td>
+								<div class="d-flex" style="width: 150px;">
+									<button class="btn btn-outline-secondary"
+										onclick="decreaseValue_cart(this)">−</button>
+									<input type="text" th:value="${cartItem.quantity}"
+										class="text-center mx-2 form-control" style="width: 50px;"
+										th:attr="data-product-id=${cartItem.product.id}" readonly>
+									<button class="btn btn-outline-secondary"
+										onclick="increaseValue_cart(this)">+</button>
+								</div>
+							</td>
+
+							<td><th:block
+									th:replace="fragments :: formatPrice(${cartItem.product})"></th:block>
+							</td>
+
+							<!-- thêm class subTotal phục vụ tính lại totalPrice bên js -->
+							<td><span class="text-success"> <span
+									th:if="${CURRENCY_SYMBOL_POSITION == 'Before price'}">[[${CURRENCY_SYMBOL}]]</span>
+									<strong th:id="'subTotal' + ${cartItem.product.id}"
+									class="subTotal">[[${#numbers.formatDecimal(cartItem.getTotalPrice,
+										1, THOUSANDS_POINT_TYPE, DECIMAL_DIGITS,
+										DECIMAL_POINT_TYPE)}]]</strong> <span
+									th:if="${CURRENCY_SYMBOL_POSITION == 'After price'}">[[${CURRENCY_SYMBOL}]]</span>
+							</span></td>
+
+							<td><a title="Delete this cart item"
+								th:href="@{'/cart/delete/' + ${cartItem.product.id}}"
+								class="link-delete" onclick="deleteCartItem(event, this)"> <i
+									class="fas fa-trash-alt text-danger"></i>
+							</a></td>
+
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<!-- list cartItems -->
+
+			<th:block th:unless="${#lists.isEmpty(cartItems)}">
+				<div class="d-flex justify-content-end align-items-center gap-3"
+					id="totalSection">
+					<h4 class="mb-0">
+						Total: <span class="text-success"> <span
+							th:if="${CURRENCY_SYMBOL_POSITION == 'Before price'}">[[${CURRENCY_SYMBOL}]]</span>
+							<strong id="total">[[${#numbers.formatDecimal(totalPrice,
+								1, THOUSANDS_POINT_TYPE, DECIMAL_DIGITS, DECIMAL_POINT_TYPE)}]]</strong>
+							<span th:if="${CURRENCY_SYMBOL_POSITION == 'After price'}">[[${CURRENCY_SYMBOL}]]</span>
+						</span>
+					</h4>
+					<button type="button" class="btn btn-success" id="checkout">Checkout</button>
+				</div>
+			</th:block>
+
+			<th:block>
+				<div
+					th:class="'text-center mt-5 ' + ${#lists.isEmpty(cartItems) ? '' : 'd-none'}"
+					id="noCartItemSection">No products found.</div>
+			</th:block>
+		</div>
+	</div>
+
+	<!-- Modal delete-->
+	<div th:replace="modal_fragments :: modal_delete"></div>
+	<!-- Modal delete-->
+
+	<!-- Footer -->
+	<footer th:replace="fragments :: footer" class="mt-auto"></footer>
+	<!-- Footer -->
+
+	<!-- jQuery Script -->
+	<script type="text/javascript">
+		// url
+		let contextPath = "[[@{/}]]";
+
+		// csrf
+		let csrfHeader = "[[${_csrf.headerName}]]";
+		let csrfValue = "[[${_csrf.token}]]";
+		
+		// dùng format lại totalPrice sau khi set tăng/giảm số lượng
+		// decimalDigits là số nên ko cần thêm "" (lỗi kệ)
+		const decimalDigits = [[${DECIMAL_DIGITS}]];
+		let decimalPointType = "[[${DECIMAL_POINT_TYPE}]]";
+		let thousandsPointType = "[[${THOUSANDS_POINT_TYPE}]]";
+		
+	</script>
+
+	<script th:src="@{/js/cart_item.js}"></script>
+	<!-- hỗ trợ format lại number sau khi set lại subTotal/total price -->
+	<script th:src="@{/js/jquery.number.min.js}"></script>
+</body>
+
+</html>

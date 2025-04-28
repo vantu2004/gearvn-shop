@@ -113,7 +113,7 @@
 						<strong>Price:&nbsp;</strong>
 
 						<!-- Price -->
-						<th:block th:replace="fragments :: formatPrice"></th:block>
+						<th:block th:replace="fragments :: formatPrice(${product})"></th:block>
 						<!-- Price -->
 
 						<span th:if="${product.discountPercent > 0}" class="text-danger">
@@ -132,11 +132,11 @@
 					<th:block th:if="${product.inStock}">
 						<div class="d-flex mt-3">
 							<button class="btn btn-outline-secondary"
-								onclick="decreaseValue()">−</button>
+								onclick="decreaseValue_productDetail()">−</button>
 							<input type="text" id="quantity" value="1"
 								class="text-center mx-2 form-control w-25" readonly>
 							<button class="btn btn-outline-secondary"
-								onclick="increaseValue()">+</button>
+								onclick="increaseValue_productDetail()">+</button>
 						</div>
 
 						<div class="mt-4">
@@ -197,7 +197,14 @@
 		// csrf
 		let csrfHeader = "[[${_csrf.headerName}]]";
 		let csrfValue = "[[${_csrf.token}]]";
-	</script><script th:src="@{/js/cart_item.js}"></script>
+		
+		// bên này ko dùng nhưng vì đang dùng chung file cart.js nên vẫn phải truyền
+		const decimalDigits = [[${DECIMAL_DIGITS}]];
+		let decimalPointType = "[[${DECIMAL_POINT_TYPE}]]";
+		let thousandsPointType = "[[${THOUSANDS_POINT_TYPE}]]";
+	</script>
+
+	<script th:src="@{/js/cart_item.js}"></script>
 
 </body>
 </html>
