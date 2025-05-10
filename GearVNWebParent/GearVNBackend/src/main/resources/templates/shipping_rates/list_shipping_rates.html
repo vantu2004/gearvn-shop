@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html xmlns:th="http://thymeleaf.org">
+
+<!-- Head -->
+<head th:replace="fragments :: page_head('Shipping Rate', 'none')"></head>
+<!-- Head -->
+
+<body>
+	<!-- Header -->
+	<header th:replace="fragments :: header"></header>
+	<!-- Header -->
+
+	<div class="container mt-5">
+		<h2>Manage Shipping Rate</h2>
+	</div>
+
+	<!-- create/csv/excel/pdf -->
+	<div class="container mt-3">
+		<div class="row g-2">
+			<div class="col-12 col-sm-6 col-md-3">
+				<a class="btn btn-primary w-100" th:href="@{/shipping_rates/create}"><i
+					class="fas fa-plus-square"></i> Create New Shipping Rate </a>
+			</div>
+		</div>
+	</div>
+	<!-- create/csv/excel/pdf -->
+
+	<div class="container mt-3">
+		<!-- search/reload -->
+		<form th:action="@{/shipping_rates/page/1}" method="get">
+			<div class="row g-3">
+				<div class="col-md-3 col-12">
+					<input type="hidden" id="inputSortField" class="form-control"
+						th:value="${sortField}" name="sortField"> <input
+						type="hidden" id="inputSortType" class="form-control"
+						th:value="${sortType}" name="sortType"> <input
+						type="search" id="inputKeyword" class="form-control"
+						placeholder="Enter keyword" aria-describedby="passwordHelpInline"
+						name="keyword" th:value="${keyword}">
+				</div>
+				<div class="col-md-3 col-12 d-flex gap-2">
+					<button type="submit" class="btn btn-primary">
+						<i class="fas fa-search"></i>
+					</button>
+					<a th:href="@{/brands}" class="btn btn-secondary"> <i
+						class="fas fa-redo"></i>
+					</a>
+				</div>
+			</div>
+		</form>
+		<!-- search/reload -->
+
+		<!-- message -->
+		<div th:if="${message != null}" class="toast show mt-3"
+			style="width: 100%;">
+			<div class="toast-header">
+				<strong class="me-auto">Message</strong>
+				<button type="button" class="btn-close" data-bs-dismiss="toast"></button>
+			</div>
+			<div class="toast-body" style="color: green;">
+				<p th:text="${message}"></p>
+			</div>
+		</div>
+		<!-- message -->
+
+		<!-- list categories -->
+		<div class="table-responsive mt-3">
+			<table class="table table-hover">
+				<thead>
+					<tr>
+						<th th:replace="fragments :: column_link('id', 'ID')" />
+						<th th:replace="fragments :: column_link('country', 'Country')" />
+						<th th:replace="fragments :: column_link('state', 'State')" />
+						<th th:replace="fragments :: column_link('rate', 'Rate')" />
+						<th th:replace="fragments :: column_link('days', 'Days')" />
+						<th
+							th:replace="fragments :: column_link('codSupported', 'COD Supported')" />
+						<th scope="col">Action</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="shippingRate : ${listShippingRates}">
+						<td th:text="${shippingRate.id}"></td>
+
+						<td th:text="${shippingRate.country.name}"></td>
+
+						<td th:text="${shippingRate.state}"></td>
+
+						<td th:text="${shippingRate.rate}"></td>
+
+						<td th:text="${shippingRate.days}"></td>
+
+						<td><i th:if="${shippingRate.codSupported}"
+							class="fas fa-check text-success"></i> <i
+							th:if="${!shippingRate.codSupported}"
+							class="fas fa-times text-danger"></i></td>
+
+						<td><a title="Update this shipping rate"
+							th:href="@{'/shipping_rates/update/' + ${shippingRate.id}}">
+								<i class="fas fa-edit text-success"></i>
+						</a> | <a title="Delete this shipping rate"
+							th:href="@{'/shipping_rates/delete/' + ${shippingRate.id}}"
+							th:shippingRateId="${shippingRate.id}" class="link-delete"> <i
+								class="fas fa-trash-alt text-danger"></i>
+						</a>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+		<!-- list categories -->
+
+		<!-- Pagination -->
+		<nav aria-label="Pagination"
+			class="d-flex flex-column align-items-center mt-5"
+			th:if="${totalElements > 0}">
+			<p class="mb-2">Show shipping rates from [[${startCount}]] to
+				[[${endCount}]] of [[${totalElements}]]</p>
+
+			<th:block>
+				<div th:replace="fragments :: pagination"></div>
+			</th:block>
+
+		</nav>
+
+
+		<div class="text-center mt-5" th:if="${totalElements <= 0}">No
+			shipping rates found.</div>
+
+	</div>
+
+	<!-- Modal delete-->
+	<div th:replace="modal_fragments :: modal_delete"></div>
+	<!-- Modal delete-->
+
+	<!-- Footer -->
+	<footer th:replace="fragments :: footer"></footer>
+	<!-- Footer -->
+
+	<!-- jQuery Script -->
+	<script type="text/javascript">
+		$(".link-delete").on(
+				"click",
+				function(event) {
+					event.preventDefault();
+
+					let link = $(this);
+					let shippingRateId = link.attr("shippingRateId")
+							|| "unknown";
+					let href = link.attr("href") || "#";
+
+					$("#modalMessage").text(
+							"Are you sure you want to delete shipping rate ID "
+									+ shippingRateId + "?");
+					$("#deleteButton").attr("href", href);
+
+					$("#confirmModal").modal("show");
+				});
+	</script>
+</body>
+
+</html>

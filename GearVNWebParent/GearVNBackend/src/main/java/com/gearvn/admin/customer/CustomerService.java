@@ -30,12 +30,12 @@ public class CustomerService {
 	}
 
 	public void getAllCustomersPageable(int currentPage, PagingAndSortingHelper helper) {
-		helper.listEntitites(currentPage, CUSTOMERS_PER_PAGE, customerRepository);
+		helper.listEntities(currentPage, CUSTOMERS_PER_PAGE, customerRepository);
 	}
 
 	public Customer getCustomerById(Integer id) {
 		return this.customerRepository.findById(id)
-				.orElseThrow(() -> new NoSuchElementException("Could not find any customers with ID " + id));
+				.orElseThrow(() -> new NoSuchElementException("Could not find any customers with id " + id));
 	}
 
 	public List<Country> getAllCountries() {

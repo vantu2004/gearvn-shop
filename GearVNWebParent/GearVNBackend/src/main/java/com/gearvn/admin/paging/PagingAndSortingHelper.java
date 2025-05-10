@@ -62,7 +62,7 @@ public class PagingAndSortingHelper {
 	 * vì các repo khác đang extends searchPaging nên bên service kia thì truyền
 	 * repo cụ thể còn bên này thì chỉ cần nhận searchPaging
 	 */
-	public void listEntitites(int currentPage, int pageSize, SearchPaging<?, Integer> searchPaging) {
+	public void listEntities(int currentPage, int pageSize, SearchPaging<?, Integer> searchPaging) {
 		Pageable pageable = this.createPageable(currentPage, pageSize);
 
 		Page<?> page = null;

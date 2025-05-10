@@ -64,6 +64,6 @@ public class BrandService {
 	}
 
 	public void getAllBrands(int currentPage, PagingAndSortingHelper helper) {
-		helper.listEntitites(currentPage, BRANDS_PER_PAGE, brandRepository);
+		helper.listEntities(currentPage, BRANDS_PER_PAGE, brandRepository);
 	}
 }

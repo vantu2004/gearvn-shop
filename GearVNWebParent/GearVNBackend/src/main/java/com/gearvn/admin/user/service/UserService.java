@@ -35,7 +35,7 @@ public class UserService {
 	}
 
 	public void pagination_getAllUsers(int pageNumber, PagingAndSortingHelper helper) {
-		helper.listEntitites(pageNumber, USER_PER_PAGE, userRepository);
+		helper.listEntities(pageNumber, USER_PER_PAGE, userRepository);
 	}
 
 	public List<Role> getAllRoles() {

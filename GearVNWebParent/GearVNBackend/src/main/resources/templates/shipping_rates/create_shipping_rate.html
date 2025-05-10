@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<!-- khai báo namespace th để có thể sử dụng các thuộc tính của thymeleaf -->
+<html xmlns:th="http://thymeleaf.org">
+
+<!-- Head -->
+<head th:replace="fragments :: page_head('Create New Brand', 'none')"></head>
+<!-- Head -->
+
+<body>
+	<!-- Header -->
+	<header th:replace="fragments :: header"></header>
+	<!-- Header -->
+
+	<div class="container mt-5">
+		<nav aria-label="breadcrumb">
+			<ol class="breadcrumb">
+				<li class="breadcrumb-item"><a th:href="@{/shipping_rates}">Manage
+						Shipping Rate</a></li>
+				<li class="breadcrumb-item"><a
+					th:href="@{/shipping_rates/create}">Create New Shipping Rate</a></li>
+			</ol>
+		</nav>
+	</div>
+
+	<div class="container mt-3">
+		<h2>Create New Shipping Rate</h2>
+	</div>
+
+	<div class="container mt-3">
+		<form class="mx-auto col-md-8 col-lg-6"
+			th:action="@{/shipping_rates/save}" method="post"
+			th:object="${shippingRate}">
+
+			<!-- Destination Country -->
+			<div class="mb-3 row">
+				<label for="country" class="col-sm-4 col-form-label">Destination
+					Country</label>
+				<div class="col-sm-8">
+					<select id="selectCountryList" name="country" class="form-select"
+						th:field="*{country}" aria-describedby="countryError">
+						<th:block th:each="country : ${countries}">
+							<option th:value="${country.id}">[[${country.name}]]</option>
+						</th:block>
+					</select>
+				</div>
+			</div>
+
+			<!-- State/Province -->
+			<div class="mb-3 row">
+				<label for="state" class="col-sm-4 col-form-label">State/Province</label>
+				<div class="col-sm-8">
+					<input type="text" id="inputState" name="state"
+						class="form-control" list="stateList"
+						placeholder="Enter state or province" th:field="*{state}"
+						aria-describedby="stateError">
+					<datalist id="stateList"></datalist>
+					<div th:if="${#fields.hasErrors('state')}" th:errors="*{state}"
+						class="text-danger" id="stateError"></div>
+				</div>
+			</div>
+
+			<!-- Shipping Rate -->
+			<div class="mb-3 row">
+				<label for="rate" class="col-sm-4 col-form-label">Shipping
+					Rate (per DIM weight)</label>
+				<div class="col-sm-8">
+					<input type="number" id="rate" name="rate" class="form-control"
+						placeholder="e.g. 5.99" th:field="*{rate}"
+						aria-describedby="rateError">
+					<div th:if="${#fields.hasErrors('rate')}" th:errors="*{rate}"
+						class="text-danger" id="rateError"></div>
+				</div>
+			</div>
+
+			<!-- Days to Deliver -->
+			<div class="mb-3 row">
+				<label for="days" class="col-sm-4 col-form-label">Days to
+					Deliver</label>
+				<div class="col-sm-8">
+					<input type="number" id="days" name="days" class="form-control"
+						placeholder="e.g. 3" th:field="*{days}"
+						aria-describedby="daysError">
+					<div th:if="${#fields.hasErrors('days')}" th:errors="*{days}"
+						class="text-danger" id="daysError"></div>
+				</div>
+			</div>
+
+			<!-- COD Supported -->
+			<div class="mb-3 row align-items-center">
+				<label for="codSupported" class="col-sm-4 col-form-label">Cash
+					On Delivery (COD)</label>
+				<div class="col-sm-8">
+					<div class="form-check d-flex align-items-center">
+						<input class="form-check-input me-2" type="checkbox"
+							id="codSupported" name="codSupported" th:field="*{codSupported}">
+					</div>
+				</div>
+			</div>
+
+			<!-- Actions -->
+			<div class="d-flex justify-content-end mt-4">
+				<a th:href="@{/shipping_rates}" class="btn btn-secondary me-2">Back</a>
+				<button type="submit" class="btn btn-success">Create</button>
+			</div>
+		</form>
+	</div>
+
+	<!-- Modal -->
+	<div th:replace="modal_fragments :: modal_dialog"></div>
+	<!-- Modal -->
+
+	<!-- Footer -->
+	<footer th:replace="fragments :: footer"></footer>
+	<!-- Footer -->
+
+	<script type="text/javascript">
+		
+	</script>
+
+	<script th:src="@{/js/shipping_rate/shipping_rate.js}"></script>
+
+</body>
+
+</html>

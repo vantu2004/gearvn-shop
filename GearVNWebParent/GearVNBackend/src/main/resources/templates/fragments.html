@@ -131,7 +131,8 @@ body {
 							</th:block>
 
 							<th:block sec:authorize="hasAnyAuthority('Admin', 'Salesperson')">
-								<li class="nav-item"><a class="nav-link" href="#">Shipping</a></li>
+								<li class="nav-item"><a class="nav-link"
+									th:href="@{/shipping_rates}">Shipping</a></li>
 							</th:block>
 
 							<th:block
