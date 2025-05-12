@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html xmlns:th="http://thymeleaf.org">
+
+<!-- Head -->
+<head th:replace="fragments :: page_head('Address Book', 'none')"></head>
+<!-- Head -->
+
+<body class="d-flex flex-column min-vh-100">
+	<!-- Header -->
+	<header th:replace="fragments :: header"></header>
+	<!-- Header -->
+
+	<div class="container mt-5 flex-grow-1">
+		<div class="row align-items-center mb-4">
+			<!-- Tiêu đề -->
+			<div class="col-12 col-md-9">
+				<h2 class="mb-2 mb-md-0 text-center text-md-start">Your Address
+					Book</h2>
+			</div>
+
+			<!-- Nút -->
+			<div class="col-12 col-md-3 text-center text-md-end">
+				<a class="btn btn-primary w-100 w-md-auto mt-2 mt-md-0"
+					th:href="@{/address_book/create}"> <i
+					class="fas fa-plus-square me-1"></i> Create New Address Book
+				</a>
+			</div>
+		</div>
+
+		<!-- message -->
+		<div th:replace="modal_fragments :: generalToast(${message})"></div>
+		<!-- message -->
+
+		<!-- Cards section -->
+		<div class="row g-4">
+			<!-- Primary address -->
+			<div class="col-12 col-md-6">
+				<div class="card"
+					th:classappend="${usePrimaryAddressAsDefault ? 'bg-warning' : ''}">
+					<div
+						class="card-header d-flex justify-content-between align-items-center">
+						<strong>Primary Address</strong>
+						<div class="d-flex align-items-center">
+
+							<th:block th:if="${usePrimaryAddressAsDefault}">
+								<strong class="me-2">[Default]</strong>
+							</th:block>
+
+							<th:block th:unless="${usePrimaryAddressAsDefault}">
+								<a class="me-2" th:href="@{/address_book/default/0}">[Set as
+									Default]</a>
+							</th:block>
+
+							<!-- truyền tham số kèm vào url để thực hiện chuyển hướng đến page chỉ định -->
+							<a th:href="@{/customers/update(redirect=address_book)}"
+								title="Edit this address book" class="me-2"> <i
+								class="fas fa-edit text-success"></i>
+							</a>
+						</div>
+					</div>
+					<div class="card-body">
+						<p class="card-text">[[${customer.getFullAddress}]]</p>
+					</div>
+				</div>
+			</div>
+
+			<!-- Other addresses -->
+			<th:block th:each="address, status : ${addresses}">
+				<div class="col-12 col-md-6">
+					<div class="card"
+						th:classappend="${address.defaultForShipping ? 'bg-warning' : ''}">
+						<div
+							class="card-header d-flex justify-content-between align-items-center">
+							<strong>Address #[[${status.count}]]</strong>
+							<div class="d-flex align-items-center">
+
+								<th:block th:if="${address.defaultForShipping}">
+									<strong class="me-2">[Default]</strong>
+								</th:block>
+
+								<th:block th:unless="${address.defaultForShipping}">
+									<a class="me-2"
+										th:href="@{'/address_book/default/' + ${address.id}}">[Set
+										as Default]</a>
+								</th:block>
+
+								<a th:href="@{'/address_book/update/' + ${address.id}}"
+									title="Edit this address book" class="me-2"> <i
+									class="fas fa-edit text-success"></i>
+								</a> <a th:href="@{'/address_book/delete/' + ${address.id}}"
+									title="Delete this address book"
+									th:addressBoookId="${address.id}" class="link-delete"> <i
+									class="fas fa-trash-alt text-danger"></i>
+								</a>
+							</div>
+						</div>
+						<div class="card-body">
+							<p class="card-text">[[${address.getFullAddress}]]</p>
+						</div>
+					</div>
+				</div>
+			</th:block>
+		</div>
+	</div>
+
+	<!-- Modal delete-->
+	<div th:replace="modal_fragments :: modal_delete"></div>
+	<!-- Modal delete-->
+
+	<!-- Footer -->
+	<footer th:replace="fragments :: footer" class="mt-auto"></footer>
+	<!-- Footer -->
+
+	<!-- jQuery Script -->
+	<script type="text/javascript">
+		const message = "[[${message}]]";
+		document.addEventListener("DOMContentLoaded", function() {
+			// nếu ko kiểm tra như này thì mặc định sẽ xuất toast khi load page
+			if (message != null && message != "") {
+				const toastEl = document.querySelector('#generalToast');
+				if (toastEl) {
+					const toast = bootstrap.Toast.getOrCreateInstance(toastEl);
+					toast.show();
+				}
+			}
+		});
+
+		$(".link-delete")
+				.on(
+						"click",
+						function(event) {
+							event.preventDefault();
+
+							let link = $(this);
+							let addressBookId = link.attr("addressBookId")
+									|| "unknown";
+							let href = link.attr("href") || "#";
+
+							$("#modalMessage").text(
+									"Are you sure you want to delete address book id "
+											+ addressBookId + "?");
+							$("#deleteButton").attr("href", href);
+
+							$("#confirmModal").modal("show");
+						});
+	</script>
+
+</body>
+
+</html>

@@ -60,6 +60,10 @@ public class ShippingRateController {
 				List<Country> countries = this.shippingRateService.getAllCountries();
 				model.addAttribute("countries", countries);
 
+				// vì create và update dùng chung nên khi đá lỗi thì phải đã cụ thể về trang nào
+				if (shippingRate.getId() != null) {
+					return "shipping_rates/update_shipping_rate";
+				}
 				return "shipping_rates/create_shipping_rate";
 			}
 

@@ -144,12 +144,29 @@ public class CustomerController {
 			return "customer/update_customer";
 		}
 
+		// cập nhật giao diện
 		this.updateFullNameForAuthenticatedCustomer(customer, request);
 
 		this.customerService.handleSaveUpdateCustomer(customer);
 
 		redirectAttributes.addFlashAttribute("message", "The customer has been saved successfully.");
-		return "redirect:/customers/update";
+
+		/*
+		 * vì có nhiều page gọi đến update này nên khi trả về kết quả cũng phải chuyển
+		 * hướng về lại trang đã gọi
+		 */
+		String redirectOption = request.getParameter("redirect");
+		String redirectURL = "redirect:/customers/update";
+
+		if ("address_book".equals(redirectOption)) {
+			redirectURL = "redirect:/address_book";
+		} else if ("cart".equals(redirectOption)) {
+			redirectURL = "redirect:/cart";
+		} else if ("checkout".equals(redirectOption)) {
+			redirectURL = "redirect:/address_book?redirect=checkout";
+		}
+
+		return redirectURL;
 	}
 
 	private void updateFullNameForAuthenticatedCustomer(Customer customer, HttpServletRequest request) {

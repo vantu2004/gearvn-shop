@@ -26,7 +26,7 @@
 	</div>
 
 	<!-- message -->
-	<th:block th:replace="modal_fragments :: message_toast(${message})"/>
+	<th:block th:replace="modal_fragments :: message_toast(${message})" />
 	<!-- message -->
 
 	<div class="container mt-3">
@@ -44,6 +44,10 @@
 						th:errorclass="error" th:errors="*{id}" class="text-danger"></p>
 				</div>
 			</div>
+
+			<!-- nhận dữ liệu truyền từ file list_addresses đính kèm trong url và truyền vào controller để xử lý-->
+			<input type="text" class="form-control" id="inputRedirect"
+				name="redirect" th:value="${param.redirect}">
 
 			<!-- First Name -->
 			<div class="form-group row mb-3">

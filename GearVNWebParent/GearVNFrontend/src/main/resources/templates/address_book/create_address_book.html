@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<!-- khai báo namespace th để có thể sử dụng các thuộc tính của thymeleaf -->
+<html xmlns:th="http://thymeleaf.org">
+
+<!-- Head -->
+<head th:replace="fragments :: page_head('Create Address Book', 'none')"></head>
+<!-- Head -->
+
+<body>
+	<!-- Header -->
+	<header th:replace="fragments :: header"></header>
+	<!-- Header -->
+
+	<div class="container mt-5">
+		<nav aria-label="breadcrumb">
+			<ol class="breadcrumb">
+				<li class="breadcrumb-item"><a th:href="@{/}">Home</a></li>
+				<li class="breadcrumb-item"><a
+					th:href="@{/address_book/create}">Create New Address Book</a></li>
+			</ol>
+		</nav>
+	</div>
+
+	<div class="container mt-3">
+		<h2>Create New Address Book</h2>
+	</div>
+
+	<div class="container mt-3">
+		<form class="mx-auto col-md-6" th:action="@{/address_book/save}"
+			method="post" th:object="${address}">
+
+			<!-- First Name -->
+			<div class="form-group row mb-3">
+				<label for="inputFirstName" class="col-sm-3 col-form-label">First
+					Name</label>
+				<div class="col-sm-9">
+					<input type="text" class="form-control" id="inputFirstName"
+						th:field="*{firstName}" placeholder="Enter your first name">
+					<p th:if="${#fields.hasErrors('firstName')}"
+						th:errors="*{firstName}" class="text-danger"></p>
+				</div>
+			</div>
+
+			<!-- Last Name -->
+			<div class="form-group row mb-3">
+				<label for="inputLastName" class="col-sm-3 col-form-label">Last
+					Name</label>
+				<div class="col-sm-9">
+					<input type="text" class="form-control" id="inputLastName"
+						th:field="*{lastName}" placeholder="Enter your last name">
+					<p th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}"
+						class="text-danger"></p>
+				</div>
+			</div>
+
+			<!-- Phone Number -->
+			<div class="form-group row mb-3">
+				<label for="inputPhoneNumber" class="col-sm-3 col-form-label">Phone
+					Number</label>
+				<div class="col-sm-9">
+					<input type="text" class="form-control" id="inputPhoneNumber"
+						th:field="*{phoneNumber}" placeholder="e.g. +1 123 456 7890">
+					<p th:if="${#fields.hasErrors('phoneNumber')}"
+						th:errors="*{phoneNumber}" class="text-danger"></p>
+				</div>
+			</div>
+
+			<!-- Address Line 1 -->
+			<div class="form-group row mb-3">
+				<label for="inputAddressLine1" class="col-sm-3 col-form-label">Address
+					Line 1</label>
+				<div class="col-sm-9">
+					<input type="text" class="form-control" id="inputAddressLine1"
+						th:field="*{addressLine1}"
+						placeholder="Street address or P.O. box">
+					<p th:if="${#fields.hasErrors('addressLine1')}"
+						th:errors="*{addressLine1}" class="text-danger"></p>
+				</div>
+			</div>
+
+			<!-- Address Line 2 -->
+			<div class="form-group row mb-3">
+				<label for="inputAddressLine2" class="col-sm-3 col-form-label">Address
+					Line 2</label>
+				<div class="col-sm-9">
+					<input type="text" class="form-control" id="inputAddressLine2"
+						th:field="*{addressLine2}"
+						placeholder="Apartment, suite, unit, etc.">
+				</div>
+			</div>
+
+			<!-- Postal Code -->
+			<div class="form-group row mb-3">
+				<label for="inputPostalCode" class="col-sm-3 col-form-label">Postal
+					Code</label>
+				<div class="col-sm-9">
+					<input type="text" class="form-control" id="inputPostalCode"
+						th:field="*{postalCode}" placeholder="e.g. 10001">
+					<p th:if="${#fields.hasErrors('postalCode')}"
+						th:errors="*{postalCode}" class="text-danger"></p>
+				</div>
+			</div>
+
+			<!-- Country -->
+			<div class="form-group row mb-3">
+				<label for="selectCountryList" class="col-sm-3 col-form-label">Country</label>
+				<div class="col-sm-9">
+					<select class="form-select" id="selectCountryList"
+						th:field="*{country}">
+						<th:block th:each="country : ${countries}">
+							<option th:value="${country.id}" th:text="${country.name}"></option>
+						</th:block>
+					</select>
+					<p th:if="${#fields.hasErrors('country')}" th:errors="*{country}"
+						class="text-danger"></p>
+				</div>
+			</div>
+
+			<!-- City -->
+			<div class="form-group row mb-3">
+				<label for="inputCity" class="col-sm-3 col-form-label">City</label>
+				<div class="col-sm-9">
+					<input type="text" class="form-control" id="inputCity"
+						th:field="*{city}" placeholder="Enter your city">
+					<p th:if="${#fields.hasErrors('city')}" th:errors="*{city}"
+						class="text-danger"></p>
+				</div>
+			</div>
+
+			<!-- State -->
+			<div class="form-group row mb-3">
+				<label for="inputState" class="col-sm-3 col-form-label">State/Province</label>
+				<div class="col-sm-9">
+					<input type="text" class="form-control" id="inputState"
+						th:field="*{state}" list="selectStateList"
+						placeholder="Enter your state or province">
+					<datalist id="selectStateList"></datalist>
+					<p th:if="${#fields.hasErrors('state')}" th:errors="*{state}"
+						class="text-danger"></p>
+				</div>
+			</div>
+
+			<!-- Buttons -->
+			<div class="form-group row mt-4">
+				<div class="col-sm-9 offset-sm-3 d-flex justify-content-end">
+					<a th:href="@{/address_book}" class="btn btn-secondary me-2">Back</a>
+					<button type="submit" class="btn btn-success">Save</button>
+				</div>
+			</div>
+
+		</form>
+	</div>
+
+	<!-- Modal -->
+	<div th:replace="modal_fragments :: modal_dialog"></div>
+	<!-- Modal -->
+
+	<!-- Footer -->
+	<footer th:replace="fragments :: footer"></footer>
+	<!-- Footer -->
+
+	<script>
+		
+	</script>
+
+	<script th:src="@{/js/address_book.js}"></script>
+
+</body>
+
+</html>
