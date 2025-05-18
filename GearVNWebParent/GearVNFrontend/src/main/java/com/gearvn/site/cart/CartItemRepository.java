@@ -8,7 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 
 import com.gearvn.common.entity.CartItem;
 import com.gearvn.common.entity.Customer;
-import com.gearvn.common.entity.Product;
+import com.gearvn.common.entity.product.Product;
 
 public interface CartItemRepository extends JpaRepository<CartItem, Integer> {
 	List<CartItem> findByCustomer(Customer customer);

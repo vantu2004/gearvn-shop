@@ -8,7 +8,7 @@ import org.supercsv.io.ICsvBeanWriter;
 import org.supercsv.prefs.CsvPreference;
 
 import com.gearvn.admin.common.AbstractExporter;
-import com.gearvn.common.entity.Product;
+import com.gearvn.common.entity.product.Product;
 
 import jakarta.servlet.http.HttpServletResponse;
 

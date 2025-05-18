@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.gearvn.common.entity.Category;
-import com.gearvn.common.entity.Product;
+import com.gearvn.common.entity.product.Product;
 import com.gearvn.site.category.CategoryService;
 
 @Controller

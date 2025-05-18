@@ -6,8 +6,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
-import com.gearvn.common.entity.Setting;
-import com.gearvn.common.entity.SettingCategory;
+import com.gearvn.common.entity.setting.Setting;
+import com.gearvn.common.entity.setting.SettingCategory;
 
 @Repository
 public interface SettingRepository extends JpaRepository<Setting, String> {

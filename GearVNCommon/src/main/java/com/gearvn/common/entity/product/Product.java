@@ -1,9 +1,12 @@
-package com.gearvn.common.entity;
+package com.gearvn.common.entity.product;
 
 import java.beans.Transient;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
+
+import com.gearvn.common.entity.Brand;
+import com.gearvn.common.entity.Category;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -31,7 +34,7 @@ import lombok.ToString;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder(toBuilder = true)
+@Builder
 @ToString
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class Product {

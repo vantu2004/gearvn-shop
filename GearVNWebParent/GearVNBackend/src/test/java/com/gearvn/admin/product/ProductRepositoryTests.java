@@ -15,7 +15,7 @@ import org.springframework.test.annotation.Rollback;
 
 import com.gearvn.common.entity.Brand;
 import com.gearvn.common.entity.Category;
-import com.gearvn.common.entity.Product;
+import com.gearvn.common.entity.product.Product;
 
 @DataJpaTest(showSql = false)
 @AutoConfigureTestDatabase(replace = Replace.NONE)
@@ -87,7 +87,7 @@ public class ProductRepositoryTests {
 	@Test
 	public void testUpdateProduct() {
 		Product product = this.productRepository.findById(1).orElse(null);
-		Product updateProduct = product.toBuilder().name("SamSung Galaxy A31").alias("samsung_galaxy_A31").build();
+		Product updateProduct = product.builder().name("SamSung Galaxy A31").alias("samsung_galaxy_A31").build();
 		this.productRepository.save(updateProduct);
 		assertThat(updateProduct).isNotNull();
 	}

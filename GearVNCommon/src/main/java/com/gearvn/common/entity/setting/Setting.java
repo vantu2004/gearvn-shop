@@ -1,4 +1,4 @@
-package com.gearvn.common.entity;
+package com.gearvn.common.entity.setting;
 
 import java.util.Objects;
 

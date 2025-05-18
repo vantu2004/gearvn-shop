@@ -2,7 +2,7 @@
 <html xmlns:th="http://thymeleaf.org">
 
 <!-- Head -->
-<head th:replace="fragments :: page_head('Manage Customers', 'none')"></head>
+<head th:replace="fragments :: page_head('Manage Orders', 'none')"></head>
 <!-- Head -->
 
 <body>
@@ -11,24 +11,24 @@
 	<!-- Header -->
 
 	<div class="container mt-5">
-		<h2>Manage Customers</h2>
+		<h2>Manage Orders</h2>
 	</div>
 
-	<!-- create/csv/excel/pdf -->
+	<!-- csv/excel/pdf -->
 	<div class="container mt-3">
 		<div class="row g-2">
 			<div class="col-12 col-sm-6 col-md-3">
-				<a class="btn btn-warning w-100" th:href="@{/customers/export/csv}">
+				<a class="btn btn-warning w-100" th:href="@{/orders/export/csv}">
 					<i class="fas fa-file-csv"></i> Export To CSV
 				</a>
 			</div>
 		</div>
 	</div>
-	<!-- create/csv/excel/pdf -->
+	<!-- csv/excel/pdf -->
 
 	<div class="container mt-3">
 		<!-- search/reload -->
-		<form th:action="@{/customers/page/1}" method="get">
+		<form th:action="@{/orders/page/1}" method="get">
 			<div class="row g-3">
 				<div class="col-md-3 col-12">
 					<input type="hidden" id="inputSortField" class="form-control"
@@ -43,7 +43,7 @@
 					<button type="submit" class="btn btn-primary">
 						<i class="fas fa-search"></i>
 					</button>
-					<a th:href="@{/customers}" class="btn btn-secondary"> <i
+					<a th:href="@{/orders}" class="btn btn-secondary"> <i
 						class="fas fa-redo"></i>
 					</a>
 				</div>
@@ -64,59 +64,60 @@
 		</div>
 		<!-- message -->
 
-		<!-- list categories -->
+		<!-- list orders -->
 		<div class="table-responsive mt-3">
 			<table class="table table-hover">
 				<thead>
 					<tr>
-						<th th:replace="fragments :: column_link('id', 'ID')" />
+						<th th:replace="fragments :: column_link('id', 'ID')"></th>
+						<th th:replace="fragments :: column_link('customer', 'Customer')"></th>
+						<th th:replace="fragments :: column_link('total', 'Total')"></th>
 						<th
-							th:replace="fragments :: column_link('firstName', 'First Name')" />
-						<th th:replace="fragments :: column_link('lastName', 'Last Name')" />
-						<th th:replace="fragments :: column_link('email', 'Email')" />
-						<th th:replace="fragments :: column_link('city', 'City')" />
-						<th th:replace="fragments :: column_link('state', 'State')" />
-						<th th:replace="fragments :: column_link('country', 'Country')" />
-						<th th:replace="fragments :: column_link('enabled', 'Enabled')" />
-						<th scope="col">Action</th>
+							th:replace="fragments :: column_link('orderTime', 'Order Time')"></th>
+						<th
+							th:replace="fragments :: column_link('destination', 'Destination')"></th>
+						<th
+							th:replace="fragments :: column_link('paymentMethod', 'Payment Method')"></th>
+						<th th:replace="fragments :: column_link('status', 'Status')"></th>
+						<th>Action</th>
 					</tr>
 				</thead>
 				<tbody>
-					<tr th:each="customer : ${listCustomers}">
-						<td th:text="${customer.id}"></td>
-						<td th:text="${customer.firstName}"></td>
-						<td th:text="${customer.lastName}"></td>
-						<td th:text="${customer.email}"></td>
-						<td th:text="${customer.city}"></td>
-						<td th:text="${customer.state}"></td>
-						<td th:text="${customer.country.name}"></td>
-
-						<td><i th:if="${customer.enabled}"
-							class="fas fa-check text-success"></i> <i
-							th:if="${!customer.enabled}" class="fas fa-times text-danger"></i></td>
-
-						<td><a title="View this customer" class="linkCustomerDetail"
-							th:href="@{'/customers/detail/' + ${customer.id}}"> <i
+					<tr th:each="order : ${listOrders}">
+						<td th:text="${order.id}"></td>
+						<td><a
+							th:href="@{'/customers/detail/' + ${order.customer.id}}"
+							class="linkCustomerDetail">[[${order.customer.getFullName}]]</a></td>
+						<td><th:block
+								th:replace="orders/order_fragments :: formatPrice(${order.total})"></th:block>
+						</td>
+						<td
+							th:text="${#dates.format(order.orderTime, 'dd/MM/yyyy HH:mm')}"></td>
+						<td th:text="${order.getDestination}"></td>
+						<td th:text="${order.paymentMethod}"></td>
+						<td th:text="${order.status}"></td>
+						<td><a title="View this order" class="linkOrderDetail"
+							th:href="@{'/orders/detail/' + ${order.id}}"> <i
 								class="fas fa-eye"></i>
-						</a> | <a title="Edit this customer"
-							th:href="@{'/customers/update/' + ${customer.id}}"> <i
+						</a> | <a title="Edit this order"
+							th:href="@{'/orders/update/' + ${order.id}}"> <i
 								class="fas fa-edit text-success"></i>
-						</a> | <a title="Delete this customer"
-							th:href="@{'/customers/delete/' + ${customer.id}}"
-							th:customerId="${customer.id}" class="link-delete"> <i
+						</a> | <a title="Delete this order"
+							th:href="@{'/orders/delete/' + ${order.id}}"
+							th:orderId="${order.id}" class="link-delete"> <i
 								class="fas fa-trash-alt text-danger"></i>
-						</a> </th:block></td>
+						</a></td>
 					</tr>
 				</tbody>
 			</table>
 		</div>
-		<!-- list categories -->
+		<!-- list orders -->
 
 		<!-- Pagination -->
 		<nav aria-label="Pagination"
 			class="d-flex flex-column align-items-center mt-5"
 			th:if="${totalElements > 0}">
-			<p class="mb-2">Show brands from [[${startCount}]] to
+			<p class="mb-2">Show orders from [[${startCount}]] to
 				[[${endCount}]] of [[${totalElements}]]</p>
 
 			<th:block>
@@ -127,7 +128,7 @@
 
 
 		<div class="text-center mt-5" th:if="${totalElements <= 0}">No
-			customers found.</div>
+			orders found.</div>
 
 	</div>
 
@@ -138,6 +139,14 @@
 		</div>
 	</div>
 	<!-- Customer details modal -->
+
+	<!-- Order details modal -->
+	<div class="modal fade" id="orderDetailModal">
+		<div class="modal-dialog modal-xl">
+			<div class="modal-content"></div>
+		</div>
+	</div>
+	<!-- Order details modal -->
 
 	<!-- Modal delete-->
 	<div th:replace="modal_fragments :: modal_delete"></div>
@@ -151,7 +160,8 @@
 	<script type="text/javascript">
 		$(document).ready(function() {
 			handleLinkViewCustomerDetails();
-			handleLinkDeleteCustomer();
+			handleLinkViewOrderDetails();
+			handleLinkDeleteOrder();
 		});
 
 		function handleLinkViewCustomerDetails() {
@@ -165,19 +175,30 @@
 					});
 		}
 
-		function handleLinkDeleteCustomer() {
+		function handleLinkViewOrderDetails() {
+			$(".linkOrderDetail").on(
+					"click",
+					function(e) {
+						e.preventDefault();
+						linkDetailURL = $(this).attr("href");
+						$("#orderDetailModal").modal("show").find(
+								".modal-content").load(linkDetailURL);
+					});
+		}
+
+		function handleLinkDeleteOrder() {
 			$(".link-delete").on(
 					"click",
 					function(event) {
 						event.preventDefault();
 
 						let link = $(this);
-						let customerId = link.attr("customerId") || "unknown";
+						let orderId = link.attr("orderId") || "unknown";
 						let href = link.attr("href") || "#";
 
 						$("#modalMessage").text(
-								"Are you sure you want to delete customer ID "
-										+ customerId + "?");
+								"Are you sure you want to delete order ID "
+										+ orderId + "?");
 						$("#deleteButton").attr("href", href);
 
 						$("#confirmModal").modal("show");

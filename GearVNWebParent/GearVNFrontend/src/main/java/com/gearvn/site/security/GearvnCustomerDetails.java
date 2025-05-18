@@ -46,7 +46,7 @@ public class GearvnCustomerDetails implements UserDetails {
 
 	// dùng khi login thường, thêm 1 hàm bên CCustomerOAuth2User để khi login gg/fb
 	public String getFullName() {
-		return this.customer.getFullName();
+		return this.getCustomer().getFullName();
 	}
 
 	// dùng update AuthenticationType khi login bằng Database

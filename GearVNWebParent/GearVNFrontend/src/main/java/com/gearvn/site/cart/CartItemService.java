@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.gearvn.common.entity.CartItem;
 import com.gearvn.common.entity.Customer;
-import com.gearvn.common.entity.Product;
+import com.gearvn.common.entity.product.Product;
 import com.gearvn.site.product.ProductRepository;
 
 import jakarta.transaction.Transactional;

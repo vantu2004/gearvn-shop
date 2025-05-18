@@ -89,10 +89,12 @@ public class WebSecurityConfig {
 				// đảm bảo admin/editor có full quyền với product
 				.requestMatchers("/products/**").hasAnyAuthority("Admin", "Editor")
 
+				.requestMatchers("/customers/**", "/orders/**").hasAnyAuthority("Admin", "Salesperson")
+
 				.anyRequest().authenticated())
 
 				.formLogin(formLogin -> formLogin.loginPage("/login").usernameParameter("email").permitAll()
-				.defaultSuccessUrl("/", true).failureUrl("/login?error=true"))
+						.defaultSuccessUrl("/", true).failureUrl("/login?error=true"))
 
 				.sessionManagement((sessionManagement) -> sessionManagement
 						// luôn tạo session cho mọi request

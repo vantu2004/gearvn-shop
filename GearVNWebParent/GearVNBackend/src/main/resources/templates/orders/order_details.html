@@ -1,0 +1,69 @@
+<html xmlns:th="http://thymeleaf.org">
+
+<div class="container mt-3">
+	<h2>Order Details | ID = [[${order.id}]]</h2>
+</div>
+
+<div class="container mt-3">
+
+	<!-- Bootstrap Tabs navs -->
+	<ul class="nav nav-tabs nav-justified mb-3" id="myTab" role="tablist">
+		<li class="nav-item" role="presentation">
+
+			<button class="nav-link active" id="tab1-tab" data-bs-toggle="tab"
+				data-bs-target="#tab1" type="button" role="tab" aria-controls="tab1"
+				aria-selected="true">Overview</button>
+
+		</li>
+
+		<li class="nav-item" role="presentation">
+
+			<button class="nav-link" id="tab2-tab" data-bs-toggle="tab"
+				data-bs-target="#tab2" type="button" role="tab" aria-controls="tab2"
+				aria-selected="false">Products</button>
+
+		</li>
+
+		<li class="nav-item" role="presentation">
+
+			<button class="nav-link" id="tab3-tab" data-bs-toggle="tab"
+				data-bs-target="#tab3" type="button" role="tab" aria-controls="tab3"
+				aria-selected="false">Shipping</button>
+
+		</li>
+
+		<li class="nav-item" role="presentation">
+
+			<button class="nav-link" id="tab3-tab" data-bs-toggle="tab"
+				data-bs-target="#tab3" type="button" role="tab" aria-controls="tab3"
+				aria-selected="false">Track</button>
+
+		</li>
+	</ul>
+
+	<!-- Tabs content -->
+	<div class="tab-content" id="myTabContent">
+
+		<div class="tab-pane fade show active" id="tab1" role="tabpanel"
+			aria-labelledby="tab1-tab">
+			<th:block
+				th:replace="orders/order_fragments :: overview_tabpane(${order})"></th:block>
+		</div>
+
+		<div class="tab-pane fade" id="tab2" role="tabpanel"
+			aria-labelledby="tab2-tab">
+			<th:block
+				th:replace="orders/order_fragments :: product_tabpane(${order})"></th:block>
+		</div>
+
+		<div class="tab-pane fade" id="tab3" role="tabpanel"
+			aria-labelledby="tab3-tab">
+			<th:block
+				th:replace="orders/order_fragments :: shipping_tabpane(${order})"></th:block>
+		</div>
+
+		<div class="tab-pane fade" id="tab4" role="tabpanel"
+			aria-labelledby="tab3-tab"></div>
+	</div>
+</div>
+</html>

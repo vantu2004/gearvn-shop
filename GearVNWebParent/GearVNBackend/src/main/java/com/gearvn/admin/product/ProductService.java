@@ -11,7 +11,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.gearvn.admin.paging.PagingAndSortingHelper;
-import com.gearvn.common.entity.Product;
+import com.gearvn.common.entity.product.Product;
 
 import jakarta.validation.Valid;
 

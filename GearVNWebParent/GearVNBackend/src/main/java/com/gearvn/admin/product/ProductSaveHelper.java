@@ -11,8 +11,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.gearvn.admin.brand.BrandService;
 import com.gearvn.admin.common.UploadImageService;
-import com.gearvn.common.entity.Product;
-import com.gearvn.common.entity.ProductImage;
+import com.gearvn.common.entity.product.Product;
+import com.gearvn.common.entity.product.ProductImage;
 
 import jakarta.validation.Valid;
 

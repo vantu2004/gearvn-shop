@@ -1,6 +1,4 @@
-package com.gearvn.common.entity;
-
-import java.beans.Transient;
+package com.gearvn.common.entity.product;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -22,21 +20,19 @@ import lombok.ToString;
 @AllArgsConstructor
 @Builder
 @ToString
-@Table(name = "product_images")
-public class ProductImage {
+@Table(name = "product_details")
+public class ProductDetail {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
-	
-	@Column(nullable = false)
+
+	@Column(nullable = false, length = 255)
 	private String name;
-	
+
+	@Column(nullable = false, length = 255)
+	private String value;
+
 	@ManyToOne
 	@JoinColumn(name = "product_id")
 	private Product product;
-	
-	@Transient
-	public String getImagePath() {
-		return "/product-images/" + this.name;
-	}
 }

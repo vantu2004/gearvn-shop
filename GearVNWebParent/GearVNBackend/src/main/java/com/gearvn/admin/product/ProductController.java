@@ -25,8 +25,8 @@ import com.gearvn.admin.paging.PagingAndSortingParam;
 import com.gearvn.admin.security.GearvnUserDetails;
 import com.gearvn.common.entity.Brand;
 import com.gearvn.common.entity.Category;
-import com.gearvn.common.entity.Product;
-import com.gearvn.common.entity.ProductImage;
+import com.gearvn.common.entity.product.Product;
+import com.gearvn.common.entity.product.ProductImage;
 
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;

@@ -1,7 +1,8 @@
-package com.gearvn.common.entity;
+package com.gearvn.common.entity.product;
 
-import com.gearvn.common.entity.product.Product;
+import java.beans.Transient;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -9,39 +10,33 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import jakarta.persistence.Transient;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import lombok.ToString;
 
-@Getter
-@Setter
+@Entity
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @ToString
-@Entity
-@Table(name = "cart_item")
-public class CartItem {
+@Table(name = "product_images")
+public class ProductImage {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
-
-	@ManyToOne
-	@JoinColumn(name = "customer_id")
-	private Customer customer;
-
+	
+	@Column(nullable = false)
+	private String name;
+	
 	@ManyToOne
 	@JoinColumn(name = "product_id")
 	private Product product;
-
-	private int quantity;
-
+	
 	@Transient
-	public float getTotalPrice() {
-		return this.product.getDiscountPrice() * this.quantity;
+	public String getImagePath() {
+		return "/product-images/" + this.name;
 	}
 }

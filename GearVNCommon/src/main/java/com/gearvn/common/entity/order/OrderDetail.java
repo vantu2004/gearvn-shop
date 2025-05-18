@@ -1,6 +1,7 @@
-package com.gearvn.common.entity;
+package com.gearvn.common.entity.order;
 
-import jakarta.persistence.Column;
+import com.gearvn.common.entity.product.Product;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -10,29 +11,35 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.ToString;
 
-@Entity
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @ToString
-@Table(name = "product_details")
-public class ProductDetail {
+@Entity
+@Table(name = "order_details")
+public class OrderDetail {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 
-	@Column(nullable = false, length = 255)
-	private String name;
-
-	@Column(nullable = false, length = 255)
-	private String value;
+	private int quantity;
+	private float productCost;
+	private float shippingCost;
+	private float unitPrice;
+	private float subtotal;
 
 	@ManyToOne
 	@JoinColumn(name = "product_id")
 	private Product product;
+
+	@ManyToOne
+	@JoinColumn(name = "order_id")
+	private Order order;
 }

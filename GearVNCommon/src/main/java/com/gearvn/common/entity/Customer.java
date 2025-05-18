@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import org.springframework.util.StringUtils;
+import com.gearvn.common.entity.abstract_address.AbstractAddressWithCountry;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -13,30 +13,28 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import lombok.experimental.SuperBuilder;
 
 @Entity
 @Getter
 @Setter
-@Builder
+@SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
 @Table(name = "customers")
 //session đang cố lưu customer dạng byte[], phải serilize luôn Country
-public class Customer implements Serializable {
+public class Customer extends AbstractAddressWithCountry implements Serializable {
 	/**
 	 * 
 	 */
@@ -56,44 +54,6 @@ public class Customer implements Serializable {
 	@NotBlank
 	private String password;
 
-	@Column(name = "first_name", nullable = false, length = 45)
-	@Size(min = 1, max = 45)
-	@NotBlank
-	private String firstName;
-
-	@Column(name = "last_name", nullable = false, length = 45)
-	@Size(min = 1, max = 45)
-	@NotBlank
-	private String lastName;
-
-	@Column(name = "phone_number", nullable = false, length = 15)
-	@Size(min = 6, max = 15)
-	@NotBlank
-	private String phoneNumber;
-
-	@Column(nullable = false, length = 64)
-	@Size(min = 6, max = 64)
-	@NotBlank
-	private String addressLine1;
-
-	@Column(name = "address_line_2", length = 64)
-	private String addressLine2;
-
-	@Column(nullable = false, length = 45)
-	@Size(min = 2, max = 45)
-	@NotBlank
-	private String city;
-
-	@Column(nullable = false, length = 45)
-	@Size(min = 2, max = 45)
-	@NotBlank
-	private String state;
-
-	@Column(name = "postal_code", nullable = false, length = 10)
-	@Size(min = 6, max = 10)
-	@NotBlank
-	private String postalCode;
-
 	@Column(name = "verification_code", length = 64)
 	private String verificationCode;
 
@@ -101,10 +61,6 @@ public class Customer implements Serializable {
 
 	@Column(name = "created_time")
 	private Date createdTime;
-
-	@ManyToOne
-	@JoinColumn(name = "country_id")
-	private Country country;
 
 	@Enumerated(EnumType.STRING)
 	@Column(name = "authentication_type", length = 10)
@@ -122,7 +78,7 @@ public class Customer implements Serializable {
 	@Transient
 	public String getFullName() {
 		// TODO Auto-generated method stub
-		return this.firstName + " " + this.lastName;
+		return firstName + " " + lastName;
 	}
 
 	@Transient
@@ -135,38 +91,6 @@ public class Customer implements Serializable {
 		if (createdTime == null)
 			return "";
 		return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(createdTime);
-	}
-
-	@Transient
-	public String getFullAddress() {
-		String address = firstName;
-
-		if (StringUtils.hasText(lastName)) {
-			address += " " + lastName;
-		}
-		if (StringUtils.hasText(addressLine1)) {
-			address += ", " + addressLine1;
-		}
-		if (StringUtils.hasText(addressLine2)) {
-			address += ", " + addressLine2;
-		}
-		if (StringUtils.hasText(city)) {
-			address += ", " + city;
-		}
-		if (StringUtils.hasText(state)) {
-			address += ", " + state;
-		}
-		if (country != null && StringUtils.hasText(country.getName())) {
-			address += ", " + country.getName();
-		}
-		if (StringUtils.hasText(postalCode)) {
-			address += ". Postal Code: " + postalCode;
-		}
-		if (StringUtils.hasText(phoneNumber)) {
-			address += ". Phone Number: " + phoneNumber;
-		}
-
-		return address;
 	}
 
 }

@@ -9,6 +9,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.web.method.support.ModelAndViewContainer;
 
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
 public class PagingAndSortingHelper {
 
 	private ModelAndViewContainer model;

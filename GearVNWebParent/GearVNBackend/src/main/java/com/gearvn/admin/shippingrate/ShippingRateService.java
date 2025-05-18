@@ -10,8 +10,8 @@ import com.gearvn.admin.paging.PagingAndSortingHelper;
 import com.gearvn.admin.product.ProductRepository;
 import com.gearvn.admin.setting.country.CountryRepository;
 import com.gearvn.common.entity.Country;
-import com.gearvn.common.entity.Product;
 import com.gearvn.common.entity.ShippingRate;
+import com.gearvn.common.entity.product.Product;
 
 import jakarta.transaction.Transactional;
 

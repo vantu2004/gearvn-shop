@@ -14,7 +14,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.gearvn.admin.common.UploadImageService;
 import com.gearvn.common.entity.Currency;
-import com.gearvn.common.entity.Setting;
+import com.gearvn.common.entity.setting.Setting;
 
 import jakarta.servlet.http.HttpServletRequest;
 

@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
-import com.gearvn.common.entity.Product;
+import com.gearvn.common.entity.product.Product;
 
 @Repository
 public interface ProductRepository extends JpaRepository<Product, Integer> {

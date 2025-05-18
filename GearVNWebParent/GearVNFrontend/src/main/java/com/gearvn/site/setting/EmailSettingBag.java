@@ -2,8 +2,8 @@ package com.gearvn.site.setting;
 
 import java.util.List;
 
-import com.gearvn.common.entity.Setting;
-import com.gearvn.common.entity.SettingBag;
+import com.gearvn.common.entity.setting.Setting;
+import com.gearvn.common.entity.setting.SettingBag;
 
 public class EmailSettingBag extends SettingBag {
 
