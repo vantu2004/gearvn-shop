@@ -253,5 +253,22 @@ a {
 	</th:block>
 	<!-- format-price -->
 
+	<!-- format-price for checkout-->
+	<th:block th:fragment="formatPriceForCheckout(price)">
+		<span> <strong> <span
+				th:if="${CURRENCY_SYMBOL_POSITION == 'Before price'}">[[${CURRENCY_SYMBOL}]]</span>
+				<!-- Dùng hàm formatDecimal format giá tiền, 
+					tham số thứ 1 là giá tiền, 
+					thứ 2 là số chữ số tối thiểu phần nguyên, 
+					thứ 3 là kỹ tự ngăn cách phần nghìn, 
+					thứ 4 là số chữ số phần thập phân, 
+					thứ 5 là ký tự ngăn cách phần nguyên và thực -->
+				[[${#numbers.formatDecimal(price, 1, THOUSANDS_POINT_TYPE,
+				DECIMAL_DIGITS, DECIMAL_POINT_TYPE)}]] <span
+				th:if="${CURRENCY_SYMBOL_POSITION == 'After price'}">[[${CURRENCY_SYMBOL}]]</span>
+		</strong>
+		</span>
+	</th:block>
+	<!-- format-price for checkout-->
 </body>
 </html>

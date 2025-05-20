@@ -7,6 +7,7 @@ import java.util.Set;
 
 import org.springframework.util.StringUtils;
 
+import com.gearvn.common.entity.Address;
 import com.gearvn.common.entity.Customer;
 import com.gearvn.common.entity.abstract_address.AbstractAddress;
 
@@ -146,5 +147,50 @@ public class Order extends AbstractAddress {
 		if (orderTime == null)
 			return "";
 		return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(orderTime);
+	}
+
+	public void copyShippingAddress(Address address) {
+		// TODO Auto-generated method stub
+		setFirstName(address.getFirstName());
+		setLastName(address.getLastName());
+		setPhoneNumber(address.getPhoneNumber());
+		setAddressLine1(address.getAddressLine1());
+		setAddressLine2(address.getAddressLine2());
+		setCity(address.getCity());
+		setState(address.getState());
+		setPostalCode(address.getPostalCode());
+		setCountry(address.getCountry().getName());
+	}
+
+	@Transient
+	public String getFullAddress() {
+		String address = firstName;
+
+		if (StringUtils.hasText(lastName)) {
+			address += " " + lastName;
+		}
+		if (StringUtils.hasText(addressLine1)) {
+			address += ", " + addressLine1;
+		}
+		if (StringUtils.hasText(addressLine2)) {
+			address += ", " + addressLine2;
+		}
+		if (StringUtils.hasText(city)) {
+			address += ", " + city;
+		}
+		if (StringUtils.hasText(state)) {
+			address += ", " + state;
+		}
+		if (StringUtils.hasText(country)) {
+			address += ", " + country;
+		}
+		if (StringUtils.hasText(postalCode)) {
+			address += ". Postal Code: " + postalCode;
+		}
+		if (StringUtils.hasText(phoneNumber)) {
+			address += ". Phone Number: " + phoneNumber;
+		}
+
+		return address;
 	}
 }

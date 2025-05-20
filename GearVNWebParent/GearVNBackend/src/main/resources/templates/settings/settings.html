@@ -66,7 +66,9 @@
 							<th:block th:replace="settings/setting_fragments :: mailTemplate"></th:block>
 						</div>
 
-						<div class="tab-pane fade" id="payment" role="tabpanel">6</div>
+						<div class="tab-pane fade" id="payment" role="tabpanel">
+							<th:block th:replace="settings/setting_fragments :: payment"></th:block>
+						</div>
 
 					</div>
 				</div>
@@ -90,12 +92,12 @@
 		// csrf
 		let csrfHeader = "[[${_csrf.headerName}]]";
 		let csrfValue = "[[${_csrf.token}]]";
-		
+
 		$(document).ready(function() {
 			// set richtext function
 			$("#emailContent").richText();
+			$("#emailContent_orderConfirmation").richText();
 		});
-
 	</script>
 
 	<script th:src="@{/js/common_form.js}"></script>

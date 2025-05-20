@@ -85,17 +85,54 @@
 			<!-- list cartItems -->
 
 			<th:block th:unless="${#lists.isEmpty(cartItems)}">
-				<div class="d-flex justify-content-end align-items-center gap-3"
-					id="totalSection">
-					<h4 class="mb-0">
-						Total: <span class="text-success"> <span
-							th:if="${CURRENCY_SYMBOL_POSITION == 'Before price'}">[[${CURRENCY_SYMBOL}]]</span>
-							<strong id="total">[[${#numbers.formatDecimal(totalPrice,
-								1, THOUSANDS_POINT_TYPE, DECIMAL_DIGITS, DECIMAL_POINT_TYPE)}]]</strong>
-							<span th:if="${CURRENCY_SYMBOL_POSITION == 'After price'}">[[${CURRENCY_SYMBOL}]]</span>
-						</span>
-					</h4>
-					<button type="button" class="btn btn-success" id="checkout">Checkout</button>
+				<div id="totalSection" class="text-end">
+
+					<th:block th:if="${shippingRate}">
+						<!-- Khi có shipping: Total và Checkout nằm cùng hàng, căn phải -->
+						<div
+							class="d-flex justify-content-end align-items-center gap-3 mb-2">
+							<h4 class="mb-0">
+								Total: <span class="text-success"> <span
+									th:if="${CURRENCY_SYMBOL_POSITION == 'Before price'}">[[${CURRENCY_SYMBOL}]]</span>
+									<strong id="total">[[${#numbers.formatDecimal(totalPrice,
+										1, THOUSANDS_POINT_TYPE, DECIMAL_DIGITS,
+										DECIMAL_POINT_TYPE)}]]</strong> <span
+									th:if="${CURRENCY_SYMBOL_POSITION == 'After price'}">[[${CURRENCY_SYMBOL}]]</span>
+								</span>
+							</h4>
+
+							<a class="btn btn-outline-success" id="checkout"
+								th:href="@{/checkout}"> <i class="fas fa-credit-card"></i>&nbsp;Checkout
+							</a>
+						</div>
+					</th:block>
+
+					<th:block th:unless="${shippingRate}">
+						<!-- Khi không có shipping: chỉ hiện Total riêng lẻ -->
+						<h4 class="mb-0 text-end">
+							Total: <span class="text-success"> <span
+								th:if="${CURRENCY_SYMBOL_POSITION == 'Before price'}">[[${CURRENCY_SYMBOL}]]</span>
+								<strong id="total">[[${#numbers.formatDecimal(totalPrice,
+									1, THOUSANDS_POINT_TYPE, DECIMAL_DIGITS, DECIMAL_POINT_TYPE)}]]</strong>
+								<span th:if="${CURRENCY_SYMBOL_POSITION == 'After price'}">[[${CURRENCY_SYMBOL}]]</span>
+							</span>
+						</h4>
+
+						<!-- Các thông báo lỗi và gợi ý cập nhật địa chỉ -->
+						<div class="text-danger h5 mt-2">No shipping available for
+							your location</div>
+
+						<div th:if="${usePrimaryAddressAsDefault}" class="mt-2">
+							<a th:href="@{/customers/update(redirect=cart)}">Update your
+								address</a>
+						</div>
+
+						<div th:unless="${usePrimaryAddressAsDefault}" class="mt-2">
+							<a th:href="@{/address_book(redirect=cart)}">Use another
+								shipping address</a>
+						</div>
+					</th:block>
+
 				</div>
 			</th:block>
 

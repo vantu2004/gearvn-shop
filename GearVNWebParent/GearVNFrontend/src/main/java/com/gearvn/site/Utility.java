@@ -1,5 +1,7 @@
 package com.gearvn.site;
 
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.util.Properties;
 
 import org.springframework.mail.javamail.JavaMailSenderImpl;
@@ -8,6 +10,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 
 import com.gearvn.site.security.oauth.CustomerOAuth2User;
+import com.gearvn.site.setting.CurrencySettingBag;
 import com.gearvn.site.setting.EmailSettingBag;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -80,5 +83,49 @@ public class Utility {
 		}
 
 		return email;
+	}
+
+	/**
+	 * Định dạng số tiền dựa trên các thiết lập định dạng từ CurrencySettingBag.
+	 *
+	 * @param amount   Số tiền cần định dạng (kiểu float)
+	 * @param settings Thiết lập định dạng tiền tệ
+	 * @return Chuỗi số tiền đã được định dạng
+	 */
+	public static String formatCurrency(float amount, CurrencySettingBag settings) {
+		String symbol = settings.getSymbol();
+		String symbolPosition = settings.getSymbolPosition();
+		String decimalPointType = settings.getDecimalPointType();
+		String thousandPointType = settings.getThousandPointType();
+		int decimalDigits = settings.getDecimalDigits();
+
+		/*
+		 * Bắt đầu xây dựng chuỗi pattern với định dạng "(symbol)
+		 * ###,###.(decimalDigits) (symbol)"
+		 */ String pattern = symbolPosition.equals("Before price") ? (symbol + " ") : "";
+		pattern += "###,###";
+
+		if (decimalDigits > 0) {
+			pattern += ".";
+			for (int count = 1; count <= decimalDigits; count++) {
+				pattern += "#";
+			}
+		}
+
+		pattern += symbolPosition.equals("After price") ? (" " + symbol) : "";
+
+		// Xác định ký tự ngăn cách hàng nghìn và dấu thập phân tùy theo thiết lập
+		char thousandSeparator = thousandPointType.equals("POINT") ? '.' : ',';
+		char decimalSeparator = decimalPointType.equals("POINT") ? '.' : ',';
+
+		// Tạo đối tượng chứa định dạng ký hiệu số
+		DecimalFormatSymbols decimalFormatSymbols = DecimalFormatSymbols.getInstance();
+		decimalFormatSymbols.setDecimalSeparator(decimalSeparator);
+		decimalFormatSymbols.setGroupingSeparator(thousandSeparator);
+
+		// Tạo đối tượng định dạng số với pattern và ký hiệu được cấu hình
+		DecimalFormat formatter = new DecimalFormat(pattern, decimalFormatSymbols);
+
+		return formatter.format(amount);
 	}
 }

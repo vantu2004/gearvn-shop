@@ -29,6 +29,10 @@
 		<form class="mx-auto col-md-6" th:action="@{/address_book/save}"
 			method="post" th:object="${address}">
 
+			<!-- nhận dữ liệu trong url từ phía cartPage/checkoutPage -->
+			<input type="hidden" class="form-control" id="inputRedirect"
+				name="redirect" th:value="${param.redirect}">
+
 			<!-- First Name -->
 			<div class="form-group row mb-3">
 				<label for="inputFirstName" class="col-sm-3 col-form-label">First

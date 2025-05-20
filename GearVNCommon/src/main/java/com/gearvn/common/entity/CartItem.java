@@ -41,6 +41,9 @@ public class CartItem {
 	private int quantity;
 
 	@Transient
+	private float shippingCost;
+
+	@Transient
 	public float getTotalPrice() {
 		return this.product.getDiscountPrice() * this.quantity;
 	}

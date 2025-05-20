@@ -54,4 +54,8 @@ public class CartItemService {
 	public void deleteCartItem(Customer customer, Integer productId) {
 		this.cartItemRepository.deleteCartItem(customer.getId(), productId);
 	}
+
+	public void deleteCartItemByCustomer(Customer customer) {
+		this.cartItemRepository.deleteCartByCustomer(customer.getId());
+	}
 }

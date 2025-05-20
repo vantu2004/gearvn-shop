@@ -86,16 +86,23 @@ public class AddressController {
 		address.setCustomer(customer);
 		this.addressService.handleSaveAddress(address);
 
-//		String redirectOption = request.getParameter("redirect");
-//		String redirectURL = "redirect:/address_book";
-//		
-//		if ("checkout".equals(redirectOption)) {
-//			redirectURL += "?redirect=checkout";
-//		}
+		/*
+		 * xác định chuyển hướng sau khi update (mặc định là về /address_book và ở đây
+		 * chọn defaultAddress nào thì sẽ dựa vào tham số trên url để redirect thêm lần
+		 * nữa)
+		 */
+		String redirectOption = request.getParameter("redirect");
+		String redirectURL = "redirect:/address_book";
+
+		if ("cart".equals(redirectOption)) {
+			redirectURL += "?redirect=cart";
+		} else if ("checkout".equals(redirectOption)) {
+			redirectURL += "?redirect=checkout";
+		}
 
 		redirectAttributes.addFlashAttribute("message", "The address has been saved successfully.");
 
-		return "redirect:/address_book";
+		return redirectURL;
 	}
 
 	@GetMapping("/address_book/update/{id}")
@@ -127,15 +134,21 @@ public class AddressController {
 		Customer customer = this.getAuthenticatedCustomer(request);
 		addressService.setDefaultAddress(addressId, customer.getId());
 
-//		String redirectOption = request.getParameter("redirect");
-//		String redirectURL = "redirect:/address_book";
-//
-//		if ("cart".equals(redirectOption)) {
-//			redirectURL = "redirect:/cart";
-//		} else if ("checkout".equals(redirectOption)) {
-//			redirectURL = "redirect:/checkout";
-//		}
+		String redirectOption = request.getParameter("redirect");
+		String redirectURL = "redirect:/address_book";
 
-		return "redirect:/address_book";
+		if ("cart".equals(redirectOption)) {
+			redirectURL = "redirect:/cart";
+		} else if ("checkout".equals(redirectOption)) {
+			/*
+			 * trong trường hợp từ checkout redirect tới page này sau đó click chọn 1
+			 * address bất kỳ, nếu address đó đã hỗ trợ shippingRate thì sẽ quay lại page
+			 * checkout nhưng nếu ch thì sẽ redirect về page cart nhờ check null
+			 * shippingRate trong CheckoutController
+			 */
+			redirectURL = "redirect:/checkout";
+		}
+
+		return redirectURL;
 	}
 }

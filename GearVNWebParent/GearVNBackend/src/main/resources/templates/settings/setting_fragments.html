@@ -471,13 +471,98 @@
 				</div>
 				<div class="tab-pane fade" id="nav-order-confirmation"
 					role="tabpanel" aria-labelledby="nav-order-confirmation-tab">
+					<form th:action="@{/settings/save_mailTemplate}" method="post">
 
-					tab-02</div>
+						<div class="form-group mb-3 row">
+							<label for="emailSubject" class="col-sm-3 col-form-label">E-mail
+								Subject</label>
+							<div class="col-sm-9">
+								<input type="text" id="emailSubject" class="form-control"
+									placeholder="Please check your order information."
+									name="ORDER_CONFIRMATION_SUBJECT"
+									th:value="${ORDER_CONFIRMATION_SUBJECT}" required>
+							</div>
+						</div>
+
+						<div class="form-group mb-3 row">
+							<div class="col-md-12 mt-3">
+								<label for="emailContent" class="form-label">Email
+									Content</label>
+								<textarea class="form-control"
+									id="emailContent_orderConfirmation" rows="8"
+									name="ORDER_CONFIRMATION_CONTENT"
+									th:text=${ORDER_CONFIRMATION_CONTENT} required></textarea>
+							</div>
+						</div>
+
+						<div class="form-group row">
+							<div class="d-flex justify-content-end">
+								<a th:href="@{/}" class="btn btn-secondary"
+									style="margin: 0 8px;">Back</a>
+								<button type="submit" class="btn btn-success">Save</button>
+							</div>
+						</div>
+
+					</form>
+				</div>
 			</div>
 			<!-- tab-content -->
-
 		</div>
 	</th:block>
 	<!-- Mail Template -->
+
+	<!-- Payment -->
+	<th:block th:fragment="payment">
+		<form th:action="@{/settings/save_payment}" method="post"
+			enctype="multipart/form-data">
+			<div class="mt-4 mx-auto col-md-12">
+				<h3>Payment</h3>
+
+				<!-- PayPal API Base URL -->
+				<div class="form-group mb-3 row">
+					<label for="paypalApiBaseUrl" class="col-sm-3 col-form-label">PayPal
+						API Base URL</label>
+					<div class="col-sm-9">
+						<input type="text" id="paypalApiBaseUrl" class="form-control"
+							placeholder="Enter PayPal API Base URL"
+							name="PAYPAL_API_BASE_URL" th:value="${PAYPAL_API_BASE_URL}"
+							required>
+					</div>
+				</div>
+
+				<!-- PayPal Client ID -->
+				<div class="form-group mb-3 row">
+					<label for="paypalClientId" class="col-sm-3 col-form-label">PayPal
+						Client ID</label>
+					<div class="col-sm-9">
+						<input type="text" id="paypalClientId" class="form-control"
+							placeholder="Enter PayPal Client ID" name="PAYPAL_API_CLIENT_ID"
+							th:value="${PAYPAL_API_CLIENT_ID}" required>
+					</div>
+				</div>
+
+				<!-- PayPal Client Secret -->
+				<div class="form-group mb-3 row">
+					<label for="paypalClientSecret" class="col-sm-3 col-form-label">PayPal
+						Client Secret</label>
+					<div class="col-sm-9">
+						<input type="text" id="paypalClientSecret" class="form-control"
+							placeholder="Enter PayPal Client Secret"
+							name="PAYPAL_API_CLIENT_SECRET"
+							th:value="${PAYPAL_API_CLIENT_SECRET}" required>
+					</div>
+				</div>
+			</div>
+
+			<div class="form-group row">
+				<div class="d-flex justify-content-end">
+					<a th:href="@{/}" class="btn btn-secondary" style="margin: 0 8px;">Back</a>
+					<button type="submit" class="btn btn-success">Save</button>
+				</div>
+			</div>
+		</form>
+	</th:block>
+	<!-- Payment -->
+
 </body>
 </html>

@@ -18,12 +18,21 @@
 					Book</h2>
 			</div>
 
-			<!-- Nút -->
+			<!-- xác định chuyển hướng sau khi tạo -->
 			<div class="col-12 col-md-3 text-center text-md-end">
-				<a class="btn btn-primary w-100 w-md-auto mt-2 mt-md-0"
-					th:href="@{/address_book/create}"> <i
-					class="fas fa-plus-square me-1"></i> Create New Address Book
-				</a>
+				<th:block th:if="${param.redirect}">
+					<a class="btn btn-primary w-100 w-md-auto mt-2 mt-md-0"
+						th:href="@{/address_book/create(redirect=${param.redirect})}">
+						<i class="fas fa-plus-square me-1"></i> Create New Address Book
+					</a>
+				</th:block>
+
+				<th:block th:unless="${param.redirect}">
+					<a class="btn btn-primary w-100 w-md-auto mt-2 mt-md-0"
+						th:href="@{/address_book/create}"> <i
+						class="fas fa-plus-square me-1"></i> Create New Address Book
+					</a>
+				</th:block>
 			</div>
 		</div>
 
@@ -47,15 +56,36 @@
 							</th:block>
 
 							<th:block th:unless="${usePrimaryAddressAsDefault}">
-								<a class="me-2" th:href="@{/address_book/default/0}">[Set as
-									Default]</a>
+								<a th:if="${param.redirect}" class="me-2"
+									th:href="@{/address_book/default/0(redirect=${param.redirect})}">[Set
+									as Default]</a>
+
+								<a th:unless="${param.redirect}" class="me-2"
+									th:href="@{/address_book/default/0}">[Set as Default]</a>
 							</th:block>
 
-							<!-- truyền tham số kèm vào url để thực hiện chuyển hướng đến page chỉ định -->
-							<a th:href="@{/customers/update(redirect=address_book)}"
-								title="Edit this address book" class="me-2"> <i
-								class="fas fa-edit text-success"></i>
-							</a>
+							<!-- check có phải từ bên checkoutPage redirect qua không, sau đó truyền tham số để tiếp tục redirect sau đó-->
+							<th:block th:if="${param.redirect}">
+								<!-- nếu từ checkoutPage thì truyền checkout để sau khi update thì vẫn giữ tham số là checkout-->
+								<a th:if="${param.redirect[0]} == 'checkout'"
+									th:href="@{/customers/update(redirect=${param.redirect[0]})}"
+									title="Edit this address book" class="me-2"> <i
+									class="fas fa-edit text-success"></i>
+								</a>
+								<!-- nếu từ cartPage thì mặc định sau khi update thì về lại /address_book -->
+								<a th:unless="${param.redirect[0]} == 'checkout'"
+									th:href="@{/customers/update(redirect=address_book)}"
+									title="Edit this address book" class="me-2"> <i
+									class="fas fa-edit text-success"></i>
+								</a>
+							</th:block>
+							<th:block th:unless="${param.redirect}">
+								<a th:href="@{/customers/update(redirect=address_book)}"
+									title="Edit this address book" class="me-2"> <i
+									class="fas fa-edit text-success"></i>
+								</a>
+							</th:block>
+
 						</div>
 					</div>
 					<div class="card-body">
@@ -78,18 +108,35 @@
 									<strong class="me-2">[Default]</strong>
 								</th:block>
 
+								<!-- xác định chuyển hướng sau khi set defaultADdress -->
 								<th:block th:unless="${address.defaultForShipping}">
-									<a class="me-2"
-										th:href="@{'/address_book/default/' + ${address.id}}">[Set
+									<a th:if="${param.redirect}" class="me-2"
+										th:href="@{/address_book/default/{id}(id=${address.id}, redirect=${param.redirect})}">[Set
+										as Default]</a>
+
+									<a th:unless="${param.redirect}" class="me-2"
+										th:href="@{/address_book/default/{id}(id=${address.id})}">[Set
 										as Default]</a>
 								</th:block>
 
-								<a th:href="@{'/address_book/update/' + ${address.id}}"
-									title="Edit this address book" class="me-2"> <i
-									class="fas fa-edit text-success"></i>
-								</a> <a th:href="@{'/address_book/delete/' + ${address.id}}"
+								<!-- xác định chuyển hướng sau khi update address_book -->
+								<th:block th:if="${param.redirect}">
+									<a
+										th:href="@{/address_book/update/{id}(id=${address.id}, redirect=${param.redirect})}"
+										title="Edit this address book" class="me-2"> <i
+										class="fas fa-edit text-success"></i>
+									</a>
+								</th:block>
+								<th:block th:unless="${param.redirect}">
+									<a th:href="@{'/address_book/update/' + ${address.id}}"
+										title="Edit this address book" class="me-2"> <i
+										class="fas fa-edit text-success"></i>
+									</a>
+								</th:block>
+
+								<a th:href="@{'/address_book/delete/' + ${address.id}}"
 									title="Delete this address book"
-									th:addressBoookId="${address.id}" class="link-delete"> <i
+									th:addressBookId="${address.id}" class="link-delete"> <i
 									class="fas fa-trash-alt text-danger"></i>
 								</a>
 							</div>

@@ -33,6 +33,10 @@ public class ShippingRate {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 
+	/*
+	 * giá vận chuyển/1 đơn vị khối lượng (vd: vật 10kg và rate = 5 --> shippingCost
+	 * là 10 * 5 = 50)
+	 */
 	@Min(value = 1)
 	private float rate;
 

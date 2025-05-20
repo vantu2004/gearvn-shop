@@ -12,7 +12,7 @@ import com.gearvn.common.entity.setting.SettingCategory;
 @Service
 public class SettingService {
 	@Autowired
-	
+
 	private SettingRepository settingRepository;
 
 	public List<Setting> getGeneralAndCurrencySetting() {
@@ -34,5 +34,11 @@ public class SettingService {
 		settings.addAll(mailTemplateSettings);
 
 		return new EmailSettingBag(settings);
+	}
+
+	public CurrencySettingBag getCurrencySettingBag() {
+		List<Setting> settings = this.settingRepository.findBySettingCategory(SettingCategory.CURRENCY);
+
+		return new CurrencySettingBag(settings);
 	}
 }

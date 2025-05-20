@@ -133,4 +133,22 @@ public class SettingController {
 
 		return "redirect:/settings#mailTemplates";
 	}
+
+	// cơ chế dirty checking giúp tự update mà ko cần gọi save
+	@PostMapping("/settings/save_payment")
+	public String savePaymentSettings(RedirectAttributes redirectAttributes, HttpServletRequest request) {
+		List<Setting> paymentSettings = this.settingService.getPaymentSettings();
+		for (Setting setting : paymentSettings) {
+			String value = request.getParameter(setting.getKey());
+			if (!StringUtils.isBlank(value)) {
+				setting.setValue(value);
+			}
+		}
+
+		this.settingService.saveAllSettings(paymentSettings);
+
+		redirectAttributes.addFlashAttribute("message", "Payment settings have been saved.");
+
+		return "redirect:/settings#payment";
+	}
 }

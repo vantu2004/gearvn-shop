@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<!-- Head -->
+<head th:replace="fragments :: page_head('Checkout Succeeded', 'none')"></head>
+<!-- Head -->
+
+<body>
+	<div class="d-flex flex-column min-vh-100">
+		<header th:replace="fragments :: header"></header>
+
+		<div class="container py-5 flex-grow-1">
+			<div class="row justify-content-center text-center">
+				<div class="col-12 col-md-8">
+					<h2 class="m-0">Your Order has been Completed!</h2>
+					<h5>A confirmation email has been sent to you.</h5>
+					<h5>Please check your email for the details.</h5>
+					<h5>
+						<a th:href="@{/login}">Click here</a> to manage and track your
+						order.
+					</h5>
+				</div>
+			</div>
+		</div>
+
+		<footer class="mt-auto" th:replace="fragments :: footer"></footer>
+	</div>
+</body>
+</html>
