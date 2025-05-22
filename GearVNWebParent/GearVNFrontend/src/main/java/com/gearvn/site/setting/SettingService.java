@@ -2,18 +2,24 @@ package com.gearvn.site.setting;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.gearvn.common.entity.Currency;
 import com.gearvn.common.entity.setting.Setting;
 import com.gearvn.common.entity.setting.SettingCategory;
+import com.gearvn.site.currency.CurrencyRepository;
 
 @Service
 public class SettingService {
-	@Autowired
 
+	@Autowired
 	private SettingRepository settingRepository;
+
+	@Autowired
+	private CurrencyRepository currencyRepository;
 
 	public List<Setting> getGeneralAndCurrencySetting() {
 		return this.settingRepository.getGeneralAndCurrencySetting(SettingCategory.GENERAL, SettingCategory.CURRENCY);
@@ -40,5 +46,21 @@ public class SettingService {
 		List<Setting> settings = this.settingRepository.findBySettingCategory(SettingCategory.CURRENCY);
 
 		return new CurrencySettingBag(settings);
+	}
+
+	public PaymentSettingBag getPaymentSettingBag() {
+		List<Setting> settings = this.settingRepository.findBySettingCategory(SettingCategory.PAYMENT);
+
+		return new PaymentSettingBag(settings);
+	}
+
+	// lấy currencyCode dựa vào CURRENCY_ID hiện tại lưu trong db
+	public String getCurrencyCodeByCurrencyId() {
+		Setting setting = this.settingRepository.findByKey("CURRENCY_ID");
+
+		Currency currency = this.currencyRepository.findById(Integer.parseInt(setting.getValue()))
+				.orElseThrow(() -> new NoSuchElementException("Currency Not Found!"));
+
+		return currency.getCode();
 	}
 }

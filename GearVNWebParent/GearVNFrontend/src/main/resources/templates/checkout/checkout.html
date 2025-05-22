@@ -43,28 +43,37 @@
 						<h5>Payment Method</h5>
 					</div>
 					<div class="card-body">
-						<div th:if="${checkoutInfo.codSupported}">
+						<!-- COD -->
+						<div th:if="${checkoutInfo.codSupported}" class="mb-3">
 							<form th:action="@{/place_order}" method="post">
-								<div class="d-flex justify-content-between align-items-center">
+								<div
+									class="d-flex justify-content-between align-items-center border p-3 rounded">
 									<div class="form-check">
 										<input class="form-check-input" type="radio"
 											name="paymentMethod" id="radioCOD" value="COD" /> <label
-											class="form-check-label" for="radioCOD"> Cash on
-											Delivery (COD) </label>
+											class="form-check-label fw-bold" for="radioCOD"> Cash
+											on Delivery (COD) </label>
 									</div>
-									<button class="btn btn-primary d-none" type="submit" id="buttonSubmit">
-										Place Order with COD</button>
+									<button class="btn btn-primary d-none" type="submit"
+										id="buttonSubmit">Place Order with COD</button>
 								</div>
 							</form>
 						</div>
 
 						<!-- PayPal -->
-						<div id="paypal-button-container"></div>
-						<form th:action="@{/process_paypal_order}" method="post"
-							id="paypalForm">
-							<input type="hidden" name="orderId" id="orderId" /> <input
-								type="hidden" name="paymentMethod" value="PAYPAL" />
-						</form>
+						<div class="border p-3 rounded">
+							<div
+								class="d-flex justify-content-between align-items-center mb-2">
+								<label class="form-check-label fw-bold" for="radioPayPal">
+									Pay with PayPal </label>
+							</div>
+							<div id="paypal-button-container"></div>
+							<form th:action="@{/process_paypal_order}" method="post"
+								id="paypalForm">
+								<input type="hidden" name="orderId" id="orderId" /> <input
+									type="hidden" name="paymentMethod" value="PAYPAL" />
+							</form>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -137,6 +146,9 @@
 	<footer th:replace="fragments :: footer" class="mt-auto"></footer>
 	<!-- Footer -->
 
+	<script
+		th:src="@{https://www.paypal.com/sdk/js(client-id=${paypalClientId},currency=${currencyCode})}"></script>
+
 	<!-- jQuery Script -->
 	<script type="text/javascript">
 		// url
@@ -145,13 +157,100 @@
 		// csrf
 		let csrfHeader = "[[${_csrf.headerName}]]";
 		let csrfValue = "[[${_csrf.token}]]";
-		
-		$(document).ready(function () {
-			$("#radioCOD").on("click", function () {
+
+		$(document).ready(function() {
+			$("#radioCOD").on("click", function() {
 				$("#buttonSubmit").removeClass("d-none");
 			});
 		});
+
+		function validateOrder(orderId) {
+			$("#orderId").val(orderId);
+			$("#paypalForm").submit();
+		}
 		
+		paypal.Buttons({
+			// ✅ Có sẵn: Cho phép người dùng nhập thông tin thẻ thanh toán
+			enableStandardCardFields: true,
+
+			// ✅ Có sẵn: Hàm callback để tạo đơn hàng khi người dùng nhấn nút thanh toán
+			createOrder: function (data, actions) {
+				return actions.order.create({
+
+					// ✅ Có sẵn: Thu tiền ngay khi người dùng chấp thuận
+					intent: 'CAPTURE',
+
+					// ✅ Có sẵn: Thông tin người thanh toán
+					payer: {
+						name: {
+							// 🧑‍💻 Tự định nghĩa: Lấy dữ liệu tên từ server (Thymeleaf hoặc template engine)
+							given_name: "[[${customer.firstName}]]",
+							surname: "[[${customer.lastName}]]"
+						},
+
+						address: {
+							// 🧑‍💻 Tự định nghĩa: Thông tin địa chỉ người dùng từ server
+							address_line_1: "[[${customer.addressLine1}]]",
+							address_line_2: "[[${customer.addressLine2}]]",
+							admin_area_1: "[[${customer.state}]]",
+							admin_area_2: "[[${customer.city}]]", 
+							postal_code: "[[${customer.postalCode}]]",
+							country_code: "[[${customer.country.code}]]"
+						},
+
+						// 🧑‍💻 Tự định nghĩa: Email từ server
+						email_address: "[[${customer.email}]]",
+
+						phone: {
+							// ✅ Có sẵn: Loại điện thoại (MOBILE, HOME, ...); ở đây là di động
+							phone_type: "MOBILE",
+							phone_number: {
+								// 🧑‍💻 Tự định nghĩa: Số điện thoại từ server
+								national_number: "[[${customer.phoneNumber}]]"
+							}
+						}
+					},
+
+					// ✅ Có sẵn: Thông tin đơn hàng
+					purchase_units: [{
+						amount: {
+							// 🧑‍💻 Tự định nghĩa: Tổng số tiền cần thanh toán từ backend
+							value: "[[${checkoutInfo.getPaymentTotalForPayPal}]]",
+							// 🧑‍💻 Tự định nghĩa: Mã tiền tệ (VD: USD, VND)
+							currency_code: "[[${currencyCode}]]"
+						}
+					}],
+
+					// ✅ Có sẵn: Cấu hình giao diện thanh toán
+					application_context: {
+						// ✅ Có sẵn: Không yêu cầu thông tin giao hàng
+						shipping_preference: "NO_SHIPPING"
+					}
+				});
+			},
+
+			// ✅ Có sẵn: Gọi khi người dùng chấp thuận thanh toán
+			onApprove: function (data, actions) {
+				return actions.order.capture().then(function (details) {
+					// 🧑‍💻 Tự định nghĩa: Lưu orderId và gọi hàm xác thực đơn hàng phía server
+					orderId = details.id;
+					validateOrder(orderId);
+					// alert("success" + orderId + " " + "total: " + details.purchase_units[0].amount.value);
+				});
+			},
+
+			// ✅ Có sẵn: Gọi khi người dùng huỷ thanh toán
+			onCancel: function (data) {
+				alert('Payment cancelled by the buyer');
+			},
+
+			// ✅ Có sẵn: Gọi khi có lỗi xảy ra trong quá trình thanh toán
+			onError: function (err) {
+				// 🧑‍💻 Tự định nghĩa: Hiển thị lỗi với người dùng
+				showErrorModal("Something wrong with your address information, so payment will not work.");
+			}
+		}).render("#paypal-button-container"); // ✅ Có sẵn: Render nút PayPal vào phần tử có ID tương ứng
+
 	</script>
 
 </body>

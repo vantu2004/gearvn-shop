@@ -22,10 +22,13 @@ import com.gearvn.common.entity.order.PaymentMethod;
 import com.gearvn.site.Utility;
 import com.gearvn.site.address.AddressService;
 import com.gearvn.site.cart.CartItemService;
+import com.gearvn.site.checkout.paypal.PayPalApiException;
+import com.gearvn.site.checkout.paypal.PayPalService;
 import com.gearvn.site.customer.CustomerService;
 import com.gearvn.site.order.OrderService;
 import com.gearvn.site.setting.CurrencySettingBag;
 import com.gearvn.site.setting.EmailSettingBag;
+import com.gearvn.site.setting.PaymentSettingBag;
 import com.gearvn.site.setting.SettingService;
 import com.gearvn.site.shipping.ShippingRateService;
 
@@ -57,6 +60,9 @@ public class CheckoutController {
 	@Autowired
 	private SettingService settingService;
 
+	@Autowired
+	private PayPalService payPalService;
+
 	@GetMapping("/checkout")
 	public String getCheckoutPage(Model model, HttpServletRequest request) {
 		Customer customer = this.getAuthenticatedCustomer(request);
@@ -83,8 +89,16 @@ public class CheckoutController {
 
 		CheckoutInfo checkoutInfo = this.checkoutService.prepareCheckout(cartItems, shippingRate);
 
+		String currencyCode = this.settingService.getCurrencyCodeByCurrencyId();
+
+		PaymentSettingBag paymentSettingBag = this.settingService.getPaymentSettingBag();
+		String paypalClientId = paymentSettingBag.getPayPalApiClientId();
+
+		model.addAttribute("customer", customer);
 		model.addAttribute("cartItems", cartItems);
 		model.addAttribute("checkoutInfo", checkoutInfo);
+		model.addAttribute("currencyCode", currencyCode);
+		model.addAttribute("paypalClientId", paypalClientId);
 
 		return "checkout/checkout";
 	}
@@ -169,5 +183,27 @@ public class CheckoutController {
 		content = content.replace("[[total]]", totalAmount);
 		content = content.replace("[[paymentMethod]]", createdOrder.getPaymentMethod().toString());
 		return content;
+	}
+
+	@PostMapping("/process_paypal_order")
+	public String processPaypalOrder(HttpServletRequest request, Model model)
+			throws UnsupportedEncodingException, MessagingException {
+		String orderId = request.getParameter("orderId");
+
+		String message = null;
+		
+		try {
+			if (this.payPalService.validateOrder(orderId)) {
+				return handlePlaceOrder(request);
+			} else {
+				message = "ERROR: Transaction could not be completed because order information is invalid.";
+			}
+		} catch (PayPalApiException e) {
+			message = "ERROR: Transaction failed due to: " + e.getMessage();
+		}
+
+		model.addAttribute("message", message);
+
+		return "checkout/checkout_fail";
 	}
 }

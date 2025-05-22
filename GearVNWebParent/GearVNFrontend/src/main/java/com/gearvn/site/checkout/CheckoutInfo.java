@@ -1,5 +1,6 @@
 package com.gearvn.site.checkout;
 
+import java.text.DecimalFormat;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -31,4 +32,8 @@ public class CheckoutInfo {
 		return calendar.getTime();
 	}
 
+	public String getPaymentTotalForPayPal() {
+		DecimalFormat formatter = new DecimalFormat("##.##");
+		return formatter.format(paymentTotal);
+	}
 }

@@ -80,9 +80,8 @@ public class WebSecurityConfig {
 				.dispatcherTypeMatchers(DispatcherType.FORWARD, DispatcherType.INCLUDE).permitAll()
 				.requestMatchers("/", "/login", "/css/**", "/js/**", "/images/**", "/webjars/**").permitAll()
 
-				// đảm bảo admin/editor có full quyền với product
 				.requestMatchers("/customers/update", "/customers/save-update", "/cart", "/address_book/**",
-						"/checkout", "/place_order")
+						"/checkout", "/place_order", "/process_paypal_order")
 				.authenticated()
 
 				.anyRequest().permitAll())
